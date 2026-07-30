@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club Catalist — Simulateur marketing sportif by C'mon Sports</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJMb2dvIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NjAuOTIgODgzLjM4Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzYyYmRmNDtzdHJva2Utd2lkdGg6MHB4O308L3N0eWxlPjwvZGVmcz48cG9seWdvbiBjbGFzcz0iY2xzLTEiIHBvaW50cz0iMzk3LjEgNTg2LjkxIDM3MS41IDU0My4zMSAzMTEuNjYgNDQxLjM5IDMyNC41NiA0MTkuMTUgMjc4Ljg5IDM0MS4zNyAyMjAuOTMgNDQyLjA0IDM1Mi4wMSA2NjUuMjggNDY5LjE1IDY2NS40MSA0MjMuMDcgNTg2LjkzIDM5Ny4xIDU4Ni45MSIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMSIgcG9pbnRzPSI1MzcuOSAyOTUuNjIgNTYzLjc3IDI5NS42MyA2NDguNjMgNDQwLjA1IDYzNS43MiA0NjIuNCA2ODEuMzUgNTQwLjExIDczOS4yNSA0MzkuNzQgNjA4LjU5IDIxNy4xOCA0NjYuNzcgMjE3LjI4IDQyMS4yOCAyOTYuMTQgNTc3LjgxIDU2Mi44IDU2My45NSA1ODYuODMgNTM5Ljg2IDU4Ni44NyAzODIuNDIgMzE4LjcyIDQ0MC45IDIxNy4zMyAzNTAuNDMgMjE3LjM1IDI5MS43NiAzMTkuMDcgNDk1IDY2NS4yMyA2MDkuMzQgNjY1LjI3IDY2OC40OCA1NjIuNTIgNTI1IDMxOC4wNCA1MzcuOSAyOTUuNjIiLz48L3N2Zz4=">
+<style>
+  /* ============================================================
+     Design system v4 — look & feel « Sorare » adapté à la charte
+     C'mon Sports : bleu #62BEF5 en parcimonie, Raleway,
+     titres CAPS + 1re lettre bleue + point final, traits bleus.
+     RGPD : polices auto-hébergées (aucune requête externe).
+     ============================================================ */
+  @font-face { font-family:'Raleway'; font-style:italic; font-weight:900; font-display:swap; src:url('fonts/raleway-900-italic.woff2') format('woff2'); }
+  @font-face { font-family:'Raleway'; font-style:normal; font-weight:400; font-display:swap; src:url('fonts/raleway-400.woff2') format('woff2'); }
+  @font-face { font-family:'Raleway'; font-style:normal; font-weight:600; font-display:swap; src:url('fonts/raleway-600.woff2') format('woff2'); }
+  @font-face { font-family:'Raleway'; font-style:normal; font-weight:700; font-display:swap; src:url('fonts/raleway-700.woff2') format('woff2'); }
+  @font-face { font-family:'Raleway'; font-style:normal; font-weight:800; font-display:swap; src:url('fonts/raleway-800.woff2') format('woff2'); }
+  @font-face { font-family:'Raleway'; font-style:normal; font-weight:900; font-display:swap; src:url('fonts/raleway-900.woff2') format('woff2'); }
+  @keyframes floatIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  :root {
+    --bg: #05080f;
+    --panel: rgba(13, 20, 33, .82);
+    --panel2: rgba(22, 33, 52, .60);
+    --panel-solid: #0d1421;
+    --border: rgba(98, 190, 245, .13);
+    --border-strong: rgba(98, 190, 245, .45);
+    --text: #f2f7fc;
+    --muted: #8fa1b6;
+    --accent: #62BEF5;            /* bleu C'mon Sports — LA couleur de marque */
+    --accent2: #62BEF5;
+    --accent-soft: rgba(98, 190, 245, .10);
+    --good: #2fd6a3;
+    --warn: #f0b429;
+    --bad: #ff5d73;
+    --gold: #ffd166;
+    --radius: 16px;
+    --shadow: 0 10px 34px rgba(0, 0, 0, .45);
+    --glow: 0 0 24px rgba(98, 190, 245, .18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(1100px 520px at 85% -10%, rgba(98, 190, 245, .13), transparent 60%),
+      radial-gradient(900px 620px at -15% 30%, rgba(98, 190, 245, .06), transparent 55%),
+      linear-gradient(180deg, #070d18 0%, #05080f 60%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Raleway', -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-weight: 800; }
+  .sig-cap { color: var(--accent); }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all .18s ease;
+    backdrop-filter: blur(8px);
+  }
+  button:hover:not(:disabled) { border-color: var(--border-strong); transform: translateY(-1px); box-shadow: var(--glow); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  button.primary {
+    background: linear-gradient(135deg, #7ecbf8 0%, #62BEF5 45%, #379fe0 100%);
+    color: #04131f;
+    border-color: transparent;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    box-shadow: 0 6px 22px rgba(98, 190, 245, .35);
+  }
+  button.primary:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(98, 190, 245, .45); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 16px; }
+
+  /* ---------- Header ---------- */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0; margin-bottom: 14px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  header .brand { display: flex; align-items: center; gap: 14px; }
+  header .logo {
+    width: 46px; height: 46px; border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; color: #04131f;
+    background: linear-gradient(135deg, #8ed2f9, #62BEF5 55%, #3092d6);
+    box-shadow: 0 6px 20px rgba(98, 190, 245, .35);
+  }
+  header h1 { text-transform: uppercase; letter-spacing: .05em; }
+  header .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  header .meta { text-align: right; font-size: 13px; color: var(--muted); }
+  header .meta b { color: var(--text); font-size: 15px; }
+  .season-track {
+    height: 4px; border-radius: 4px; background: rgba(255, 255, 255, .06);
+    overflow: hidden; margin: 0 0 16px;
+  }
+  .season-track .fill {
+    height: 100%; border-radius: 4px; transition: width .4s ease;
+    background: linear-gradient(90deg, #379fe0, var(--accent), #9ad9ff);
+  }
+
+  /* ---------- KPI bar ---------- */
+  .kpis {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 10px; margin-bottom: 16px;
+  }
+  .kpi {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 14px; padding: 11px 13px;
+    backdrop-filter: blur(10px);
+    position: relative; overflow: hidden;
+    transition: border-color .2s, transform .2s;
+  }
+  .kpi::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(98, 190, 245, .55), transparent);
+    opacity: 0; transition: opacity .25s;
+  }
+  .kpi:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .kpi:hover::before { opacity: 1; }
+  .kpi .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .09em; color: var(--muted); font-weight: 700; }
+  .kpi .val { font-size: 20px; font-weight: 900; margin-top: 3px; }
+  .kpi .delta { font-size: 11px; margin-top: 3px; font-weight: 700; }
+  .up { color: var(--good); } .down { color: var(--bad); } .flat { color: var(--muted); }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    display: inline-flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 14px; padding: 4px; backdrop-filter: blur(10px);
+  }
+  .tabs button { border: none; background: transparent; border-radius: 10px; padding: 8px 14px; font-size: 13px; }
+  .tabs button:hover:not(.active) { box-shadow: none; transform: none; background: var(--accent-soft); }
+  .tabs button.active {
+    background: linear-gradient(135deg, #7ecbf8, #62BEF5 55%, #379fe0);
+    color: #04131f; font-weight: 800;
+    box-shadow: 0 4px 14px rgba(98, 190, 245, .35);
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 14px;
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow);
+    animation: floatIn .3s ease;
+  }
+  /* Règle signature n°1 : titres en CAPS, point final, 1re lettre bleue (via .sig-cap) */
+  .card h3 {
+    font-size: 13.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    text-transform: uppercase; letter-spacing: .09em; font-weight: 800;
+  }
+  .card h3 .tag {
+    font-size: 9.5px; padding: 3px 9px; border-radius: 20px;
+    background: var(--accent-soft); color: var(--accent); border: 1px solid var(--border);
+    font-weight: 700; letter-spacing: .06em;
+  }
+
+  /* ---------- Actions ---------- */
+  .action {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border: 1px solid var(--border); border-radius: 13px;
+    padding: 11px 13px; margin-bottom: 8px; background: var(--panel2);
+    transition: border-color .18s, background .18s, transform .18s;
+  }
+  .action:hover { border-color: var(--border-strong); transform: translateX(2px); }
+  .action.selected {
+    border-color: var(--border-strong);
+    background: linear-gradient(100deg, var(--accent-soft), var(--panel2) 60%);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .action .info { flex: 1; }
+  .action .name { font-weight: 800; font-size: 14px; }
+  .action .desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+  .action .cost {
+    display: inline-block; font-size: 11px; color: var(--warn); white-space: nowrap;
+    background: rgba(240, 180, 41, .08); border: 1px solid rgba(240, 180, 41, .25);
+    padding: 1px 8px; border-radius: 20px; margin-top: 5px; font-weight: 700;
+  }
+  .action .ctrl { display: flex; align-items: center; gap: 8px; }
+  .action .ctrl button { width: 32px; height: 32px; padding: 0; font-size: 16px; border-radius: 50%; }
+  .action .count { min-width: 18px; text-align: center; font-weight: 900; font-size: 16px; }
+
+  .ap-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    font-size: 13px; color: var(--muted); font-weight: 600;
+  }
+  .ap-dots { display: flex; gap: 6px; }
+  .ap-dot {
+    width: 26px; height: 10px; border-radius: 6px;
+    background: var(--panel2); border: 1px solid var(--border);
+    transition: all .2s;
+  }
+  .ap-dot.on {
+    background: linear-gradient(90deg, #62BEF5, #9ad9ff);
+    border-color: transparent; box-shadow: 0 0 10px rgba(98, 190, 245, .5);
+  }
+
+  /* ---------- Bars / meters ---------- */
+  .meter { margin-bottom: 11px; }
+  .meter .top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+  .meter .track { height: 8px; border-radius: 6px; background: rgba(255,255,255,.05); overflow: hidden; }
+  .meter .fill { height: 100%; border-radius: 6px; background: var(--accent); transition: width .35s ease; }
+
+  /* ---------- Log — règle signature n°3 : trait bleu vertical à gauche du texte ---------- */
+  .log {
+    max-height: 380px; overflow-y: auto; font-size: 13px;
+    border-left: 3px solid var(--accent); padding-left: 12px;
+  }
+  .log .entry { padding: 7px 4px; border-bottom: 1px solid rgba(255,255,255,.05); line-height: 1.5; }
+  .log .entry .wk { color: var(--muted); font-size: 10.5px; margin-right: 6px; font-weight: 700; }
+  .log .good { color: var(--good); }
+  .log .bad { color: var(--bad); }
+  .log .warn { color: var(--warn); }
+  .blue-rule { border-left: 3px solid var(--accent); padding-left: 14px; }
+
+  /* ---------- Sponsors ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .09em; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,.05); }
+  tbody tr { transition: background .15s; }
+  tbody tr:hover { background: var(--accent-soft); }
+  .sat { font-weight: 800; }
+
+  /* ---------- Modal ---------- */
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(2, 5, 10, .72);
+    backdrop-filter: blur(7px);
+    display: flex; align-items: center; justify-content: center; z-index: 50;
+    padding: 16px;
+  }
+  .modal {
+    background: linear-gradient(170deg, rgba(20, 32, 50, .96), rgba(9, 14, 24, .98));
+    border: 1px solid var(--border-strong); border-radius: 20px;
+    max-width: 560px; width: 100%; padding: 26px; max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .6), var(--glow);
+    animation: floatIn .28s ease;
+  }
+  .modal h2 { margin-bottom: 12px; font-size: 19px; text-transform: uppercase; letter-spacing: .05em; }
+  .modal p { font-size: 14px; line-height: 1.6; color: var(--muted); margin-bottom: 10px; }
+  .modal .choices { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .modal .choices button { text-align: left; padding: 13px 15px; line-height: 1.45; border-radius: 13px; }
+  .modal .choices button:hover { background: var(--accent-soft); }
+  .modal .choices button b { display: block; color: var(--accent); margin-bottom: 3px; }
+
+  /* ---------- Setup — cartes club façon cartes de collection ---------- */
+  .setup-clubs { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 14px; margin-top: 14px; }
+  .club-card {
+    position: relative; overflow: hidden;
+    border: 1px solid var(--border); border-radius: 18px; padding: 20px 16px 16px;
+    background:
+      radial-gradient(280px 160px at 50% -20%, rgba(98, 190, 245, .22), transparent 70%),
+      linear-gradient(165deg, rgba(24, 38, 60, .85), rgba(8, 13, 22, .95));
+    cursor: pointer; transition: transform .22s ease, border-color .22s, box-shadow .22s;
+    text-align: center;
+  }
+  .club-card::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, .09) 47%, transparent 62%);
+    transform: translateX(-130%); transition: transform .55s ease;
+    pointer-events: none;
+  }
+  .club-card:hover { border-color: var(--border-strong); transform: translateY(-5px) scale(1.015); box-shadow: 0 16px 40px rgba(0,0,0,.5), var(--glow); }
+  .club-card:hover::after { transform: translateX(130%); }
+  .club-card .emoji {
+    font-size: 44px; line-height: 1;
+    filter: drop-shadow(0 6px 16px rgba(98, 190, 245, .35));
+  }
+  .club-card h3 { display: block; margin: 10px 0 2px; font-size: 15px; text-transform: uppercase; letter-spacing: .05em; }
+  .club-card .d { font-size: 12px; color: var(--muted); line-height: 1.55; text-align: left; margin-top: 8px; }
+  .club-card .pill {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px; margin-top: 6px;
+    background: var(--accent-soft); color: var(--accent); border: 1px solid var(--border);
+  }
+  .club-card .stats { display: flex; gap: 7px; margin-top: 12px; }
+  .club-card .stat {
+    flex: 1; background: rgba(4, 9, 17, .6); border: 1px solid var(--border);
+    border-radius: 11px; padding: 8px 4px; text-align: center;
+  }
+  .club-card .stat b { display: block; font-size: 13px; }
+  .club-card .stat span { font-size: 8.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+
+  /* ---------- Hero résultat de match ---------- */
+  .hero {
+    position: relative; overflow: hidden;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    padding: 15px 20px; margin-bottom: 14px;
+    backdrop-filter: blur(12px); animation: floatIn .32s ease;
+  }
+  .hero-win { border-left: 4px solid var(--good); background: linear-gradient(100deg, rgba(47, 214, 163, .13), var(--panel) 55%); }
+  .hero-loss { border-left: 4px solid var(--bad); background: linear-gradient(100deg, rgba(255, 93, 115, .13), var(--panel) 55%); }
+  .hero-main { font-size: 24px; font-weight: 900; font-style: italic; letter-spacing: .04em; }
+  .hero-win .hero-main { color: var(--good); }
+  .hero-loss .hero-main { color: var(--bad); }
+  .hero-sub { color: var(--muted); font-size: 12.5px; margin-top: 3px; font-weight: 600; }
+
+  .result-banner {
+    border-radius: 12px; padding: 11px 15px; margin-bottom: 12px;
+    font-size: 14px; font-weight: 700; border: 1px solid var(--border); background: var(--panel2);
+  }
+  .badge {
+    display: inline-block; font-size: 10.5px; padding: 3px 10px; border-radius: 20px;
+    font-weight: 800; letter-spacing: .04em;
+  }
+  .badge.gold { background: rgba(255, 209, 102, .12); color: var(--gold); border: 1px solid rgba(255, 209, 102, .5); }
+  .badge.silver { background: rgba(160, 174, 192, .12); color: #a9b8cc; border: 1px solid rgba(160, 174, 192, .5); }
+  .badge.none { background: var(--panel2); color: var(--muted); border: 1px solid var(--border); }
+
+  .objectives li { font-size: 13px; margin: 7px 0 7px 18px; line-height: 1.45; }
+  /* Règle signature n°4 : trait bleu en fin de contenu */
+  .footer-note { color: var(--muted); font-size: 11px; text-align: center; padding: 20px 0 34px; }
+  .footer-note::before {
+    content: ""; display: block; width: 44px; height: 3px; border-radius: 2px;
+    background: var(--accent); margin: 0 auto 12px;
+  }
+  .hidden { display: none !important; }
+  .cmon-logo { height: 44px; width: auto; display: block; filter: drop-shadow(0 4px 14px rgba(98, 190, 245, .25)); }
+  .cmon-icon { height: 26px; width: auto; display: inline-block; }
+  .brand .sep { width: 3px; height: 38px; background: var(--accent); border-radius: 2px; }
+
+  /* ---------- Login / profils ---------- */
+  input[type="text"], input[type="password"] {
+    font-family: inherit; font-size: 14px; color: var(--text);
+    background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 10px 14px; width: 100%;
+    outline: none; transition: border-color .18s;
+  }
+  input[type="text"]:focus, input[type="password"]:focus { border-color: var(--border-strong); box-shadow: var(--glow); }
+  .profile-row {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--border); border-radius: 13px;
+    padding: 11px 14px; margin-bottom: 8px; background: var(--panel2);
+    cursor: pointer; transition: border-color .18s, transform .18s;
+  }
+  .profile-row:hover { border-color: var(--border-strong); transform: translateX(3px); box-shadow: var(--glow); }
+  .profile-row .avatar {
+    width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 17px; color: #04131f;
+    background: linear-gradient(135deg, #8ed2f9, #62BEF5 55%, #3092d6);
+  }
+  .profile-row .pname { font-weight: 800; font-size: 15px; flex: 1; }
+  .profile-row .pmeta { font-size: 11px; color: var(--muted); }
+  .footer-links { margin-top: 8px; }
+  .footer-links a { color: var(--accent); text-decoration: none; font-weight: 700; cursor: pointer; }
+  .footer-links a:hover { text-decoration: underline; }
+  .user-chip {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px;
+  }
+  .privacy-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .privacy-note h4 { color: var(--text); font-size: 12.5px; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: .06em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ LOGIN SCREEN ============ -->
+  <div id="screen-login" class="hidden">
+    <header>
+      <div class="brand">
+        <div>
+          <h1 style="font-size:19px"><span class="sig-cap">C</span>LUB CATALIST<span class="sig-cap">.</span></h1>
+          <div class="sub">Simulateur de gestion marketing d'un club de sport — by C'mon Sports</div>
+        </div>
+      </div>
+    </header>
+    <div class="card" style="max-width:540px; margin:30px auto 14px">
+      <h3>👤 <span><span class="sig-cap">Q</span>UI JOUE ?</span></h3>
+      <div id="profiles-list"></div>
+      <div style="border-top:1px solid var(--border); margin-top:14px; padding-top:14px">
+        <div style="font-size:12px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px">Créer un compte</div>
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <input type="text" id="new-email" maxlength="80" inputmode="email" autocomplete="email" placeholder="Adresse e-mail">
+          <input type="text" id="new-pseudo" maxlength="20" placeholder="Pseudo affiché (optionnel)">
+          <input type="password" id="new-pin" maxlength="8" inputmode="numeric" placeholder="Code PIN 4-8 chiffres (optionnel)">
+          <label style="display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--muted); line-height:1.5; cursor:pointer">
+            <input type="checkbox" id="new-optin" style="margin-top:2px; accent-color:#62BEF5">
+            <span>J'accepte de recevoir les actualités C'mon Sports par e-mail. Mon adresse sera alors transmise
+            à Brevo (plateforme d'e-mailing, hébergement UE) avec le marqueur Club Catalist. <b style="color:var(--text)">Optionnel</b> —
+            sans cette case, mon adresse ne quitte jamais ce navigateur.</span>
+          </label>
+          <button class="primary" id="btn-create-profile">Créer le compte</button>
+          <div id="create-error" style="font-size:12px; color:var(--bad)"></div>
+        </div>
+      </div>
+    </div>
+    <p style="max-width:540px; margin:0 auto; font-size:12px; color:var(--muted); text-align:center; line-height:1.6">
+      🔒 Vos données (e-mail, code PIN haché, sauvegardes) restent <b style="color:var(--text)">dans ce navigateur</b>.
+      Seule exception, à votre demande : l'inscription aux actualités (case ci-dessus).
+    </p>
+  </div>
+
+  <!-- ============ SETUP SCREEN ============ -->
+  <div id="screen-setup">
+    <header>
+      <div class="brand">
+        <svg class="cmon-logo" viewBox="210 200 1600 480" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C’mon Sports"><polygon class="cls-1" points="397.1 586.91 371.5 543.31 311.66 441.39 324.56 419.15 278.89 341.37 220.93 442.04 352.01 665.28 469.15 665.41 423.07 586.93 397.1 586.91"/><polygon class="cls-1" points="537.9 295.62 563.77 295.63 648.63 440.05 635.72 462.4 681.35 540.11 739.25 439.74 608.59 217.18 466.77 217.28 421.28 296.14 577.81 562.8 563.95 586.83 539.86 586.87 382.42 318.72 440.9 217.33 350.43 217.35 291.76 319.07 495 665.23 609.34 665.27 668.48 562.52 525 318.04 537.9 295.62"/><polygon class="cls-1" points="957.24 414.4 942.26 388.86 883.17 388.89 853.69 439.98 883.73 491.14 942.24 491.11 956.98 465.56 1015.99 465.54 971.82 542.23 854.38 542.23 794.56 440.35 853.65 337.81 971.47 337.73 1016.47 414.38 957.24 414.4"/><polygon class="cls-1" points="959.89 217.33 1004.89 293.97 945.66 294 900.63 217.33 959.89 217.33"/><path class="cls-1" d="m1512.33,337.79l-117.78.08-59.08,102.51,59.8,101.85h117.4s59.27-102.9,59.27-102.9l-59.61-101.54Zm-29.22,153.34l-58.5.02-30.02-51.14,29.46-51.08,59.08-.02,29.72,50.65-29.75,51.57Z"/><polygon class="cls-1" points="1232.85 338 1180.05 429.32 1126.3 337.73 1061.66 337.73 1062.64 541.88 1121.88 541.86 1119.65 437.3 1151.11 490.85 1209.29 490.81 1240.46 437.58 1238.23 542.13 1297.47 542.16 1298.44 338.01 1232.85 338"/><polygon class="cls-1" points="1788.36 542.19 1787.89 541.34 1787.89 337.73 1730.08 337.73 1730.08 430.98 1675.32 337.73 1610.57 337.73 1611.55 542.23 1670.88 542.21 1668.65 437.47 1730.08 542.23 1787.89 542.23 1787.89 542.19 1788.36 542.19"/><path class="cls-1" d="m828.13,666.72c-6.04,0-11.82-.99-17.35-2.96-5.53-1.97-9.81-4.51-12.82-7.6l3.37-6.62c2.86,2.78,6.71,5.13,11.55,7.02,4.83,1.9,9.92,2.84,15.26,2.84s9.26-.64,12.48-1.91c3.21-1.28,5.57-3,7.08-5.17,1.51-2.17,2.26-4.56,2.26-7.2,0-3.17-.91-5.73-2.73-7.66-1.82-1.93-4.2-3.46-7.14-4.59-2.94-1.12-6.19-2.11-9.75-2.96-3.56-.85-7.12-1.76-10.68-2.73-3.56-.97-6.83-2.26-9.81-3.89-2.98-1.63-5.38-3.77-7.2-6.44-1.82-2.67-2.73-6.17-2.73-10.5,0-4.02,1.06-7.72,3.19-11.08,2.13-3.37,5.4-6.07,9.81-8.13,4.41-2.05,10.06-3.07,16.95-3.07,4.56,0,9.09.64,13.58,1.91,4.49,1.28,8.36,3.04,11.61,5.28l-2.9,6.85c-3.48-2.32-7.18-4.02-11.08-5.11-3.91-1.08-7.68-1.63-11.32-1.63-4.87,0-8.9.66-12.07,1.97-3.17,1.32-5.51,3.07-7.02,5.28s-2.26,4.7-2.26,7.49c0,3.17.91,5.73,2.73,7.66,1.82,1.94,4.22,3.44,7.2,4.53,2.98,1.08,6.25,2.05,9.81,2.9,3.56.85,7.1,1.78,10.62,2.79,3.52,1.01,6.77,2.3,9.75,3.89,2.98,1.59,5.38,3.7,7.2,6.32,1.82,2.63,2.73,6.08,2.73,10.33,0,3.95-1.08,7.6-3.25,10.97-2.17,3.37-5.48,6.08-9.92,8.13-4.45,2.05-10.16,3.07-17.12,3.07Z"/><path class="cls-1" d="m982.27,666.03v-81.24h30.41c6.89,0,12.81,1.1,17.76,3.31,4.95,2.2,8.76,5.38,11.43,9.52,2.67,4.14,4,9.15,4,15.03s-1.33,10.66-4,14.8c-2.67,4.14-6.48,7.33-11.43,9.57-4.95,2.25-10.87,3.37-17.76,3.37h-25.65l3.83-4.06v29.71h-8.59Zm8.59-29.02l-3.83-4.18h25.42c8.12,0,14.29-1.76,18.51-5.28,4.22-3.52,6.33-8.49,6.33-14.92s-2.11-11.53-6.33-15.09c-4.22-3.56-10.39-5.34-18.51-5.34h-25.42l3.83-4.06v48.86Z"/><path class="cls-1" d="m1206.27,666.72c-6.11,0-11.78-1.02-17-3.07-5.22-2.05-9.75-4.95-13.58-8.7-3.83-3.75-6.81-8.13-8.94-13.12-2.13-4.99-3.19-10.46-3.19-16.42s1.06-11.43,3.19-16.42c2.13-4.99,5.11-9.36,8.94-13.12,3.83-3.75,8.34-6.65,13.52-8.7,5.18-2.05,10.87-3.07,17.06-3.07s11.76,1.03,16.95,3.07c5.18,2.05,9.69,4.93,13.52,8.65,3.83,3.71,6.81,8.09,8.94,13.11,2.13,5.03,3.19,10.52,3.19,16.48s-1.07,11.45-3.19,16.48c-2.13,5.03-5.11,9.4-8.94,13.11-3.83,3.72-8.34,6.6-13.52,8.65-5.18,2.05-10.83,3.07-16.95,3.07Zm0-7.66c4.88,0,9.38-.83,13.52-2.5,4.14-1.66,7.74-4.02,10.79-7.08,3.06-3.06,5.44-6.62,7.14-10.68,1.7-4.06,2.55-8.53,2.55-13.41s-.85-9.34-2.55-13.4c-1.7-4.06-4.08-7.62-7.14-10.68-3.06-3.06-6.66-5.41-10.79-7.08-4.14-1.66-8.65-2.5-13.52-2.5s-9.4.83-13.58,2.5c-4.18,1.66-7.82,4.02-10.91,7.08-3.1,3.06-5.49,6.62-7.2,10.68-1.7,4.06-2.55,8.53-2.55,13.4s.85,9.25,2.55,13.35c1.7,4.1,4.1,7.68,7.2,10.74,3.09,3.06,6.73,5.42,10.91,7.08,4.18,1.67,8.7,2.5,13.58,2.5Z"/><path class="cls-1" d="m1373.28,666.03v-81.24h30.41c6.88,0,12.8,1.1,17.76,3.31,4.95,2.2,8.76,5.38,11.43,9.52,2.67,4.14,4,9.15,4,15.03s-1.33,10.66-4,14.8c-2.67,4.14-6.48,7.31-11.43,9.52-4.95,2.21-10.87,3.31-17.76,3.31h-25.65l3.83-3.95v29.71h-8.59Zm8.59-29.02l-3.83-4.06h25.42c8.13,0,14.29-1.78,18.51-5.34,4.22-3.56,6.33-8.55,6.33-14.97s-2.11-11.53-6.33-15.09c-4.22-3.56-10.39-5.34-18.51-5.34h-25.42l3.83-4.06v48.86Zm46.89,29.02l-20.89-29.48h9.28l21.01,29.48h-9.4Z"/><path class="cls-1" d="m1576.98,666.03v-73.82h-28.55v-7.43h65.69v7.43h-28.55v73.82h-8.59Z"/><path class="cls-1" d="m1754.09,666.72c-6.04,0-11.82-.99-17.35-2.96-5.53-1.97-9.81-4.51-12.83-7.6l3.37-6.62c2.86,2.78,6.71,5.13,11.55,7.02,4.83,1.9,9.92,2.84,15.26,2.84s9.26-.64,12.48-1.91c3.21-1.28,5.57-3,7.08-5.17,1.51-2.17,2.26-4.56,2.26-7.2,0-3.17-.91-5.73-2.73-7.66-1.82-1.93-4.2-3.46-7.14-4.59-2.94-1.12-6.19-2.11-9.75-2.96-3.56-.85-7.12-1.76-10.68-2.73-3.56-.97-6.83-2.26-9.81-3.89-2.98-1.63-5.38-3.77-7.2-6.44-1.82-2.67-2.73-6.17-2.73-10.5,0-4.02,1.06-7.72,3.19-11.08,2.13-3.37,5.4-6.07,9.81-8.13,4.41-2.05,10.06-3.07,16.94-3.07,4.57,0,9.09.64,13.58,1.91,4.49,1.28,8.36,3.04,11.61,5.28l-2.9,6.85c-3.48-2.32-7.18-4.02-11.08-5.11-3.91-1.08-7.68-1.63-11.32-1.63-4.87,0-8.9.66-12.07,1.97-3.17,1.32-5.51,3.07-7.02,5.28-1.51,2.21-2.26,4.7-2.26,7.49,0,3.17.91,5.73,2.73,7.66,1.82,1.94,4.22,3.44,7.2,4.53,2.98,1.08,6.25,2.05,9.81,2.9,3.56.85,7.1,1.78,10.62,2.79,3.52,1.01,6.77,2.3,9.75,3.89,2.98,1.59,5.38,3.7,7.2,6.32,1.82,2.63,2.73,6.08,2.73,10.33,0,3.95-1.08,7.6-3.25,10.97-2.17,3.37-5.48,6.08-9.92,8.13-4.45,2.05-10.16,3.07-17.12,3.07Z"/></svg>
+        <div class="sep"></div>
+        <div>
+          <h1 style="font-size:19px"><span class="sig-cap">C</span>LUB CATALIST<span class="sig-cap">.</span></h1>
+          <div class="sub">Simulateur de gestion marketing d'un club de sport — by C'mon Sports</div>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="user-chip" id="setup-user"></span>
+        <button id="btn-logout-setup" style="font-size:12px;padding:4px 10px">Se déconnecter</button>
+      </div>
+    </header>
+    <div class="card">
+      <h3>🎯 <span><span class="sig-cap">V</span>OTRE MISSION.</span></h3>
+      <p class="blue-rule" style="font-size:14px; color:var(--muted); line-height:1.6">
+        Vous êtes recruté·e comme <b style="color:var(--text)">Responsable Marketing Digital</b> d'un club de sport.
+        Chaque semaine, répartissez vos points d'action entre contenu, campagnes, collecte de données, sponsors et conformité.
+        Faites progresser le <b style="color:var(--text)">score DMOS</b> (maturité digitale, /60), valorisez votre fanbase,
+        satisfaites vos sponsors et atteignez les objectifs du comité directeur… sous peine de licenciement.
+      </p>
+    </div>
+    <div class="card">
+      <h3><span><span class="sig-cap">C</span>HOISISSEZ VOTRE CLUB.</span></h3>
+      <div class="setup-clubs" id="setup-clubs"></div>
+    </div>
+    <div id="resume-zone"></div>
+  </div>
+
+  <!-- ============ GAME SCREEN ============ -->
+  <div id="screen-game" class="hidden">
+    <header>
+      <div class="brand">
+        <div class="logo" id="club-logo">M</div>
+        <div>
+          <h1 style="font-size:19px" id="club-name">Club</h1>
+          <div class="sub" id="club-sub"></div>
+        </div>
+      </div>
+      <div class="meta">
+        <div><b id="hdr-week">Semaine 1</b> / <span id="hdr-season">Saison 1</span></div>
+        <div id="hdr-cert"></div>
+        <div style="margin-top:4px">
+          <span class="user-chip" id="game-user"></span>
+          <button id="btn-save" style="font-size:12px;padding:4px 10px">💾 Sauvegarder</button>
+          <button id="btn-reset" style="font-size:12px;padding:4px 10px">🗑 Nouvelle partie</button>
+          <button id="btn-logout-game" style="font-size:12px;padding:4px 10px">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+    <div class="season-track"><div class="fill" id="season-fill" style="width:0%"></div></div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="tabs">
+      <button data-tab="dashboard" class="active">📊 Tableau de bord</button>
+      <button data-tab="dmos">🧭 DMOS</button>
+      <button data-tab="sponsors">🤝 Sponsors</button>
+      <button data-tab="cmon">🚀 C'mon Sports</button>
+      <button data-tab="history">📜 Historique</button>
+    </div>
+
+    <!-- ------ TAB: DASHBOARD ------ -->
+    <div id="tab-dashboard">
+      <div id="last-result"></div>
+      <div class="grid2">
+        <div>
+          <div class="card">
+            <h3>⚡ <span><span class="sig-cap">A</span>CTIONS DE LA SEMAINE.</span> <span class="tag">3 points d'action</span></h3>
+            <div class="ap-bar">
+              <span>Points d'action :</span>
+              <div class="ap-dots" id="ap-dots"></div>
+            </div>
+            <div id="actions-list"></div>
+            <button class="primary" id="btn-advance" style="width:100%; margin-top:10px; padding:12px; font-size:15px">
+              ▶ Jouer la semaine
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h3>🎯 <span><span class="sig-cap">O</span>BJECTIFS DE LA SAISON.</span> <span class="tag" id="obj-tag">comité directeur</span></h3>
+            <ul class="objectives" id="objectives"></ul>
+          </div>
+          <div class="card">
+            <h3>📰 <span><span class="sig-cap">J</span>OURNAL.</span></h3>
+            <div class="log" id="log"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ------ TAB: DMOS ------ -->
+    <div id="tab-dmos" class="hidden">
+      <div class="grid2">
+        <div class="card">
+          <h3>🧭 <span><span class="sig-cap">S</span>CORE DMOS.</span> <span class="tag">Digital Maturity & Operations Score</span></h3>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5">
+            6 piliers notés sur 10. Un score total ≥ 45/60 débloque la <b style="color:var(--gold)">certification Gold</b>
+            (sponsors plus généreux, prospection facilitée). ≥ 30/60 : certification Silver.
+          </p>
+          <div id="dmos-meters"></div>
+          <div style="margin-top:14px; font-size:15px">
+            Total : <b id="dmos-total" style="font-size:20px"></b> / 60 &nbsp; <span id="dmos-badge"></span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🔬 <span><span class="sig-cap">F</span>AN LAB — VALORISATION DE LA FANBASE.</span></h3>
+          <p style="font-size:13px;color:var(--muted);line-height:1.5">
+            La valeur économique de votre communauté dépend du nombre de contacts qualifiés,
+            de la qualité des données et de l'engagement. C'est l'argument n°1 face aux sponsors.
+          </p>
+          <div style="text-align:center; padding:18px 0">
+            <div style="font-size:34px; font-weight:800; color:var(--accent)" id="fanlab-value"></div>
+            <div style="font-size:12px; color:var(--muted)">valeur estimée de la fanbase</div>
+          </div>
+          <div id="fanlab-details" style="font-size:13px; color:var(--muted); line-height:1.8"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ------ TAB: SPONSORS ------ -->
+    <div id="tab-sponsors" class="hidden">
+      <div class="card">
+        <h3>🤝 <span><span class="sig-cap">P</span>ORTEFEUILLE SPONSORS.</span></h3>
+        <table>
+          <thead><tr><th>Sponsor</th><th>Secteur</th><th>Montant / saison</th><th>Satisfaction</th><th>Contrat</th></tr></thead>
+          <tbody id="sponsor-rows"></tbody>
+        </table>
+        <p style="font-size:12px; color:var(--muted); margin-top:10px; line-height:1.5">
+          💡 L'action « Activation sponsor » augmente la satisfaction. En fin de saison, les sponsors satisfaits (≥ 60 %)
+          renouvellent — parfois à la hausse. L'action « Prospection sponsor » peut décrocher un nouveau contrat :
+          les chances dépendent du score DMOS et de la valeur Fan Lab.
+        </p>
+      </div>
+    </div>
+
+    <!-- ------ TAB: C'MON SPORTS ------ -->
+    <div id="tab-cmon" class="hidden">
+      <div class="card">
+        <h3>🚀 <span><span class="sig-cap">C</span>'MON SPORTS — VOTRE PARTENAIRE DATA & MARKETING.</span></h3>
+        <p class="blue-rule" style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px">
+          Un club peut tout faire seul — mais il avance à l'aveugle. C'mon Sports révèle ce que vous ne
+          voyez pas (scores DMOS exacts, valeur économique de la fanbase, santé de vos données) et
+          structure votre croissance. Chaque service activé transforme durablement votre tableau de bord.
+        </p>
+        <div id="services-list"></div>
+      </div>
+    </div>
+
+    <!-- ------ TAB: HISTORY ------ -->
+    <div id="tab-history" class="hidden">
+      <div class="card">
+        <h3>📜 <span><span class="sig-cap">B</span>ILANS DE SAISON.</span></h3>
+        <div id="history-list" style="font-size:13px; color:var(--muted)">Aucune saison terminée pour l'instant.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note"><svg class="cmon-icon" viewBox="210 210 545 465" fill="#62bdf4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C’mon Sports"><polygon class="cls-1" points="397.1 586.91 371.5 543.31 311.66 441.39 324.56 419.15 278.89 341.37 220.93 442.04 352.01 665.28 469.15 665.41 423.07 586.93 397.1 586.91"/><polygon class="cls-1" points="537.9 295.62 563.77 295.63 648.63 440.05 635.72 462.4 681.35 540.11 739.25 439.74 608.59 217.18 466.77 217.28 421.28 296.14 577.81 562.8 563.95 586.83 539.86 586.87 382.42 318.72 440.9 217.33 350.43 217.35 291.76 319.07 495 665.23 609.34 665.27 668.48 562.52 525 318.04 537.9 295.62"/></svg><div style="margin-top:8px">Club Catalist — prototype v7 · l'écosystème C'mon Sports en jeu · sauvegarde locale automatique en fin de semaine</div>
+    <div class="footer-links">
+      <a id="link-privacy">🔒 Confidentialité & données (RGPD / nLPD)</a> ·
+      <a id="link-export">Exporter mes données</a> ·
+      <a id="link-delete">Supprimer mon profil</a> ·
+      <a id="link-admin" style="color:var(--muted)">⚙️ Admin</a>
+    </div></div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   Marketing Club GM — jeu de gestion marketing d'un club de sport
+   Inspiré des méthodes C'mon Sports : audit DMOS (6 piliers /60),
+   valorisation fanbase (Fan Lab), gestion sponsors, campagnes CRM.
+   ===================================================================== */
+
+/* Stockage 100 % local (localStorage) — aucune donnée ne quitte le navigateur.
+   Sauvegardes par profil ; l'ancienne clé unique sert à la migration. */
+const LEGACY_SAVE_KEY = "mktclubgm1";
+const USERS_KEY = "mktclubgm_users";
+const CONSENT_KEY = "mktclubgm_consent";
+const SESSION_KEY = "mktclubgm_session";
+let currentUser = null;
+function currentSaveKey() { return currentUser ? "mktclubgm1_p" + currentUser.id : LEGACY_SAVE_KEY; }
+const WEEKS_PER_SEASON = 26;
+
+/* ---------------- Clubs jouables ---------------- */
+const CLUBS = [
+  { id:"hc",  emoji:"🏒", name:"HC Montagnards", sport:"Hockey sur glace", city:"La Chaux-de-Fonds", division:1,
+    desc:"Club historique de l'élite, fanbase fidèle mais vieillissante. Digital quasi inexistant : tout est à construire.",
+    fans:14000, contacts:1800, engagement:38, budget:60000, strength:52, capacity:5200, ticket:24,
+    dmos:{strategie:2, contenu:3, donnees:1, outils:2, acquisition:2, conformite:2} },
+  { id:"fc",  emoji:"⚽", name:"FC Riviera 04", sport:"Football", city:"Vevey", division:2,
+    desc:"Ambitieux club de 2e division qui rêve de promotion. Bonne présence sociale, mais données fans éparpillées et sponsors impatients.",
+    fans:32000, contacts:5200, engagement:45, budget:95000, strength:58, capacity:8600, ticket:19,
+    dmos:{strategie:4, contenu:5, donnees:2, outils:3, acquisition:4, conformite:3} },
+  { id:"bb",  emoji:"🏀", name:"Lions Basket 89", sport:"Basketball", city:"Fribourg", division:2,
+    desc:"Petit budget, grosse énergie, 2e division. Communauté jeune et engagée, mais zéro CRM et une conformité RGPD douteuse.",
+    fans:9500, contacts:900, engagement:56, budget:42000, strength:60, capacity:3100, ticket:16,
+    dmos:{strategie:3, contenu:4, donnees:1, outils:1, acquisition:3, conformite:1} },
+  { id:"vb", emoji:"🏐", name:"Volley Léman Élite", sport:"Volleyball", city:"Lausanne", division:1,
+    desc:"Champion en titre de l'élite, l'Europe en ligne de mire. Le sportif tourne, le marketing dort : le comité veut monétiser, vite.",
+    fans:21000, contacts:3400, engagement:41, budget:78000, strength:68, capacity:4000, ticket:21,
+    dmos:{strategie:3, contenu:3, donnees:3, outils:2, acquisition:2, conformite:4} },
+];
+
+/* ---------------- Piliers DMOS ---------------- */
+const PILLARS = [
+  { key:"strategie",  label:"Stratégie digitale", hint:"Vision, KPIs, gouvernance — stabilise la confiance du comité" },
+  { key:"contenu",    label:"Contenu & social",   hint:"Amplifie l'effet des publications sur l'engagement" },
+  { key:"donnees",    label:"Données fans",       hint:"Booste la collecte de contacts et l'efficacité des campagnes" },
+  { key:"outils",     label:"Outils & CRM",       hint:"Réduit le coût des actions marketing" },
+  { key:"acquisition",label:"Acquisition",        hint:"Accélère la croissance de la fanbase" },
+  { key:"conformite", label:"Conformité RGPD",    hint:"Réduit le risque de contrôle et d'amende" },
+];
+
+/* ---------------- Actions hebdomadaires ---------------- */
+const ACTIONS = [
+  { id:"content", name:"📱 Publier du contenu", ap:1, cost:500,
+    desc:"Posts réseaux sociaux, stories match, coulisses. +engagement, +fans." },
+  { id:"campaign", name:"📧 Campagne emailing", ap:1, cost:800,
+    desc:"Newsletter + offre billetterie via votre base contacts. +revenus billetterie, +engagement. Attention à la fatigue si répétée." },
+  { id:"collect", name:"🎁 Jeu concours / collecte data", ap:1, cost:1500,
+    desc:"Opération de collecte : nouveaux contacts qualifiés, +qualité données." },
+  { id:"activation", name:"🤝 Activation sponsor", ap:1, cost:1200,
+    desc:"Opération visibilité pour vos sponsors (LED, réseaux, hospitalité). +satisfaction sponsors, petit bonus de revenus." },
+  { id:"prospect", name:"📞 Prospection sponsor", ap:2, cost:2000,
+    desc:"Démarchage d'un nouveau sponsor. Chances de succès selon score DMOS et valeur Fan Lab." },
+  { id:"training", name:"🎓 Formation & outils", ap:1, cost:3000,
+    desc:"Investissement structurel : +1 point sur le pilier DMOS le plus faible." },
+  { id:"rgpd", name:"🛡 Chantier conformité RGPD", ap:1, cost:2000,
+    desc:"Consentements, registre, nettoyage de base. +conformité, +qualité données." },
+];
+
+/* ---------------- Événements aléatoires ---------------- */
+const EVENTS = [
+  { id:"viral", weight:10, cond:s=>true, run(s){
+      const gain = Math.round(s.fans * 0.03);
+      s.fans += gain; s.engagement = clamp(s.engagement + 4, 0, 100);
+      log(s, `🔥 Une vidéo des coulisses devient virale ! +${fmt(gain)} fans, engagement en hausse.`, "good");
+  }},
+  { id:"badbuzz", weight:8, cond:s=>true, run(s){
+      s.engagement = clamp(s.engagement - 6, 0, 100);
+      s.boardConfidence = clamp(s.boardConfidence - 4, 0, 100);
+      log(s, `💥 Bad buzz : un joueur dérape en interview. Engagement et confiance du comité en baisse.`, "bad");
+  }},
+  { id:"rgpdcheck", weight:8, cond:s=>true, run(s){
+      if (s.dmos.conformite >= 6) {
+        s.boardConfidence = clamp(s.boardConfidence + 3, 0, 100);
+        log(s, `🛡 Contrôle du préposé à la protection des données : tout est en règle. Le comité apprécie.`, "good");
+      } else {
+        const fine = 4000 + s.dmos.conformite * -300 + 3000;
+        s.budget -= fine;
+        s.boardConfidence = clamp(s.boardConfidence - 6, 0, 100);
+        log(s, `⚖️ Contrôle RGPD : consentements manquants. Amende de ${fmt(fine)} CHF. Investissez dans la conformité !`, "bad");
+      }
+  }},
+  { id:"media", weight:9, cond:s=>s.engagement >= 50, run(s){
+      const gain = Math.round(s.fans * 0.02);
+      s.fans += gain;
+      log(s, `📺 La télé régionale consacre un reportage au club. +${fmt(gain)} fans.`, "good");
+  }},
+  { id:"churn", weight:7, cond:s=>s.dataQuality < 5 && !s.services.datafactory, run(s){
+      const loss = Math.round(s.contacts * 0.05);
+      s.contacts -= loss;
+      log(s, `🧹 Base de données mal entretenue : ${fmt(loss)} contacts obsolètes (hard bounces). La qualité des données compte !`, "warn");
+  }},
+  { id:"sponsorimpat", weight:7, cond:s=>s.sponsors.length>0, run(s){
+      const sp = pick(s.sponsors);
+      sp.satisfaction = clamp(sp.satisfaction - 10, 0, 100);
+      log(s, `😤 ${sp.name} se plaint du manque de visibilité. Satisfaction en baisse — prévoyez une activation.`, "warn");
+  }},
+  { id:"intern", weight:6, cond:s=>true, run(s){
+      s.engagement = clamp(s.engagement + 3, 0, 100);
+      log(s, `🎓 Un·e stagiaire en marketing sportif très motivé·e rejoint l'équipe. Petit boost d'engagement.`, "good");
+  }},
+  /* --- Partner manager C'mon Sports : présent si au moins un service est actif --- */
+  { id:"pmCall", weight:8, cond:s=>anyServiceActive(s), run(s){
+      s.engagement = clamp(s.engagement + 2, 0, 100);
+      s.boardConfidence = clamp(s.boardConfidence + 2, 0, 100);
+      log(s, `📞 Point mensuel avec votre partner manager C'mon Sports : quelques quick wins identifiés et un comité rassuré par le pilotage pro.`, "good");
+  }},
+  { id:"pmBenchmark", weight:6, cond:s=>s.services.audited, run(s){
+      const weakest = PILLARS.reduce((min,pl)=> s.dmos[pl.key] < s.dmos[min.key] ? pl : min, PILLARS[0]);
+      log(s, `📊 Benchmark C'mon Sports : sur le pilier « ${weakest.label} », les clubs comparables font mieux que vous. La roadmap suggère d'y consacrer votre prochaine formation.`, "warn");
+  }},
+  /* --- Scénarios d'ego : plus fréquents quand le comité est difficile --- */
+  { id:"presiTweet", weight:9, ego:true, cond:s=>true, run(s){
+      s.engagement = clamp(s.engagement - 5, 0, 100);
+      s.sponsors.forEach(sp=>sp.satisfaction=clamp(sp.satisfaction-5,0,100));
+      log(s, `🗯 Le président dérape sur les réseaux en taclant l'arbitrage. Vous passez la semaine à éteindre l'incendie.`, "bad");
+  }},
+  { id:"coachPress", weight:7, ego:true, cond:s=>true, run(s){
+      s.boardConfidence = clamp(s.boardConfidence - 4, 0, 100);
+      s.engagement = clamp(s.engagement - 2, 0, 100);
+      log(s, `🎙 En conférence de presse, le coach déclare que « le marketing ne comprend rien au sport ». Ambiance au club.`, "bad");
+  }},
+  { id:"vipLoge", weight:6, ego:true, cond:s=>s.sponsors.length>0, run(s){
+      s.budget -= 2500;
+      s.sponsors.forEach(sp=>sp.satisfaction=clamp(sp.satisfaction-3,0,100));
+      log(s, `🥂 Le président installe ses amis d'enfance en loge VIP… aux places réservées à vos sponsors. −2 500 CHF et des excuses à présenter.`, "warn");
+  }},
+];
+
+/* Événements à choix (modaux) */
+const DECISIONS = [
+  { id:"influencer", weight:6, cond:s=>s.budget>8000,
+    title:"🤳 Proposition d'influenceur",
+    text:"Un influenceur sport régional (180k abonnés) propose un partenariat : 6 000 CHF pour une série de contenus autour de vos matchs à domicile.",
+    choices:[
+      { label:"Accepter le partenariat", sub:"−6 000 CHF · forte chance de croissance fans/engagement",
+        run(s){ s.budget-=6000;
+          if (Math.random()<0.75){ const g=Math.round(s.fans*0.05); s.fans+=g; s.engagement=clamp(s.engagement+6,0,100);
+            log(s,`🤳 Le partenariat influenceur cartonne : +${fmt(g)} fans !`,"good");}
+          else { log(s,`🤳 Le partenariat influenceur fait un flop. 6 000 CHF envolés.`,"bad"); } } },
+      { label:"Décliner poliment", sub:"Aucun risque, aucune récompense",
+        run(s){ log(s,`Vous déclinez la proposition de l'influenceur.`,""); } },
+    ]},
+  { id:"dataleak", weight:5, cond:s=>s.contacts>2000,
+    title:"🔓 Faille de sécurité détectée",
+    text:"Votre prestataire billetterie vous informe d'une possible fuite de données touchant vos contacts. Personne d'autre n'est encore au courant.",
+    choices:[
+      { label:"Transparence totale : informer les fans", sub:"−2 000 CHF de gestion de crise · protège la confiance à long terme",
+        run(s){ s.budget-=2000; s.engagement=clamp(s.engagement-2,0,100); s.dmos.conformite=clamp(s.dmos.conformite+1,0,10);
+          log(s,`🔓 Vous communiquez sur l'incident avec transparence. Les fans apprécient l'honnêteté (+1 conformité DMOS).`,"good"); } },
+      { label:"Étouffer l'affaire", sub:"Gratuit… sauf si ça se sait (risque d'amende et de crise)",
+        run(s){ if (Math.random()<0.4){ s.budget-=9000; s.boardConfidence=clamp(s.boardConfidence-12,0,100); s.engagement=clamp(s.engagement-8,0,100);
+            log(s,`🔓 La fuite est révélée par la presse. Amende de 9 000 CHF et crise de confiance majeure.`,"bad"); }
+          else { log(s,`🔓 L'incident passe inaperçu. Cette fois.`,"warn"); } } },
+    ]},
+  { id:"presiPhoto", weight:7, ego:true, cond:s=>true,
+    title:"🤵 L'ego du président",
+    text:"Le président « suggère » d'apparaître sur chaque visuel du club : affiches, posts, newsletter. Votre charte graphique pleure en silence.",
+    choices:[
+      { label:"Accepter avec le sourire", sub:"Confiance du comité +7 · engagement −5 (les fans se moquent)",
+        run(s){ s.boardConfidence=clamp(s.boardConfidence+7,0,100); s.engagement=clamp(s.engagement-5,0,100);
+          log(s,`🤵 Le président s'affiche partout. Le comité adore ; les fans détournent les visuels en memes.`,"warn"); } },
+      { label:"Défendre la charte graphique", sub:"Confiance du comité −8 · votre ligne éditoriale reste crédible",
+        run(s){ s.boardConfidence=clamp(s.boardConfidence-8,0,100);
+          log(s,`🤵 Vous refusez poliment. Le président s'en souviendra au prochain comité…`,"bad"); } },
+    ]},
+  { id:"starImage", weight:6, ego:true, cond:s=>s.budget>6000,
+    title:"⭐ La star réclame",
+    text:"Votre meilleur·e joueur·se exige une prime de droit à l'image de 5 000 CHF pour continuer à apparaître dans vos contenus — son agent a « vu ce qui se fait ailleurs ».",
+    choices:[
+      { label:"Payer la prime", sub:"−5 000 CHF · ses contenus cartonnent (+fans, +engagement)",
+        run(s){ s.budget-=5000; const g=Math.round(s.fans*0.02); s.fans+=g; s.engagement=clamp(s.engagement+4,0,100);
+          log(s,`⭐ La star signe. Ses stories font exploser les compteurs : +${fmt(g)} fans.`,"good"); } },
+      { label:"Refuser", sub:"Gratuit · risque de clash public (50 %)",
+        run(s){ if(Math.random()<0.5){ s.engagement=clamp(s.engagement-7,0,100); s.boardConfidence=clamp(s.boardConfidence-4,0,100);
+            log(s,`⭐ La star boude publiquement et like des tweets critiques du club. Bad buzz.`,"bad"); }
+          else log(s,`⭐ L'agent bluffait. La star continue comme avant.`,"good"); } },
+    ]},
+  { id:"sponsorControl", weight:5, ego:true, cond:s=>s.sponsors.length>0,
+    title:"🧐 Le sponsor veut tout valider",
+    text:"Votre partenaire principal exige de valider chaque publication avant diffusion. Son directeur marketing « a des idées ».",
+    choices:[
+      { label:"Accepter le droit de regard", sub:"Satisfaction sponsors +15 · engagement −4 (contenus aseptisés)",
+        run(s){ s.sponsors.forEach(sp=>sp.satisfaction=clamp(sp.satisfaction+15,0,100)); s.engagement=clamp(s.engagement-4,0,100);
+          log(s,`🧐 Vos contenus passent désormais en comité de validation. Les sponsors sont ravis, vos stats un peu moins.`,"warn"); } },
+      { label:"Garder la main sur l'éditorial", sub:"Satisfaction sponsors −12 · confiance comité −3",
+        run(s){ s.sponsors.forEach(sp=>sp.satisfaction=clamp(sp.satisfaction-12,0,100)); s.boardConfidence=clamp(s.boardConfidence-3,0,100);
+          log(s,`🧐 Vous défendez votre ligne éditoriale. Le sponsor grince des dents.`,"warn"); } },
+    ]},
+  { id:"derby", weight:6, cond:s=>s.week>4,
+    title:"🏟 Le derby approche",
+    text:"Le match le plus attendu de la saison arrive. Le comité vous demande un plan marketing spécial derby.",
+    choices:[
+      { label:"Grosse opération 360°", sub:"−4 000 CHF · billetterie et engagement boostés au prochain match à domicile",
+        run(s){ s.budget-=4000; s.derbyBoost=true;
+          log(s,`🏟 Plan derby lancé : affichage, jeu concours, avant-match animé. Le prochain match à domicile sera électrique.`,"good"); } },
+      { label:"Communication standard", sub:"Gratuit · le comité espérait mieux",
+        run(s){ s.boardConfidence=clamp(s.boardConfidence-3,0,100);
+          log(s,`🏟 Vous jouez le derby en com' standard. Le comité fait la moue.`,"warn"); } },
+    ]},
+];
+
+/* ---------------- Sponsors potentiels ---------------- */
+const SPONSOR_POOL = [
+  { name:"Brasserie du Lac", sector:"Boissons" },
+  { name:"Garage Piguet & Fils", sector:"Automobile" },
+  { name:"Banque Cantonale Régionale", sector:"Finance" },
+  { name:"Fromagerie des Crêtes", sector:"Agroalimentaire" },
+  { name:"Assurances Helvetia Plus", sector:"Assurance" },
+  { name:"TechnoValley SA", sector:"Tech" },
+  { name:"Boulangerie Central", sector:"Commerce local" },
+  { name:"Énergie Verte Romande", sector:"Énergie" },
+  { name:"Clinique du Sport Léman", sector:"Santé" },
+  { name:"Imprimerie Moderne", sector:"Services" },
+];
+
+/* ---------------- Services C'mon Sports ----------------
+   Le cœur du propos : sans accompagnement, le club pilote à l'aveugle
+   (scores DMOS flous, valeur fanbase inconnue, données qui pourrissent
+   en silence). Chaque service révèle et/ou protège. */
+/* Grille tarifaire officielle C'mon Sports (fournie par Doug) :
+   audit 5 000 · Fan Lab Insight 6 000 · Fan Lab Pro 18 000 ·
+   Data Factory 2 000/mois · Blue Penguin 12 000 + 1 500/mois ·
+   Griddy Picks 2 500 + 500/jour de compétition (1 match/sem en jeu).
+   Les mensuels sont convertis en hebdo interne (×12/52). */
+const SERVICES = [
+  { id:"audit", name:"Audit DMOS", setup:5000, duration:3,
+    subLabel:"one-shot", btnLabel:"Commander · 5 000 CHF",
+    pitch:"Diagnostic complet de votre maturité digitale : kick-off, analyse des 6 piliers, workshop avec le comité, rapport et roadmap.",
+    effect:"Révèle vos scores DMOS exacts (fini les fourchettes), débloque la certification Silver/Gold, formations guidées par la roadmap (−20 %). Confiance du comité +8 à la livraison." },
+  { id:"fanlabInsight", name:"Fan Lab Insight", setup:6000,
+    subLabel:"analyse one-shot", btnLabel:"Commander · 6 000 CHF",
+    pitch:"L'analyse fondamentale de votre base CRM : qualité des données et indice de pénétration de votre bassin de fans.",
+    effect:"Révèle la qualité des données CRM, le bassin atteignable et le taux de pénétration — vous savez enfin où creuser." },
+  { id:"fanlabPro", name:"Fan Lab Pro", setup:18000,
+    subLabel:"analyse one-shot · inclut Insight", btnLabel:"Commander · 18 000 CHF",
+    pitch:"L'analyse complète de la valeur de votre audience : ROI ticketing, ROI merchandising et valorisation économique de la fanbase pour convaincre les sponsors.",
+    effect:"Tout Insight + révèle la valeur Fan Lab en francs, chances de signature sponsor nettement accrues, part marketing billetterie 5 → 6 % et merchandising +10 %." },
+  { id:"datafactory", name:"Data Factory", weekly:460,
+    subLabel:"abonnement · 2 000 CHF/mois", btnLabel:"Activer · 2 000 CHF/mois",
+    pitch:"Le service opérationnel qui structure et entretient vos données fans : nettoyage, déduplication, procédures de collecte et de maintenance.",
+    effect:"+1 de qualité de données à l'activation, stoppe leur vieillissement hebdomadaire, immunise contre les purges de contacts obsolètes et divise par deux la fatigue emailing (meilleure segmentation : on ne sollicite que les bons segments)." },
+  { id:"bluepenguin", name:"Blue Penguin", setup:12000, weekly:350,
+    subLabel:"intégration 12 000 CHF + 1 500 CHF/mois", btnLabel:"Intégrer · 12 000 CHF",
+    pitch:"Programme de fidélité tokenisé : les fans gagnent des récompenses à chaque interaction avec le club.",
+    effect:"+0,8 d'engagement par semaine (rendements décroissants) et +15 % de revenus merchandising." },
+  { id:"griddy", name:"Griddy Picks", setup:2500, weekly:500,
+    subLabel:"intégration 2 500 CHF + 500 CHF/jour de match", btnLabel:"Intégrer · 2 500 CHF",
+    pitch:"Jeu de pronostics aux couleurs du club : les fans jouent chaque journée de championnat et laissent leurs données.",
+    effect:"Collecte passive de contacts qualifiés chaque semaine de compétition (selon la pénétration du bassin) — le jeu concours qui tourne tout seul." },
+];
+function freshServices() {
+  return { audited:false, auditIn:0, fanlabInsight:false, fanlabPro:false, datafactory:false, bluepenguin:false, griddy:false };
+}
+/* Ce que les analyses Fan Lab révèlent */
+function insightActive(s) { return s.services.fanlabInsight || s.services.fanlabPro; }
+function serviceActive(s, id) {
+  if (id === "audit") return s.services.audited || s.services.auditIn > 0;
+  return !!s.services[id];
+}
+function anyServiceActive(s) { return SERVICES.some(sv => serviceActive(s, sv.id)); }
+function weeklyServicesCost(s) {
+  return SERVICES.reduce((t, sv) => t + (sv.weekly && s.services[sv.id] ? sv.weekly : 0), 0);
+}
+
+function buyService(id) {
+  const svc = SERVICES.find(x=>x.id===id);
+  const st = state.services;
+  if (serviceActive(state, id)) return;
+  const upfront = svc.setup || 0;
+  if (state.budget < upfront) return;
+  state.budget -= upfront;
+  const MSG = {
+    audit: `🚀 Audit DMOS commandé auprès de C'mon Sports (${fmtCHF(upfront)}). Kick-off cette semaine — rapport dans ${svc.duration} semaines.`,
+    fanlabInsight: `🚀 Fan Lab Insight livré (${fmtCHF(upfront)}) : qualité de vos données CRM et pénétration du bassin enfin mesurées.`,
+    fanlabPro: `🚀 Fan Lab Pro livré (${fmtCHF(upfront)}) : votre audience a désormais une valeur chiffrée, ROI ticketing et merchandising optimisés. Vos sponsors vont adorer.`,
+    datafactory: `🚀 Data Factory activé (2 000 CHF/mois) : base nettoyée, procédures en place. Qualité +1, dégradation stoppée.`,
+    bluepenguin: `🚀 Blue Penguin intégré (${fmtCHF(upfront)} + 1 500 CHF/mois) : le programme de fidélité tokenisé est en ligne.`,
+    griddy: `🚀 Griddy Picks intégré (${fmtCHF(upfront)} + 500 CHF/jour de match) : le jeu de pronostics collecte ses premiers contacts.`,
+  };
+  if (id === "audit") {
+    st.auditIn = svc.duration;
+  } else {
+    st[id] = true;
+    if (id === "datafactory") state.dataQuality = clamp(state.dataQuality + 1, 0, 10);
+  }
+  log(state, MSG[id], "good");
+  save();
+  renderAll();
+}
+
+/* ================= Helpers ================= */
+const $ = sel => document.querySelector(sel);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const fmt = n => Math.round(n).toLocaleString("fr-CH");
+const fmtCHF = n => fmt(n) + " CHF";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+function log(s, msg, cls) {
+  s.log.unshift({ w: s.week, season: s.season, msg, cls: cls || "" });
+  if (s.log.length > 120) s.log.pop();
+}
+
+function dmosTotal(s) { return PILLARS.reduce((t,p)=>t+s.dmos[p.key],0); }
+function certification(s) {
+  // la certification n'existe qu'après un audit DMOS officiel
+  if (!s.services || !s.services.audited) return { label:"Non audité", cls:"none" };
+  const t = dmosTotal(s);
+  if (t >= 45) return { label:"Certifié DMOS Gold", cls:"gold" };
+  if (t >= 30) return { label:"Certifié DMOS Silver", cls:"silver" };
+  return { label:"Audité — non certifié", cls:"none" };
+}
+/* Affichage flou du DMOS tant que le club n'a pas été audité */
+function dmosDisplay(s) {
+  const t = dmosTotal(s);
+  if (s.services.audited) return t + "/60";
+  return "~" + clamp(t-5, 0, 60) + "–" + clamp(t+5, 0, 60) + " ?";
+}
+function fanlabValue(s) {
+  // Valeur fanbase = contacts qualifiés × qualité données × facteur engagement
+  return s.contacts * (1.5 + s.dataQuality * 0.6) * (0.5 + s.engagement / 100);
+}
+function divisionName(d) { return d === 1 ? "1re division" : "2e division"; }
+/* Niveau d'exigence : 0 = 2e division, 1 = élite, 2 = élite + Europe.
+   Plus il est haut, plus les charges et les attentes des fans/comité montent. */
+function expectationLevel(s) { return s.division === 1 ? (s.europe ? 2 : 1) : 0; }
+function projectedPos(s) {
+  const g = s.seasonStats.wins + s.seasonStats.losses;
+  if (!g) return 6;
+  return clamp(Math.round(1 + (1 - s.seasonStats.wins / g) * 11), 1, 12);
+}
+/* Bassin de fans atteignable : la région sature en 2e division,
+   l'élite (et son exposition nationale) élargit le marché. */
+function marketCap(s) {
+  const club = CLUBS.find(c=>c.id===s.clubId);
+  return club.fans * (s.division === 1 ? 8 : 3);
+}
+function marketSaturation(s) { return clamp(1 - s.fans / marketCap(s), 0.05, 1); }
+/* Taux de pénétration CRM : part du bassin réellement collectable (~35 %
+   du bassin total accepte de laisser ses données) déjà présente dans votre
+   base qualifiée. Plus il monte, plus la collecte devient difficile. */
+function collectiblePool(s) { return Math.round(marketCap(s) * 0.35); }
+function penetration(s) { return s.contacts / collectiblePool(s); }
+
+/* ---------------- Niveaux de difficulté (patience du comité) ---------------- */
+const DIFFICULTIES = [
+  { id:0, emoji:"🌱", name:"Comité patient",
+    desc:"Un comité qui croit au projet long terme. Confiance de départ élevée, licenciement rare, peu d'egos à gérer.",
+    confStart:70, regression:0.04, rescue:0.030, fireAt:3, eventChance:0.30, egoWeight:0.5, reqOk:2 },
+  { id:1, emoji:"⚖️", name:"Comité exigeant",
+    desc:"L'équilibre classique : des résultats, sinon des questions. Quelques egos dans les couloirs.",
+    confStart:60, regression:0.06, rescue:0.015, fireAt:5, eventChance:0.38, egoWeight:1, reqOk:2 },
+  { id:2, emoji:"🌋", name:"Comité impitoyable",
+    desc:"Président omniprésent, egos surdimensionnés, presse féroce. Il faut 3 objectifs sur 5 pour garder sa place.",
+    confStart:50, regression:0.08, rescue:0.004, fireAt:8, eventChance:0.48, egoWeight:1.8, reqOk:3 },
+];
+function diff(s) { return DIFFICULTIES[s.difficulty ?? 1]; }
+/* Tirage pondéré ; les événements marqués `ego` pèsent plus lourd quand le comité est difficile */
+function weightedPick(list, s) {
+  const w = e => e.weight * (e.ego ? diff(s).egoWeight : 1);
+  const total = list.reduce((t,e)=>t+w(e),0);
+  if (total <= 0) return null;
+  let r = Math.random() * total;
+  for (const e of list) { r -= w(e); if (r <= 0) return e; }
+  return list[list.length-1];
+}
+
+/* ================= State ================= */
+let state = null;
+let selected = {};   // actionId -> count (sélection de la semaine en cours)
+
+function newGame(club, difficulty = 1) {
+  state = {
+    version: 5,
+    clubId: club.id,
+    difficulty,
+    division: club.division,
+    europe: false,
+    services: freshServices(),
+    season: 1, week: 1,
+    budget: club.budget,
+    fans: club.fans,
+    contacts: club.contacts,
+    engagement: club.engagement,
+    dataQuality: 3 + club.dmos.donnees * 0.4,
+    dmos: { ...club.dmos },
+    boardConfidence: DIFFICULTIES[difficulty].confStart,
+    emailFatigue: 0,
+    derbyBoost: false,
+    sponsors: [
+      { name: pick(SPONSOR_POOL).name, sector:"Partenaire principal", amount: Math.round(club.budget*0.6), satisfaction: 65, seasons: 2 },
+      { name: pick(SPONSOR_POOL).name, sector:"Équipementier", amount: Math.round(club.budget*0.3), satisfaction: 55, seasons: 1 },
+    ],
+    usedSponsors: [],
+    objectives: [],
+    seasonStats: null,
+    log: [],
+    history: [],
+    gameOver: false,
+  };
+  // éviter deux sponsors identiques au départ
+  while (state.sponsors[1].name === state.sponsors[0].name) state.sponsors[1].name = pick(SPONSOR_POOL).name;
+  state.usedSponsors = state.sponsors.map(sp=>sp.name);
+  state.seasonStats = freshSeasonStats(state);
+  state.objectives = makeObjectives(state);
+  log(state, `Bienvenue au ${club.name} ! Le comité attend des résultats dès cette saison. Bon courage.`, "good");
+  selected = {};
+  save();
+}
+
+function freshSeasonStats(s) {
+  return {
+    startFans: s.fans, startContacts: s.contacts, startDmos: dmosTotal(s),
+    revenue: 0, ticketRevenue: 0, sponsorRevenue: 0, merchRevenue: 0,
+    wins: 0, losses: 0, euroWins: 0, euroLosses: 0,
+  };
+}
+
+/* Les objectifs sont des données pures (sérialisables) ; la vérification
+   passe par cette table, pour survivre au save/load localStorage. */
+const OBJECTIVE_CHECKS = {
+  fans:    (st,o) => st.fans >= o.target,
+  dmos:    (st,o) => dmosTotal(st) >= o.target,
+  budget:  (st,o) => st.budget > o.target,
+  sponsor: (st,o) => st.sponsors.length===0 ? false : (st.sponsors.reduce((t,x)=>t+x.satisfaction,0)/st.sponsors.length) >= o.target,
+  league:  (st,o) => projectedPos(st) <= o.target,
+  euro:    (st,o) => st.seasonStats.euroWins >= o.target,
+};
+function checkObjective(st, o) { return OBJECTIVE_CHECKS[o.id](st, o); }
+
+function makeObjectives(s) {
+  const lvl = expectationLevel(s);
+  // les attentes de croissance montent avec le niveau : +15 % en D2, +20 % en élite, +25 % avec l'Europe
+  const growth = [1.15, 1.20, 1.25][lvl];
+  const leagueObj = s.division === 2
+    ? { id:"league", label:"Jouer la promotion (top 4 du championnat)", target: 4 }
+    : s.europe
+      ? { id:"euro", label:"Gagner au moins 2 matchs européens", target: 2 }
+      : { id:"league", label:"Assurer le maintien (position ≤ 10)", target: 10 };
+  return [
+    { id:"fans", label:`Atteindre ${fmt(Math.round(s.fans*growth))} fans`, target: Math.round(s.fans*growth) },
+    { id:"dmos", label:`Score DMOS ≥ ${Math.min(60, dmosTotal(s)+6)}/60`, target: Math.min(60, dmosTotal(s)+6) },
+    { id:"budget", label:`Finir la saison avec un budget positif`, target: 0 },
+    { id:"sponsor", label:`Satisfaction sponsors moyenne ≥ 60 %`, target: 60 },
+    leagueObj,
+  ];
+}
+
+function save() { try { localStorage.setItem(currentSaveKey(), JSON.stringify(state)); } catch(e){} }
+function load() {
+  try {
+    const raw = localStorage.getItem(currentSaveKey());
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (s && s.version === 1) {
+      // migration v1 → v2 : système de divisions / coupe d'Europe
+      const club = CLUBS.find(c=>c.id===s.clubId);
+      s.division = club ? club.division : 2;
+      s.europe = false;
+      s.seasonStats.euroWins = 0;
+      s.seasonStats.euroLosses = 0;
+      s.version = 2;
+    }
+    if (s && s.version === 2) {
+      // migration v2 → v3 : niveaux de difficulté (comité exigeant par défaut)
+      s.difficulty = 1;
+      s.version = 3;
+    }
+    if (s && s.version === 3) {
+      // migration v3 → v4 : services C'mon Sports (le brouillard s'installe)
+      s.services = freshServices();
+      s.version = 4;
+    }
+    if (s && s.version === 4) {
+      // migration v4 → v5 : Fan Lab scindé en Insight / Pro (l'ancien Fan Lab ≈ Pro)
+      s.services.fanlabPro = !!s.services.fanlab;
+      s.services.fanlabInsight = false;
+      delete s.services.fanlab;
+      s.version = 5;
+    }
+    if (s && s.version === 5) return s;
+  } catch(e){}
+  return null;
+}
+
+/* ================= Simulation hebdo ================= */
+function weekCost() {
+  // frais fixes hebdo (salaires, outils) — grandissent avec le club et explosent au niveau supérieur
+  // (licences ligue, staff élargi, déplacements, exigences de production)
+  const divMult = [1, 1.7, 2.2][expectationLevel(state)];
+  return Math.round((1200 + state.fans * 0.055) * divMult);
+}
+
+function playMatch(s) {
+  const club = CLUBS.find(c=>c.id===s.clubId);
+  const home = s.week % 2 === 1;
+  // en élite les adversaires sont plus forts ; en 2e division on domine plus souvent
+  const divAdj = s.division === 1 ? -0.10 : 0.03;
+  const winProb = clamp(club.strength/100 + divAdj + (home?0.08:-0.05) + (s.engagement-50)/400, 0.12, 0.85);
+  const win = Math.random() < winProb;
+  const ticketPrice = Math.round(club.ticket * (s.division === 1 ? 1.25 : 1));
+  let att = 0, ticketRev = 0;
+  if (home) {
+    let fill = clamp(0.30 + s.engagement/160 + (s.fans/club.fans - 1)*0.15, 0.15, 1);
+    if (s.derbyBoost) { fill = clamp(fill + 0.25, 0, 1); }
+    att = Math.round(club.capacity * fill);
+    ticketRev = att * ticketPrice;
+    if (s.derbyBoost) {
+      s.engagement = clamp(s.engagement + 5, 0, 100);
+      s.boardConfidence = clamp(s.boardConfidence + 4, 0, 100);
+      log(s, `🏟 Ambiance de folie pour le match événement : ${fmt(att)} spectateurs !`, "good");
+      s.derbyBoost = false;
+    }
+  }
+  if (win) {
+    s.engagement = clamp(s.engagement + 2.5 * clamp(1 - s.engagement/110, 0.1, 1), 0, 100);
+    s.seasonStats.wins++;
+  } else {
+    // plus le niveau est haut, plus les fans digèrent mal les défaites
+    s.engagement = clamp(s.engagement - (2 + expectationLevel(s) * 0.8), 0, 100);
+    s.seasonStats.losses++;
+  }
+  return { home, win, att, ticketRev };
+}
+
+/* Coût réel d'une action : base × outils (−3 %/pt) × taille du club
+   (une opération marketing coûte moins cher pour un petit club, plus cher
+   pour un grand) × roadmap post-audit (formations −20 %). */
+function actionCost(s, a) {
+  const toolDiscount = 1 - s.dmos.outils * 0.03;
+  const sizeMult = clamp(0.45 + s.fans / 60000, 0.45, 1.6);
+  const auditDiscount = (a.id === "training" && s.services.audited) ? 0.8 : 1;
+  return Math.round(a.cost * toolDiscount * sizeMult * auditDiscount);
+}
+
+function resolveActions(s) {
+  let summary = [];
+  for (const a of ACTIONS) {
+    const n = selected[a.id] || 0;
+    if (!n) continue;
+    for (let i=0;i<n;i++) {
+      s.budget -= actionCost(s, a);
+      switch (a.id) {
+        case "content": {
+          // rendements décroissants quand l'engagement est déjà élevé
+          const engGain = (2 + s.dmos.contenu * 0.35) * clamp(1 - s.engagement/110, 0.1, 1);
+          const fanGain = Math.round(s.fans * (0.002 + s.dmos.acquisition*0.0008) * (0.5 + s.engagement/100) * marketSaturation(s));
+          s.engagement = clamp(s.engagement + engGain, 0, 100);
+          s.fans += fanGain;
+          summary.push(`Contenu publié : +${fmt(fanGain)} fans`);
+          break;
+        }
+        case "campaign": {
+          if (s.contacts < 300) { summary.push(`Campagne annulée : base contacts trop faible`); s.budget += actionCost(s, a); break; }
+          const fatigueMult = clamp(1 - s.emailFatigue*0.25, 0.3, 1);
+          // au-delà de 25 000 contacts, une campagne unique ne convertit plus linéairement
+          const effContacts = Math.min(s.contacts, 25000);
+          // Data Factory : segmentation fine → on ne sollicite que les bons segments,
+          // la base fatigue deux fois moins vite
+          const fatigueGain = s.services.datafactory ? 0.5 : 1;
+          const rev = Math.round(effContacts * (0.15 + s.dataQuality*0.06) * fatigueMult);
+          s.budget += rev;
+          s.seasonStats.ticketRevenue += rev; s.seasonStats.revenue += rev;
+          s.engagement = clamp(s.engagement + 1.5*fatigueMult, 0, 100);
+          s.emailFatigue = clamp(s.emailFatigue + fatigueGain, 0, 4);
+          summary.push(`Campagne emailing : +${fmtCHF(rev)}${fatigueMult<1?" (fatigue de la base)":""}`);
+          break;
+        }
+        case "collect": {
+          // plus le bassin est déjà pénétré, plus les nouveaux contacts qualifiés sont durs à trouver
+          const satMult = clamp(1 - penetration(s), 0.05, 1);
+          const gain = Math.round((120 + s.fans*0.006*(1 + s.dmos.donnees*0.15)) * satMult);
+          s.contacts += gain;
+          s.dataQuality = clamp(s.dataQuality + 0.3, 0, 10);
+          summary.push(`Collecte data : +${fmt(gain)} contacts qualifiés${satMult < 0.5 ? " (bassin déjà bien couvert)" : ""}`);
+          break;
+        }
+        case "activation": {
+          let bonus = 0;
+          s.sponsors.forEach(sp => { sp.satisfaction = clamp(sp.satisfaction + 8, 0, 100); bonus += Math.round(sp.amount*0.01); });
+          s.budget += bonus;
+          summary.push(`Activation sponsor : satisfaction +8 %${bonus?`, bonus ${fmtCHF(bonus)}`:""}`);
+          break;
+        }
+        case "prospect": {
+          // sans Fan Lab Pro, pas de valorisation chiffrée à présenter : l'argument data manque
+          const flv = s.services.fanlabPro ? fanlabValue(s) : 0;
+          const p = clamp(0.15 + dmosTotal(s)/120 + Math.min(flv/400000, 0.25), 0.1, 0.85);
+          if (s.sponsors.length >= 6) { summary.push(`Prospection : portefeuille sponsors déjà plein (6 max)`); break; }
+          if (Math.random() < p) {
+            const pool = SPONSOR_POOL.filter(x=>!s.usedSponsors.includes(x.name));
+            const base = pool.length ? pick(pool) : { name:"Sponsor Mystère SA", sector:"Divers" };
+            // la certification (donc les gros contrats) exige un audit officiel
+            const certMult = !s.services.audited ? 1 : dmosTotal(s)>=45 ? 1.5 : dmosTotal(s)>=30 ? 1.2 : 1;
+            const divMult = [1, 1.5, 1.9][expectationLevel(s)]; // l'élite et l'Europe font grimper les contrats
+            const amount = Math.round((8000 + flv*0.04) * certMult * divMult / 500) * 500;
+            s.sponsors.push({ name: base.name, sector: base.sector, amount, satisfaction: 70, seasons: 2 });
+            s.usedSponsors.push(base.name);
+            s.boardConfidence = clamp(s.boardConfidence + 6, 0, 100);
+            log(s, `🎉 Nouveau sponsor signé : ${base.name} (${base.sector}) pour ${fmtCHF(amount)}/saison !`, "good");
+            summary.push(`Prospection réussie : ${base.name} signe !`);
+          } else {
+            summary.push(`Prospection : pas de signature cette fois (chances : ${Math.round(p*100)} %)`);
+          }
+          break;
+        }
+        case "training": {
+          const weakest = PILLARS.reduce((min,pl)=> s.dmos[pl.key] < s.dmos[min.key] ? pl : min, PILLARS[0]);
+          if (s.dmos[weakest.key] < 10) {
+            s.dmos[weakest.key]++;
+            summary.push(`Formation : +1 sur « ${weakest.label} » (DMOS ${dmosTotal(s)}/60)`);
+          } else summary.push(`Formation : tous les piliers sont au max !`);
+          break;
+        }
+        case "rgpd": {
+          s.dmos.conformite = clamp(s.dmos.conformite + 1, 0, 10);
+          s.dataQuality = clamp(s.dataQuality + 0.4, 0, 10);
+          summary.push(`Chantier RGPD : conformité ${s.dmos.conformite}/10`);
+          break;
+        }
+      }
+    }
+  }
+  return summary;
+}
+
+function advanceWeek() {
+  if (state.gameOver) return;
+  const s = state;
+
+  // 1. Actions choisies
+  const actionSummary = resolveActions(s);
+
+  // 2. Frais fixes + revenus récurrents + services C'mon Sports
+  s.budget -= weekCost();
+  const svcCost = weeklyServicesCost(s);
+  s.budget -= svcCost;
+  if (s.services.auditIn > 0) {
+    s.services.auditIn--;
+    if (s.services.auditIn === 0) {
+      s.services.audited = true;
+      s.boardConfidence = clamp(s.boardConfidence + 8, 0, 100);
+      log(s, `📋 Rapport d'audit DMOS livré par C'mon Sports : vos scores exacts sont révélés (${dmosTotal(s)}/60) et la roadmap est en place. Le comité apprécie d'y voir enfin clair (+8 confiance). Formations guidées : −20 %.`, "good");
+    } else {
+      log(s, `📋 Audit DMOS en cours — votre partner manager C'mon Sports analyse vos piliers (rapport dans ${s.services.auditIn} sem.).`);
+    }
+  }
+  if (s.services.bluepenguin) {
+    s.engagement = clamp(s.engagement + 0.8 * clamp(1 - s.engagement/110, 0.1, 1), 0, 100);
+  }
+  if (s.services.griddy) {
+    const g = Math.round(s.fans * 0.0015 * clamp(1 - penetration(s), 0.05, 1));
+    if (g > 0) { s.contacts += g; }
+  }
+  const sponsorWeekly = Math.round(s.sponsors.reduce((t,sp)=>t+sp.amount,0) / WEEKS_PER_SEASON);
+  const merch = Math.round(s.fans * 0.012 * (0.5 + s.engagement/100)
+    * (s.services.bluepenguin ? 1.15 : 1)
+    * (s.services.fanlabPro ? 1.10 : 1)); // ROI merchandising optimisé par Fan Lab Pro
+  s.budget += sponsorWeekly + merch;
+  s.seasonStats.sponsorRevenue += sponsorWeekly;
+  s.seasonStats.merchRevenue += merch;
+  s.seasonStats.revenue += sponsorWeekly + merch;
+
+  // 3. Match — le budget marketing ne touche qu'une part de la billetterie (15 %)
+  const match = playMatch(s);
+  let ticketShare = 0;
+  if (match.home) {
+    // Fan Lab Pro optimise le ROI billetterie : part marketing 5 % → 6 %
+    ticketShare = Math.round(match.ticketRev * (s.services.fanlabPro ? 0.06 : 0.05));
+    s.budget += ticketShare;
+    s.seasonStats.ticketRevenue += match.ticketRev;
+    s.seasonStats.revenue += match.ticketRev;
+  }
+
+  // 3b. Match de coupe d'Europe (semaines 3 à 15, une semaine sur trois)
+  let euroMsg = null;
+  if (s.europe && s.week % 3 === 0 && s.week <= 15) {
+    const club = CLUBS.find(c=>c.id===s.clubId);
+    const p = clamp(0.30 + (club.strength - 50)/200 + (s.engagement - 50)/500, 0.12, 0.60);
+    const euroWin = Math.random() < p;
+    s.budget -= 3000; // déplacement, organisation, dispositif média
+    let gain = 2500;  // part marketing des droits TV / billetterie européenne
+    if (euroWin) {
+      gain += 8000;   // prime de victoire
+      s.seasonStats.euroWins++;
+      s.engagement = clamp(s.engagement + 4, 0, 100);
+      s.boardConfidence = clamp(s.boardConfidence + 3, 0, 100);
+      euroMsg = { msg: `🌍 Victoire européenne ! Prime et droits TV : +${fmtCHF(gain)} (déplacement −3 000 CHF). La ville vibre.`, cls: "good" };
+    } else {
+      s.seasonStats.euroLosses++;
+      s.engagement = clamp(s.engagement - 3, 0, 100);
+      euroMsg = { msg: `🌍 Défaite en coupe d'Europe. Droits TV +${fmtCHF(gain)}, déplacement −3 000 CHF. Les fans attendaient mieux.`, cls: "bad" };
+    }
+    s.budget += gain;
+    s.seasonStats.revenue += gain;
+  }
+
+  // 4. Dérives naturelles — l'attention s'érode d'autant plus vite que le niveau est haut
+  const lvl = expectationLevel(s);
+  s.engagement = clamp(s.engagement - (1 + lvl * 0.5), 0, 100);
+  s.emailFatigue = clamp(s.emailFatigue - 0.5, 0, 4);        // la fatigue email retombe
+  if (!s.services.datafactory) s.dataQuality = clamp(s.dataQuality - 0.05, 0, 10); // sans Data Factory, les données vieillissent
+  s.sponsors.forEach(sp => sp.satisfaction = clamp(sp.satisfaction - 1.5, 0, 100));
+  // exposition médiatique de l'élite : la fanbase grandit toute seule (un peu), jusqu'à saturation du marché
+  if (s.division === 1) s.fans += Math.round(s.fans * (0.0012 + (s.europe ? 0.0010 : 0)) * marketSaturation(s));
+  // stratégie DMOS stabilise la confiance du comité, qui régresse vers un niveau d'exigence
+  // d'autant plus dur que le club joue haut (50 % en D2, 44 % en élite, 39 % avec l'Europe).
+  // Asymétrique : le comité vous tire vers le bas quand vous brillez (vitesse selon sa patience),
+  // et ne vous remonte que selon son indulgence quand vous coulez (quasi jamais en impitoyable).
+  const confTarget = [50, 44, 39][lvl];
+  const pullRate = s.boardConfidence > confTarget ? diff(s).regression : diff(s).rescue;
+  s.boardConfidence = clamp(
+    s.boardConfidence + (confTarget - s.boardConfidence) * pullRate + (s.dmos.strategie - 5) * 0.25 + (match.win ? 0.8 : -1.2),
+    0, 100);
+
+  // 5. Bandeau de dernier match + journal de la semaine
+  s.lastMatch = { win: match.win, home: match.home, att: match.att, share: ticketShare,
+                  week: s.week, season: s.season, pos: projectedPos(s) };
+  const resTxt = match.win ? "Victoire" : "Défaite";
+  const where = match.home ? `à domicile (${fmt(match.att)} spect., billetterie ${fmtCHF(match.ticketRev)}, part marketing +${fmtCHF(ticketShare)})` : "à l'extérieur";
+  log(s, `🏆 ${resTxt} ${where} · ${projectedPos(s)}e du championnat (${divisionName(s.division)}).`, match.win ? "good" : "bad");
+  if (euroMsg) log(s, euroMsg.msg, euroMsg.cls);
+  actionSummary.forEach(m => log(s, `• ${m}`));
+  log(s, `💰 Sponsors +${fmtCHF(sponsorWeekly)} · Merch +${fmtCHF(merch)} · Frais fixes −${fmtCHF(weekCost())}${svcCost ? ` · Services C'mon Sports −${fmtCHF(svcCost)}` : ""}`);
+
+  // 6. Budget négatif ?
+  if (s.budget < 0) {
+    s.boardConfidence = clamp(s.boardConfidence - 5, 0, 100);
+    log(s, `🟥 Budget dans le rouge ! Le comité s'inquiète sérieusement.`, "bad");
+  }
+
+  // 7. Événement aléatoire — fréquence et poids des scénarios d'ego selon la difficulté
+  let pendingDecision = null;
+  if (Math.random() < diff(s).eventChance) {
+    const decisionEligible = DECISIONS.filter(d=>d.cond(s));
+    if (Math.random() < 0.35 && decisionEligible.length) {
+      pendingDecision = weightedPick(decisionEligible, s);
+    } else {
+      const eligible = EVENTS.filter(e=>e.cond(s));
+      const ev = weightedPick(eligible, s);
+      if (ev) ev.run(s);
+    }
+  }
+
+  // 8. Licenciement ? (le seuil dépend de la patience du comité)
+  if (s.boardConfidence <= diff(s).fireAt) {
+    s.gameOver = true;
+    log(s, `🚪 Le comité directeur (${diff(s).name.toLowerCase()}) vous remercie. Votre aventure au club s'arrête ici.`, "bad");
+  }
+
+  // 9. Fin de saison ?
+  let seasonEnd = null;
+  if (!s.gameOver && s.week >= WEEKS_PER_SEASON) {
+    seasonEnd = endSeason(s);
+  } else if (!s.gameOver) {
+    s.week++;
+  }
+
+  selected = {};
+  save();
+  renderAll();
+
+  if (s.gameOver) showGameOver();
+  else if (seasonEnd) showSeasonModal(seasonEnd);
+  else if (pendingDecision) showDecision(pendingDecision);
+}
+
+function endSeason(s) {
+  const results = s.objectives.map(o => ({ label:o.label, ok:checkObjective(s,o) }));
+  const okCount = results.filter(r=>r.ok).length;
+  const confDelta = (okCount - diff(s).reqOk) * 8;
+  s.boardConfidence = clamp(s.boardConfidence + confDelta, 0, 100);
+
+  // Classement final (12 équipes) : le bilan sportif + un peu de hasard
+  const games = s.seasonStats.wins + s.seasonStats.losses;
+  const winRate = games ? s.seasonStats.wins / games : 0.5;
+  const pos = clamp(Math.round(1 + (1 - winRate) * 11 + (Math.random() * 2 - 1)), 1, 12);
+  const playedDivision = s.division;
+  const wasEurope = s.europe;
+  let promoted = false, relegated = false, euroQualified = false;
+  if (s.division === 2 && pos <= 2) promoted = true;
+  if (s.division === 1 && pos >= 11) relegated = true;
+  if (s.division === 1 && !relegated && pos <= 3) euroQualified = true;
+
+  // renouvellements sponsors
+  const renewals = [];
+  s.sponsors = s.sponsors.filter(sp => {
+    sp.seasons--;
+    if (sp.seasons <= 0) {
+      if (sp.satisfaction >= 60) {
+        const upside = sp.satisfaction >= 80 ? 1.2 : 1.05;
+        sp.amount = Math.round(sp.amount * upside / 500) * 500;
+        sp.seasons = 2;
+        renewals.push({ name: sp.name, renewed: true, amount: sp.amount });
+        return true;
+      }
+      renewals.push({ name: sp.name, renewed: false });
+      return false;
+    }
+    return true;
+  });
+
+  // Conséquences sportives : promotion, relégation, qualification européenne
+  if (promoted) {
+    s.division = 1;
+    const fanGain = Math.round(s.fans * 0.12);
+    s.fans += fanGain;
+    s.engagement = clamp(s.engagement + 10, 0, 100);
+    s.boardConfidence = clamp(s.boardConfidence + 12, 0, 100);
+    s.sponsors.forEach(sp => {
+      sp.amount = Math.round(sp.amount * 1.35 / 500) * 500; // clause de promotion
+      sp.satisfaction = clamp(sp.satisfaction + 10, 0, 100);
+    });
+    log(s, `🎊 PROMOTION EN ${divisionName(1).toUpperCase()} ! +${fmt(fanGain)} fans, clauses sponsors revalorisées (+35 %). Mais attention : charges et attentes vont exploser.`, "good");
+  }
+  if (relegated) {
+    s.division = 2;
+    const fanLoss = Math.round(s.fans * 0.08);
+    s.fans -= fanLoss;
+    s.engagement = clamp(s.engagement - 10, 0, 100);
+    s.boardConfidence = clamp(s.boardConfidence - 12, 0, 100);
+    s.sponsors.forEach(sp => {
+      sp.amount = Math.round(sp.amount * 0.7 / 500) * 500; // clause de relégation
+      sp.satisfaction = clamp(sp.satisfaction - 15, 0, 100);
+    });
+    log(s, `🟥 RELÉGATION en ${divisionName(2)}… −${fmt(fanLoss)} fans, contrats sponsors revus à la baisse (−30 %).`, "bad");
+  }
+  s.europe = euroQualified;
+  if (euroQualified) {
+    s.boardConfidence = clamp(s.boardConfidence + 8, 0, 100);
+    log(s, `🌍 QUALIFICATION EUROPÉENNE ! La saison prochaine, le club joue la coupe d'Europe : revenus TV et prestige, mais déplacements coûteux et fans intraitables.`, "good");
+  }
+
+  const bilan = {
+    season: s.season,
+    results, okCount, confDelta, renewals,
+    pos, playedDivision, wasEurope, promoted, relegated, euroQualified,
+    euroWins: s.seasonStats.euroWins, euroLosses: s.seasonStats.euroLosses,
+    revenue: s.seasonStats.revenue,
+    ticketRevenue: s.seasonStats.ticketRevenue,
+    sponsorRevenue: s.seasonStats.sponsorRevenue,
+    merchRevenue: s.seasonStats.merchRevenue,
+    wins: s.seasonStats.wins, losses: s.seasonStats.losses,
+    fansDelta: s.fans - s.seasonStats.startFans,
+    dmosDelta: dmosTotal(s) - s.seasonStats.startDmos,
+    cert: certification(s).label,
+  };
+  s.history.unshift(bilan);
+  log(s, `🏁 Fin de la saison ${s.season} : ${pos}e de ${divisionName(playedDivision)}, ${okCount}/${results.length} objectifs atteints.`, okCount>=3?"good":okCount>=2?"warn":"bad");
+  renewals.forEach(r => log(s, r.renewed
+    ? `🤝 ${r.name} renouvelle pour ${fmtCHF(r.amount)}/saison !`
+    : `👋 ${r.name} ne renouvelle pas son contrat (satisfaction insuffisante).`, r.renewed?"good":"bad"));
+
+  if (s.boardConfidence <= diff(s).fireAt) {
+    s.gameOver = true;
+    log(s, `🚪 Bilan insuffisant : le comité met fin à votre contrat.`, "bad");
+  } else {
+    s.season++; s.week = 1;
+    s.seasonStats = freshSeasonStats(s);
+    s.objectives = makeObjectives(s);
+  }
+  return bilan;
+}
+
+/* ================= Rendering ================= */
+let prevKpis = null;
+
+function kpiList(s) {
+  return [
+    { lbl:"Budget", val: fmtCHF(s.budget), raw: s.budget, color: s.budget<0 ? "var(--bad)" : "" },
+    { lbl:"Fans", val: fmt(s.fans), raw: s.fans },
+    { lbl:"Engagement", val: Math.round(s.engagement)+" %", raw: s.engagement },
+    { lbl:"Contacts CRM", val: fmt(s.contacts), raw: s.contacts },
+    { lbl:"Pénétration bassin", val: insightActive(s) ? (Math.round(penetration(s)*1000)/10)+" %" : "?",
+      raw: insightActive(s) ? penetration(s)*100 : 0,
+      color: insightActive(s) ? (penetration(s) >= 0.5 ? "var(--accent)" : "") : "var(--muted)" },
+    { lbl:"Qualité données", val: insightActive(s) ? (Math.round(s.dataQuality*10)/10)+"/10" : "?",
+      raw: insightActive(s) ? s.dataQuality : 0,
+      color: insightActive(s) ? "" : "var(--muted)" },
+    { lbl:"Score DMOS", val: dmosDisplay(s), raw: s.services.audited ? dmosTotal(s) : 0,
+      color: s.services.audited ? "" : "var(--muted)" },
+    { lbl:"Confiance comité", val: Math.round(s.boardConfidence)+" %", raw: s.boardConfidence,
+      color: s.boardConfidence<25 ? "var(--bad)" : s.boardConfidence<45 ? "var(--warn)" : "" },
+  ];
+}
+
+function renderKpis() {
+  const list = kpiList(state);
+  const el = $("#kpis");
+  el.innerHTML = list.map((k,i) => {
+    let delta = "";
+    if (prevKpis) {
+      const d = k.raw - prevKpis[i].raw;
+      if (Math.abs(d) >= 0.5) delta = `<div class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${fmt(Math.abs(d))}</div>`;
+      else delta = `<div class="delta flat">—</div>`;
+    }
+    return `<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val" style="color:${k.color||'var(--text)'}">${k.val}</div>${delta}</div>`;
+  }).join("");
+}
+
+function renderHeader() {
+  const club = CLUBS.find(c=>c.id===state.clubId);
+  $("#club-logo").textContent = club.emoji;
+  $("#club-logo").style.background = "var(--panel2)";
+  $("#club-name").innerHTML = `<span class="sig-cap">${club.name[0]}</span>${club.name.slice(1).toUpperCase()}<span class="sig-cap">.</span>`;
+  $("#club-sub").textContent = `${club.sport} · ${club.city} · vous êtes Responsable Marketing Digital`;
+  $("#hdr-week").textContent = `Semaine ${state.week}/${WEEKS_PER_SEASON}`;
+  $("#season-fill").style.width = Math.round(state.week / WEEKS_PER_SEASON * 100) + "%";
+  $("#hdr-season").textContent = `Saison ${state.season}`;
+  const cert = certification(state);
+  const divBadge = `<span class="badge ${state.division===1?'gold':'silver'}">${divisionName(state.division)}</span>`;
+  const euroBadge = state.europe ? ` <span class="badge gold">🌍 Coupe d'Europe</span>` : "";
+  const d = diff(state);
+  $("#hdr-cert").innerHTML = `${divBadge}${euroBadge} <span class="badge none">${d.emoji} ${d.name}</span> <span class="badge ${cert.cls}">${cert.label}</span>`;
+}
+
+function apUsed() {
+  return ACTIONS.reduce((t,a)=>t + (selected[a.id]||0)*a.ap, 0);
+}
+
+function renderActions() {
+  const used = apUsed();
+  $("#ap-dots").innerHTML = [0,1,2].map(i=>`<div class="ap-dot ${i<used?'on':''}"></div>`).join("");
+  $("#actions-list").innerHTML = ACTIONS.map(a => {
+    const n = selected[a.id]||0;
+    const cost = actionCost(state, a);
+    const canAdd = used + a.ap <= 3;
+    return `<div class="action ${n?'selected':''}">
+      <div class="info">
+        <div class="name">${a.name} <span style="font-weight:400;color:var(--muted);font-size:11px">(${a.ap} PA)</span></div>
+        <div class="desc">${a.desc}</div>
+        <div class="cost">Coût : ${fmtCHF(cost)}</div>
+      </div>
+      <div class="ctrl">
+        <button data-act="${a.id}" data-dir="-1" ${n?'':'disabled'}>−</button>
+        <div class="count">${n}</div>
+        <button data-act="${a.id}" data-dir="1" ${canAdd?'':'disabled'}>+</button>
+      </div>
+    </div>`;
+  }).join("");
+  $("#actions-list").querySelectorAll("button").forEach(b => {
+    b.onclick = () => {
+      const id = b.dataset.act, dir = +b.dataset.dir;
+      selected[id] = Math.max(0, (selected[id]||0) + dir);
+      if (!selected[id]) delete selected[id];
+      renderActions();
+    };
+  });
+  $("#btn-advance").disabled = state.gameOver;
+}
+
+function renderLastResult() {
+  const el = $("#last-result");
+  const m = state.lastMatch;
+  if (!m) { el.innerHTML = ""; return; }
+  const detail = m.home
+    ? `à domicile · ${fmt(m.att)} spectateurs · part marketing +${fmtCHF(m.share)}`
+    : `à l'extérieur`;
+  el.innerHTML = `<div class="hero ${m.win?'hero-win':'hero-loss'}">
+    <div class="hero-main">${m.win?'VICTOIRE':'DÉFAITE'}<span class="sig-cap">.</span></div>
+    <div class="hero-sub">Saison ${m.season} · Semaine ${m.week} — ${detail} · ${m.pos}e de ${divisionName(state.division)}</div>
+  </div>`;
+}
+
+function renderObjectives() {
+  const pos = projectedPos(state);
+  const posColor = pos <= 4 ? 'var(--good)' : pos >= 10 ? 'var(--bad)' : 'var(--text)';
+  const standing = `<li style="list-style:none; margin-left:0; padding-bottom:6px; border-bottom:1px solid var(--border)">
+    📈 Championnat : <b style="color:${posColor}">${pos}e/12</b> — ${divisionName(state.division)}${state.europe?' · 🌍 Coupe d’Europe':''}</li>`;
+  $("#objectives").innerHTML = standing + state.objectives.map(o => {
+    const ok = checkObjective(state, o);
+    return `<li style="color:${ok?'var(--good)':'var(--muted)'}">${ok?'✅':'⬜'} ${o.label}</li>`;
+  }).join("");
+}
+
+function renderLog() {
+  $("#log").innerHTML = state.log.map(e =>
+    `<div class="entry"><span class="wk">S${e.season}·Sem${e.w}</span><span class="${e.cls}">${e.msg}</span></div>`
+  ).join("") || `<div class="entry">Le journal est vide.</div>`;
+}
+
+function renderDmos() {
+  const audited = state.services.audited;
+  $("#dmos-meters").innerHTML = PILLARS.map(p => {
+    const v = state.dmos[p.key];
+    if (audited) {
+      return `<div class="meter">
+        <div class="top"><span title="${p.hint}">${p.label} <span style="color:var(--muted);font-size:11px">ⓘ</span></span><b>${v}/10</b></div>
+        <div class="track"><div class="fill" style="width:${v*10}%; background:${v>=7?'var(--good)':v>=4?'var(--accent)':'var(--bad)'}"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${p.hint}</div>
+      </div>`;
+    }
+    // sans audit : estimation grossière (arrondi à la bande de 3), pas de valeur précise
+    const approx = Math.round(v / 3) * 3;
+    return `<div class="meter" style="opacity:.55">
+      <div class="top"><span title="${p.hint}">${p.label}</span><b style="color:var(--muted)">?/10</b></div>
+      <div class="track"><div class="fill" style="width:${approx*10}%; background:var(--muted)"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">${p.hint}</div>
+    </div>`;
+  }).join("") + (audited ? "" :
+    `<div style="font-size:12px; color:var(--accent); margin-top:10px; line-height:1.5">
+      🔒 Estimations internes approximatives. Commandez un <b>Audit DMOS</b> (onglet 🚀 C'mon Sports)
+      pour révéler vos scores exacts et débloquer la certification.</div>`);
+  $("#dmos-total").textContent = audited ? dmosTotal(state) : "?";
+  const cert = certification(state);
+  $("#dmos-badge").innerHTML = `<span class="badge ${cert.cls}">${cert.label}</span>`;
+  const insight = insightActive(state);
+  const pro = state.services.fanlabPro;
+  const flv = fanlabValue(state);
+  $("#fanlab-value").textContent = pro ? fmtCHF(flv) : "? CHF";
+  $("#fanlab-value").style.color = pro ? "var(--accent)" : "var(--muted)";
+  const pen = penetration(state);
+  $("#fanlab-details").innerHTML =
+    `📇 ${fmt(state.contacts)} contacts qualifiés<br>` +
+    (insight
+      ? `🌐 Bassin : ${fmt(marketCap(state))} personnes (${divisionName(state.division)}), dont ~${fmt(collectiblePool(state))} collectables en CRM<br>` +
+        `📊 Taux de pénétration : <b style="color:${pen>=0.5?'var(--accent)':'var(--text)'}">${Math.round(pen*1000)/10} %</b>` +
+        `${pen>=0.5?' — la collecte de nouveaux contacts sature':''}<br>` +
+        `🧪 Qualité des données : ${Math.round(state.dataQuality*10)/10}/10<br>`
+      : `🌐 Bassin atteignable : <span style="color:var(--muted)">inconnu</span><br>` +
+        `📊 Taux de pénétration : <span style="color:var(--muted)">inconnu</span><br>` +
+        `🧪 Qualité des données : <span style="color:var(--muted)">inconnue</span><br>`) +
+    `❤️ Engagement : ${Math.round(state.engagement)} %<br>` +
+    (pro
+      ? `<span style="font-size:12px">Formule : contacts × (1,5 + qualité×0,6) × (0,5 + engagement/100) · ROI ticketing & merch optimisés</span>`
+      : insight
+        ? `<span style="font-size:12px; color:var(--accent)">🔒 Passez à <b>Fan Lab Pro</b> (onglet 🚀 C'mon Sports) pour chiffrer la valeur de votre audience et convaincre les sponsors.</span>`
+        : `<span style="font-size:12px; color:var(--accent)">🔒 Commandez <b>Fan Lab Insight</b> ou <b>Pro</b> (onglet 🚀 C'mon Sports) pour mesurer et valoriser votre fanbase.</span>`);
+}
+
+function renderSponsors() {
+  const rows = state.sponsors.map(sp => {
+    const c = sp.satisfaction>=70?'var(--good)':sp.satisfaction>=45?'var(--warn)':'var(--bad)';
+    return `<tr>
+      <td><b>${sp.name}</b></td><td>${sp.sector}</td>
+      <td>${fmtCHF(sp.amount)}</td>
+      <td class="sat" style="color:${c}">${Math.round(sp.satisfaction)} %</td>
+      <td>${sp.seasons} saison${sp.seasons>1?'s':''} restante${sp.seasons>1?'s':''}</td>
+    </tr>`;
+  }).join("");
+  $("#sponsor-rows").innerHTML = rows || `<tr><td colspan="5" style="color:var(--muted)">Aucun sponsor… il est temps de prospecter !</td></tr>`;
+}
+
+function renderServices() {
+  $("#services-list").innerHTML = SERVICES.map(svc => {
+    const st = state.services;
+    let status = "", btn = "";
+    if (svc.id === "audit") {
+      if (st.audited) status = `<span class="badge gold">✔ Audit livré</span>`;
+      else if (st.auditIn > 0) status = `<span class="badge silver">⏳ En cours — rapport dans ${st.auditIn} sem.</span>`;
+      else btn = `<button class="primary" data-svc="audit">${svc.btnLabel}</button>`;
+    } else if (svc.id === "fanlabInsight" && st.fanlabPro) {
+      status = `<span class="badge gold">✔ Inclus dans Fan Lab Pro</span>`;
+    } else if (st[svc.id]) {
+      status = `<span class="badge gold">✔ Actif</span>`;
+    } else {
+      btn = `<button class="primary" data-svc="${svc.id}">${svc.btnLabel}</button>`;
+    }
+    const affordable = state.budget >= (svc.setup || 0);
+    return `<div class="action" style="align-items:flex-start">
+      <div class="info">
+        <div class="name"><span class="sig-cap">${svc.name[0]}</span>${svc.name.slice(1)} <span style="font-weight:600;color:var(--muted);font-size:11px">· ${svc.subLabel}</span> ${status}</div>
+        <div class="desc">${svc.pitch}</div>
+        <div class="desc" style="color:var(--accent)">→ ${svc.effect}</div>
+      </div>
+      <div style="flex-shrink:0; align-self:center">${btn && !affordable ? btn.replace("<button ", "<button disabled ") : btn}</div>
+    </div>`;
+  }).join("");
+  $("#services-list").querySelectorAll("button[data-svc]").forEach(b => {
+    b.onclick = () => buyService(b.dataset.svc);
+  });
+}
+
+function renderHistory() {
+  if (!state.history.length) {
+    $("#history-list").innerHTML = "Aucune saison terminée pour l'instant.";
+    return;
+  }
+  $("#history-list").innerHTML = state.history.map(h => {
+    const leagueTxt = h.pos ? `${h.pos}e de ${divisionName(h.playedDivision)}${h.wasEurope?` · 🌍 ${h.euroWins}V-${h.euroLosses}D en Europe`:''}` : '';
+    const badges = `${h.promoted?' <span class="badge gold">🎊 Promotion</span>':''}${h.relegated?' <span class="badge none">🟥 Relégation</span>':''}${h.euroQualified?' <span class="badge gold">🌍 Qualifié en Europe</span>':''}`;
+    return `
+    <div style="border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:10px; background:var(--panel2)">
+      <b style="color:var(--text)">Saison ${h.season}</b> — ${leagueTxt ? leagueTxt+' · ' : ''}${h.okCount}/${h.results.length} objectifs · ${h.wins}V-${h.losses}D · ${h.cert}${badges}<br>
+      Revenus : ${fmtCHF(h.revenue)} (billetterie ${fmtCHF(h.ticketRevenue)}, sponsors ${fmtCHF(h.sponsorRevenue)}, merch ${fmtCHF(h.merchRevenue)})<br>
+      Fans : ${h.fansDelta>=0?'+':''}${fmt(h.fansDelta)} · DMOS : ${h.dmosDelta>=0?'+':''}${h.dmosDelta}
+    </div>`;}).join("");
+}
+
+function renderAll() {
+  renderHeader(); renderKpis(); renderLastResult(); renderActions(); renderObjectives();
+  renderLog(); renderDmos(); renderSponsors(); renderServices(); renderHistory();
+  prevKpis = kpiList(state);
+}
+
+/* ================= Modals ================= */
+function showModal(html) {
+  $("#modal-root").innerHTML = `<div class="modal-bg"><div class="modal">${html}</div></div>`;
+}
+function closeModal() { $("#modal-root").innerHTML = ""; }
+
+function showDecision(d) {
+  showModal(`<h2>${d.title}</h2><p>${d.text}</p><div class="choices" id="dec-choices"></div>`);
+  const box = $("#dec-choices");
+  d.choices.forEach(c => {
+    const b = document.createElement("button");
+    b.innerHTML = `<b>${c.label}</b><span style="font-size:12px;color:var(--muted)">${c.sub}</span>`;
+    b.onclick = () => { c.run(state); closeModal(); save(); renderAll(); if (state.boardConfidence<=diff(state).fireAt && !state.gameOver){ state.gameOver=true; showGameOver(); } };
+    box.appendChild(b);
+  });
+}
+
+function showSeasonModal(b) {
+  const rows = b.results.map(r=>`<li style="color:${r.ok?'var(--good)':'var(--bad)'}">${r.ok?'✅':'❌'} ${r.label}</li>`).join("");
+  const ren = b.renewals.map(r=> r.renewed
+    ? `<li style="color:var(--good)">🤝 ${r.name} renouvelle (${fmtCHF(r.amount)}/saison)</li>`
+    : `<li style="color:var(--bad)">👋 ${r.name} part</li>`).join("") || "<li style='color:var(--muted)'>Aucun contrat n'arrivait à échéance.</li>";
+  const euroLine = b.wasEurope ? ` · Coupe d'Europe : ${b.euroWins}V-${b.euroLosses}D` : "";
+  let leagueBanner = `<div class="result-banner">📈 ${b.pos}e de ${divisionName(b.playedDivision)} (${b.wins}V-${b.losses}D${euroLine})</div>`;
+  if (b.promoted) leagueBanner += `<div class="result-banner" style="border-color:var(--good); color:var(--good)">🎊 PROMOTION en ${divisionName(1)} ! Sponsors revalorisés… mais charges et attentes vont exploser.</div>`;
+  if (b.relegated) leagueBanner += `<div class="result-banner" style="border-color:var(--bad); color:var(--bad)">🟥 RELÉGATION en ${divisionName(2)}. Fans déçus, contrats sponsors à la baisse.</div>`;
+  if (b.euroQualified) leagueBanner += `<div class="result-banner" style="border-color:var(--gold); color:var(--gold)">🌍 QUALIFICATION EUROPÉENNE pour la saison prochaine !</div>`;
+  showModal(`
+    <h2>🏁 Bilan de la saison ${b.season}</h2>
+    ${leagueBanner}
+    <p><b style="color:var(--text)">${b.okCount}/${b.results.length} objectifs atteints</b> — confiance du comité ${b.confDelta>=0?'+':''}${b.confDelta} pts</p>
+    <ul style="margin:0 0 12px 18px; font-size:13px; line-height:1.7">${rows}</ul>
+    <p><b style="color:var(--text)">Sponsors :</b></p>
+    <ul style="margin:0 0 12px 18px; font-size:13px; line-height:1.7">${ren}</ul>
+    <p style="font-size:13px">Revenus générés : <b style="color:var(--accent)">${fmtCHF(b.revenue)}</b> · Bilan sportif : ${b.wins}V-${b.losses}D · ${b.cert}</p>
+    <button class="primary" style="width:100%;margin-top:8px" onclick="document.querySelector('#modal-root').innerHTML=''">
+      ➡ Attaquer la saison ${b.season+1}
+    </button>`);
+}
+
+function showGameOver() {
+  const seasons = state.season;
+  const club = CLUBS.find(c=>c.id===state.clubId);
+  const cert = certification(state);
+  const usedServices = SERVICES.filter(sv => serviceActive(state, sv.id)).map(sv=>sv.name);
+  showModal(`
+    <h2>🚪 Fin de l'aventure</h2>
+    <p>Le comité directeur a perdu confiance et met fin à votre contrat après ${seasons} saison${seasons>1?'s':''}.</p>
+    <div class="result-banner" style="text-align:left">
+      <div style="font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:6px">
+        📋 Bilan de maturité digitale — méthodologie C'mon Sports</div>
+      <div style="font-size:13px; font-weight:600; line-height:1.8; color:var(--muted)">
+        🏟 ${club.name} · ${divisionName(state.division)}<br>
+        🧭 Score DMOS : <b style="color:var(--text)">${state.services.audited ? dmosTotal(state)+"/60" : "jamais audité — resté dans le flou"}</b> · <span class="badge ${cert.cls}">${cert.label}</span><br>
+        🔬 Valeur Fan Lab : <b style="color:var(--text)">${state.services.fanlabPro ? fmtCHF(fanlabValue(state)) : "jamais mesurée"}</b><br>
+        👥 ${fmt(state.fans)} fans · 📇 ${fmt(state.contacts)} contacts CRM<br>
+        🚀 Accompagnement : ${usedServices.length ? usedServices.join(", ") : "aucun — le club a piloté à l'aveugle"}
+      </div>
+    </div>
+    <button class="primary" style="width:100%;margin-top:12px" id="btn-restart">🔄 Recommencer une carrière</button>`);
+  $("#btn-restart").onclick = () => { localStorage.removeItem(currentSaveKey()); location.reload(); };
+}
+
+/* ================= Comptes locaux & RGPD =================
+   Privacy by design : pseudo libre, PIN haché (SHA-256 + sel),
+   sauvegardes par profil — le tout uniquement dans CE navigateur.
+   Droits RGPD/nLPD exerçables en un clic : export JSON, effacement. */
+function loadUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch(e) { return []; } }
+function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+async function hashPin(pin, salt) {
+  const data = new TextEncoder().encode(salt + ":" + pin);
+  if (window.crypto && crypto.subtle) {
+    const h = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(h)).map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  // repli hors contexte sécurisé (le PIN n'est jamais stocké en clair)
+  let x = 5381;
+  for (const c of salt + ":" + pin) x = ((x * 33) ^ c.charCodeAt(0)) >>> 0;
+  return "djb2-" + x.toString(16);
+}
+
+function showScreen(id) {
+  ["screen-login", "screen-setup", "screen-game"].forEach(s =>
+    $("#" + s).classList.toggle("hidden", s !== id));
+}
+
+function renderLogin() {
+  showScreen("screen-login");
+  const users = loadUsers();
+  $("#profiles-list").innerHTML = users.length ? users.map(u => `
+    <div class="profile-row" data-uid="${u.id}">
+      <div class="avatar">${esc(u.pseudo[0].toUpperCase())}</div>
+      <div class="pname">${esc(u.pseudo)}${u.email ? `<div style="font-size:11px; font-weight:600; color:var(--muted)">${esc(u.email)}</div>` : ""}</div>
+      <div class="pmeta">${u.pinHash ? "🔒 PIN · " : ""}créé le ${new Date(u.createdAt).toLocaleDateString("fr-CH")}</div>
+    </div>`).join("")
+    : `<div style="font-size:13px;color:var(--muted)">Aucun profil sur cet appareil. Créez le vôtre ci-dessous.</div>`;
+  $("#profiles-list").querySelectorAll(".profile-row").forEach(el => {
+    el.onclick = () => attemptLogin(el.dataset.uid);
+  });
+}
+
+function attemptLogin(uid) {
+  const u = loadUsers().find(x => x.id === uid);
+  if (!u) return;
+  if (!u.pinHash) return finishLogin(u);
+  showModal(`<h2>🔒 ${esc(u.pseudo)}</h2>
+    <p>Saisissez votre code PIN pour ouvrir ce profil.</p>
+    <input type="password" id="pin-try" maxlength="8" inputmode="numeric" placeholder="Code PIN" autocomplete="off">
+    <div id="pin-error" style="font-size:12px;color:var(--bad);margin-top:6px"></div>
+    <div class="choices">
+      <button class="primary" id="pin-ok">Se connecter</button>
+      <button id="pin-cancel">Annuler</button>
+    </div>`);
+  $("#pin-try").focus();
+  const tryIt = async () => {
+    const h = await hashPin($("#pin-try").value.trim(), u.salt);
+    if (h === u.pinHash) { closeModal(); finishLogin(u); }
+    else { $("#pin-error").textContent = "Code PIN incorrect."; $("#pin-try").value = ""; }
+  };
+  $("#pin-ok").onclick = tryIt;
+  $("#pin-try").onkeydown = e => { if (e.key === "Enter") tryIt(); };
+  $("#pin-cancel").onclick = closeModal;
+}
+
+function finishLogin(u) {
+  currentUser = u;
+  try { sessionStorage.setItem(SESSION_KEY, u.id); } catch(e) {}
+  const saved = load();
+  if (saved) { state = saved; startGame(); }
+  else { state = null; showSetup(); }
+}
+
+async function createProfile() {
+  const email = $("#new-email").value.trim().toLowerCase();
+  const pseudoInput = $("#new-pseudo").value.trim();
+  const pin = $("#new-pin").value.trim();
+  const optIn = $("#new-optin").checked;
+  const err = $("#create-error");
+  err.textContent = "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { err.textContent = "Saisissez une adresse e-mail valide."; return; }
+  if (pin && !/^\d{4,8}$/.test(pin)) { err.textContent = "Le code PIN doit compter 4 à 8 chiffres."; return; }
+  const users = loadUsers();
+  if (users.some(u => (u.email || "").toLowerCase() === email)) { err.textContent = "Un compte existe déjà avec cette adresse sur cet appareil."; return; }
+  const pseudo = pseudoInput || email.split("@")[0];
+  const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b => b.toString(16).padStart(2, "0")).join("");
+  const u = { id: "u" + Date.now().toString(36) + salt.slice(0, 4), email, pseudo, salt,
+              pinHash: pin ? await hashPin(pin, salt) : null,
+              optIn, brevo: optIn ? "en attente" : "non (pas d'opt-in)",
+              createdAt: new Date().toISOString() };
+  users.push(u); saveUsers(users);
+  // migration : une sauvegarde d'avant les profils est rattachée au premier profil créé
+  const legacy = localStorage.getItem(LEGACY_SAVE_KEY);
+  if (legacy) { localStorage.setItem("mktclubgm1_p" + u.id, legacy); localStorage.removeItem(LEGACY_SAVE_KEY); }
+  if (optIn) brevoSyncContact(u); // asynchrone, ne bloque pas la création
+  finishLogin(u);
+}
+
+/* ================= Synchronisation Brevo =================
+   Uniquement pour les comptes ayant coché l'opt-in marketing.
+   Le contact est créé/mis à jour chez Brevo avec le marqueur
+   CMON_SOLUTION_CLUBCATALIST (créé automatiquement au besoin).
+   Sans clé API configurée (⚙️ Admin) ou hors ligne, les contacts
+   sont mis en file d'attente locale et synchronisés plus tard. */
+const BREVO_KEY = "mktclubgm_brevo_key";
+const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok";
+const BREVO_ATTR = "CMON_SOLUTION_CLUBCATALIST";
+
+function brevoUpdateUser(uid, status) {
+  const users = loadUsers();
+  const u = users.find(x => x.id === uid);
+  if (u) { u.brevo = status; saveUsers(users); }
+  if (currentUser && currentUser.id === uid) currentUser.brevo = status;
+}
+
+async function brevoEnsureAttribute(key) {
+  if (localStorage.getItem(BREVO_ATTR_OK)) return;
+  const r = await fetch(`https://api.brevo.com/v3/contacts/attributes/normal/${BREVO_ATTR}`, {
+    method: "POST",
+    headers: { "api-key": key, "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({ type: "boolean" }),
+  });
+  // 201 = créé ; 400 = existe déjà — les deux conviennent
+  if (r.status === 201 || r.status === 400) localStorage.setItem(BREVO_ATTR_OK, "1");
+}
+
+async function brevoSyncContact(u) {
+  if (!u.optIn) return;
+  const key = localStorage.getItem(BREVO_KEY);
+  if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
+  try {
+    await brevoEnsureAttribute(key);
+    const r = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: { "api-key": key, "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({
+        email: u.email,
+        updateEnabled: true,
+        attributes: { [BREVO_ATTR]: true, OPT_IN: true },
+      }),
+    });
+    if (r.ok || r.status === 204) brevoUpdateUser(u.id, "synchronisé le " + new Date().toLocaleDateString("fr-CH"));
+    else brevoUpdateUser(u.id, "en attente (erreur " + r.status + ")");
+  } catch (e) {
+    brevoUpdateUser(u.id, "en attente (hors ligne)");
+  }
+}
+
+function brevoFlushQueue() {
+  if (!localStorage.getItem(BREVO_KEY)) return;
+  loadUsers().filter(u => u.optIn && String(u.brevo || "").startsWith("en attente"))
+             .forEach(u => brevoSyncContact(u));
+}
+
+function showAdmin() {
+  const key = localStorage.getItem(BREVO_KEY) || "";
+  const pending = loadUsers().filter(u => u.optIn && String(u.brevo || "").startsWith("en attente"));
+  showModal(`
+    <h2>⚙️ Administration — connexion Brevo</h2>
+    <p style="font-size:13px">Clé API Brevo (v3). Stockée uniquement dans ce navigateur — à configurer sur le poste
+    qui fait tourner la borne/démo. <b style="color:var(--warn)">Ne pas déployer publiquement avec une clé embarquée.</b></p>
+    <input type="password" id="admin-key" placeholder="xkeysib-…" value="${esc(key)}" autocomplete="off">
+    <p style="font-size:12px; margin-top:10px">Contacts opt-in en attente de synchronisation : <b style="color:var(--text)">${pending.length}</b>
+    ${pending.length ? "<br>" + pending.map(u => esc(u.email)).join(", ") : ""}</p>
+    <div class="choices">
+      <button class="primary" id="admin-save">Enregistrer la clé & synchroniser</button>
+      <button id="admin-clear">Effacer la clé</button>
+      <button id="admin-close">Fermer</button>
+    </div>`);
+  $("#admin-save").onclick = () => {
+    const v = $("#admin-key").value.trim();
+    if (v) localStorage.setItem(BREVO_KEY, v);
+    brevoFlushQueue();
+    closeModal();
+  };
+  $("#admin-clear").onclick = () => { localStorage.removeItem(BREVO_KEY); localStorage.removeItem(BREVO_ATTR_OK); closeModal(); };
+  $("#admin-close").onclick = closeModal;
+}
+
+function logout() {
+  try { sessionStorage.removeItem(SESSION_KEY); } catch(e) {}
+  currentUser = null; state = null;
+  location.reload();
+}
+
+function showConsent() {
+  showModal(`
+    <h2>🔒 Vos données restent chez vous</h2>
+    <p><b style="color:var(--text)">Par défaut, aucune donnée ne quitte votre navigateur.</b> Club Catalist fonctionne sans serveur,
+    sans cookie, sans traceur (polices embarquées). Comptes (e-mail), codes PIN (hachés) et sauvegardes sont
+    stockés uniquement sur cet appareil, aussi longtemps que vous ne les supprimez pas.</p>
+    <p><b style="color:var(--text)">Seule exception, avec votre accord explicite :</b> si vous cochez l'inscription aux actualités
+    C'mon Sports à la création du compte, votre adresse e-mail est transmise à Brevo (plateforme d'e-mailing, hébergement UE).
+    Sans cette case, rien n'est transmis.</p>
+    <p>Vous pouvez à tout moment exporter ou effacer l'ensemble de vos données depuis le pied de page
+    (« Confidentialité & données »).</p>
+    <div class="choices">
+      <button class="primary" id="consent-ok">J'ai compris — continuer</button>
+      <button id="consent-privacy">Lire la politique de confidentialité</button>
+    </div>`);
+  $("#consent-ok").onclick = () => { localStorage.setItem(CONSENT_KEY, new Date().toISOString()); closeModal(); initAuth(); };
+  $("#consent-privacy").onclick = () => showPrivacy(true);
+}
+
+function showPrivacy(fromConsent = false) {
+  showModal(`
+    <h2>🔒 Confidentialité & données</h2>
+    <div class="privacy-note">
+      <h4>Responsable du traitement</h4>
+      C'mon Corporations SàRL (C'mon Sports), La Chaux-de-Fonds, Suisse — douglas@cmon-sports.com
+      <h4>Quelles données ?</h4>
+      Adresse e-mail (identifiant de compte), pseudo affiché, code PIN haché (SHA-256 salé, jamais stocké en clair),
+      sauvegardes de jeu, horodatage du consentement, choix d'opt-in marketing. Pas d'adresse IP collectée,
+      pas de cookie, pas de traceur, pas d'outil d'analyse d'audience.
+      <h4>Où et comment ?</h4>
+      Par défaut : exclusivement dans le stockage local (localStorage) de votre navigateur, sur votre appareil —
+      aucun serveur, aucune transmission. <b style="color:var(--text)">Si et seulement si</b> vous avez coché l'inscription aux
+      actualités C'mon Sports (opt-in, base légale : consentement, art. 6 §1 a RGPD), votre adresse e-mail est transmise
+      à notre sous-traitant Brevo (Sendinblue SAS, France — hébergement UE) avec le marqueur de solution Club Catalist,
+      aux seules fins d'envoi de nos communications.
+      <h4>Durée de conservation</h4>
+      En local : jusqu'à suppression par vos soins (bouton ci-dessous, ou effacement des données de navigation).
+      Chez Brevo (si opt-in) : jusqu'à désinscription ou demande d'effacement.
+      <h4>Vos droits (RGPD art. 15-21 · nLPD)</h4>
+      Accès et portabilité : « Exporter mes données » (fichier JSON lisible). Effacement local : « Supprimer mon profil ».
+      Retrait du consentement marketing : lien de désinscription présent dans chaque e-mail, ou demande à
+      douglas@cmon-sports.com (effacement chez Brevo inclus).
+    </div>
+    <div class="choices">
+      ${currentUser ? `<button id="pv-export">📦 Exporter mes données (JSON)</button>
+      <button id="pv-delete" style="color:var(--bad)">🗑 Supprimer mon profil et toutes ses données</button>` : ""}
+      <button class="primary" id="pv-close">Fermer</button>
+    </div>`);
+  $("#pv-close").onclick = () => { closeModal(); if (fromConsent) showConsent(); };
+  if (currentUser) {
+    $("#pv-export").onclick = exportMyData;
+    $("#pv-delete").onclick = deleteMyProfile;
+  }
+}
+
+function exportMyData() {
+  if (!currentUser) { alert("Connectez-vous d'abord."); return; }
+  let saveData = null;
+  try { saveData = JSON.parse(localStorage.getItem(currentSaveKey())); } catch(e) {}
+  const payload = {
+    exporte_le: new Date().toISOString(),
+    profil: { email: currentUser.email || null, pseudo: currentUser.pseudo, cree_le: currentUser.createdAt,
+              pin: currentUser.pinHash ? "défini (haché, non restituable en clair)" : "aucun" },
+    consentement_information: localStorage.getItem(CONSENT_KEY),
+    optin_actualites: !!currentUser.optIn,
+    statut_brevo: currentUser.brevo || "non (pas d'opt-in)",
+    sauvegarde_de_jeu: saveData,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `club-catalist-${currentUser.pseudo.replace(/[^\w-]/g, "_")}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function deleteMyProfile() {
+  if (!currentUser) { alert("Connectez-vous d'abord."); return; }
+  if (!confirm(`Supprimer définitivement le profil « ${currentUser.pseudo} » et toutes ses données (sauvegardes comprises) ? Cette action est irréversible.`)) return;
+  localStorage.removeItem(currentSaveKey());
+  saveUsers(loadUsers().filter(u => u.id !== currentUser.id));
+  logout();
+}
+
+function initAuth() {
+  const users = loadUsers();
+  let sid = null;
+  try { sid = sessionStorage.getItem(SESSION_KEY); } catch(e) {}
+  const u = users.find(x => x.id === sid);
+  if (u) finishLogin(u); else renderLogin();
+}
+
+/* ================= Setup & wiring ================= */
+function showSetup() {
+  showScreen("screen-setup");
+  $("#setup-user").textContent = currentUser ? "👤 " + currentUser.pseudo : "";
+  $("#setup-clubs").innerHTML = CLUBS.map(c => `
+    <div class="club-card" data-club="${c.id}">
+      <div class="emoji">${c.emoji}</div>
+      <h3><span class="sig-cap">${c.name[0]}</span>${c.name.slice(1)}</h3>
+      <div style="font-size:11px;color:var(--muted);font-weight:600">${c.sport} · ${c.city}</div>
+      <div class="pill">${divisionName(c.division)}</div>
+      <div class="d">${c.desc}</div>
+      <div class="stats">
+        <div class="stat"><b>${fmt(c.fans)}</b><span>fans</span></div>
+        <div class="stat"><b>${Math.round(c.budget/1000)}k</b><span>budget</span></div>
+        <div class="stat"><b>${PILLARS.reduce((t,p)=>t+c.dmos[p.key],0)}/60</b><span>DMOS</span></div>
+      </div>
+    </div>`).join("");
+  $("#setup-clubs").querySelectorAll(".club-card").forEach(el => {
+    el.onclick = () => {
+      const club = CLUBS.find(c=>c.id===el.dataset.club);
+      showDifficultyChoice(club);
+    };
+  });
+  const saved = load();
+  if (saved) {
+    $("#resume-zone").innerHTML = `<div class="card" style="text-align:center">
+      <p style="font-size:14px;color:var(--muted);margin-bottom:10px">Une partie sauvegardée existe (saison ${saved.season}, semaine ${saved.week}).</p>
+      <button class="primary" id="btn-resume">▶ Reprendre la partie</button></div>`;
+    $("#btn-resume").onclick = () => { state = saved; startGame(); };
+  }
+}
+
+function showDifficultyChoice(club) {
+  showModal(`<h2>${club.emoji} ${club.name}</h2>
+    <p>Quel comité directeur vous attend ? Ce choix fixe la patience du comité, le seuil de licenciement
+    et la fréquence des scénarios d'ego. Il vaut pour toute la carrière.</p>
+    <div class="choices" id="diff-choices"></div>
+    <button style="width:100%;margin-top:10px" id="diff-cancel">← Choisir un autre club</button>`);
+  const box = $("#diff-choices");
+  DIFFICULTIES.forEach(d => {
+    const b = document.createElement("button");
+    b.innerHTML = `<b>${d.emoji} ${d.name}</b><span style="font-size:12px;color:var(--muted)">${d.desc}</span>`;
+    b.onclick = () => { closeModal(); newGame(club, d.id); startGame(); };
+    box.appendChild(b);
+  });
+  $("#diff-cancel").onclick = closeModal;
+}
+
+function startGame() {
+  showScreen("screen-game");
+  $("#game-user").textContent = currentUser ? "👤 " + currentUser.pseudo : "";
+  prevKpis = null;
+  renderAll();
+  if (state.gameOver) showGameOver();
+}
+
+// Tabs
+document.querySelectorAll(".tabs button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    ["dashboard","dmos","sponsors","cmon","history"].forEach(t =>
+      $("#tab-"+t).classList.toggle("hidden", t !== b.dataset.tab));
+  };
+});
+
+$("#btn-advance").onclick = advanceWeek;
+$("#btn-save").onclick = () => { save(); $("#btn-save").textContent = "✔ Sauvegardé"; setTimeout(()=>$("#btn-save").textContent="💾 Sauvegarder", 1200); };
+$("#btn-reset").onclick = () => {
+  if (confirm("Effacer la partie en cours et recommencer ? (votre profil est conservé)")) {
+    localStorage.removeItem(currentSaveKey());
+    location.reload();
+  }
+};
+$("#btn-create-profile").onclick = createProfile;
+$("#new-pin").onkeydown = e => { if (e.key === "Enter") createProfile(); };
+$("#btn-logout-setup").onclick = logout;
+$("#btn-logout-game").onclick = logout;
+$("#link-privacy").onclick = () => showPrivacy(false);
+$("#link-export").onclick = exportMyData;
+$("#link-delete").onclick = deleteMyProfile;
+$("#link-admin").onclick = showAdmin;
+
+// Boot : information de confidentialité au premier lancement, puis connexion,
+// et tentative de synchronisation des contacts opt-in en attente
+if (!localStorage.getItem(CONSENT_KEY)) showConsent();
+else initAuth();
+brevoFlushQueue();
+</script>
+</body>
+</html>
