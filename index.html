@@ -1936,6 +1936,30 @@ function brevoFlushQueue() {
              .forEach(u => brevoSyncContact(u));
 }
 
+/* Envoi d'un contact de test — vérifie la chaîne complète jusqu'à la liste. */
+async function brevoSendTest(key, listId, email) {
+  try {
+    await brevoEnsureAttribute(key);
+    const r = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST", headers: brevoHeaders(key),
+      body: JSON.stringify({
+        email, updateEnabled: true, listIds: [listId],
+        attributes: { [BREVO_ATTR]: true, PRENOM: "Test Club Catalist" },
+      }),
+    });
+    if (r.ok || r.status === 204) return `✅ Contact de test « ${esc(email)} » envoyé dans la liste #${listId}`;
+    let detail = "";
+    try { const j = await r.json(); detail = j.message ? " — " + j.message : ""; } catch (e) {}
+    if (r.status === 400) {
+      const add = await fetch(`https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`, {
+        method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ emails: [email] }),
+      });
+      if (add.ok || add.status === 204) return `✅ Contact déjà connu — rattaché à la liste #${listId}`;
+    }
+    return `❌ Échec HTTP ${r.status}${esc(detail)}`;
+  } catch (e) { return "❌ Réseau : " + esc(e.message); }
+}
+
 /* Diagnostic complet : clé valide ? liste accessible ? combien de contacts ? */
 async function brevoDiagnose(key, listId) {
   const out = [];
@@ -1974,14 +1998,17 @@ function showAdmin() {
   const users = loadUsers();
   const optIns = users.filter(u => u.optIn);
   const synced = optIns.filter(u => /^(synchronisé|déjà connu)/.test(String(u.brevo || "")));
-  const rows = optIns.length
-    ? optIns.map(u => {
-        const st = String(u.brevo || "—");
-        const col = /^(synchronisé|déjà connu)/.test(st) ? "var(--good)" : /échec/.test(st) ? "var(--bad)" : "var(--warn)";
+  // On liste TOUS les comptes : voir « pas d'opt-in » explique à lui seul une liste vide.
+  const rows = users.length
+    ? users.map(u => {
+        const st = u.optIn ? String(u.brevo || "—") : "pas d'opt-in — non transmis";
+        const col = !u.optIn ? "var(--muted)"
+          : /^(synchronisé|déjà connu)/.test(st) ? "var(--good)"
+          : /échec/.test(st) ? "var(--bad)" : "var(--warn)";
         return `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">
-          <span>${esc(u.email)}</span><span style="color:${col};font-weight:700;text-align:right">${esc(st)}</span></div>`;
+          <span>${esc(u.email || u.pseudo)}</span><span style="color:${col};font-weight:700;text-align:right">${esc(st)}</span></div>`;
       }).join("")
-    : `<div style="color:var(--muted)">Aucun compte avec opt-in marketing sur cet appareil.</div>`;
+    : `<div style="color:var(--muted)">Aucun compte sur cet appareil.</div>`;
   showModal(`
     <h2>⚙️ Administration — connexion Brevo</h2>
     <p style="font-size:13px">Clé API Brevo (v3) et liste de destination. Stockées uniquement dans ce navigateur.
@@ -1993,10 +2020,14 @@ function showAdmin() {
     </div>
     <div id="admin-diag" style="font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)"></div>
     <p style="font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700">
-      Comptes opt-in : ${synced.length}/${optIns.length} synchronisés</p>
+      ${users.length} compte(s) · ${optIns.length} avec opt-in · ${synced.length} synchronisé(s)</p>
     <div style="font-size:12px; max-height:150px; overflow-y:auto">${rows}</div>
+    ${optIns.length === 0 && users.length > 0 ? `<p style="font-size:12px;color:var(--warn);line-height:1.5;margin-top:8px">
+      ⚠️ Aucun compte n'a coché l'opt-in : c'est pourquoi la liste Brevo reste vide.
+      Seuls les comptes ayant consenti sont transmis.</p>` : ""}
     <div class="choices">
       <button id="admin-test">🔍 Tester la connexion & la liste</button>
+      <button id="admin-testcontact">✉️ Envoyer un contact de test</button>
       <button class="primary" id="admin-save">Enregistrer & synchroniser maintenant</button>
       <button id="admin-clear">Effacer la clé</button>
       <button id="admin-close">Fermer</button>
@@ -2014,6 +2045,16 @@ function showAdmin() {
     $("#admin-diag").innerHTML = "⏳ Test en cours…";
     const res = await brevoDiagnose(k, l);
     $("#admin-diag").innerHTML = res.join("<br>");
+  };
+  $("#admin-testcontact").onclick = async () => {
+    const { k, l } = readInputs();
+    if (!k) { $("#admin-diag").innerHTML = "❌ Saisissez d'abord une clé API."; return; }
+    const mail = prompt("Adresse e-mail du contact de test :", ADMIN_EMAIL);
+    if (!mail) return;
+    $("#admin-diag").innerHTML = "⏳ Envoi du contact de test…";
+    const res = await brevoSendTest(k, l, mail.trim().toLowerCase());
+    const diag = await brevoDiagnose(k, l);
+    $("#admin-diag").innerHTML = res + "<br>" + diag.join("<br>");
   };
   $("#admin-save").onclick = async () => {
     const { k, l } = readInputs();
