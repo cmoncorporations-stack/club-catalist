@@ -1861,8 +1861,12 @@ async function createProfile() {
    sont mis en file d'attente locale et synchronisés plus tard. */
 const BREVO_KEY = "mktclubgm_brevo_key";
 const BREVO_LIST_KEY = "mktclubgm_brevo_list";
-const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok";
+// Suffixe de version : à incrémenter dès que la liste des attributs change,
+// sinon les navigateurs ayant déjà synchronisé sauteraient la création des
+// nouveaux attributs et Brevo rejetterait le contact (HTTP 400).
+const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok_v2";
 const BREVO_ATTR = "CMON_SOLUTION_CLUBCATALIST";
+const BREVO_ATTR_PSEUDO = "PSEUDO";
 const BREVO_LIST_DEFAULT = 63; // liste « Club Catalist » côté Brevo
 
 function brevoListId() { return parseInt(localStorage.getItem(BREVO_LIST_KEY) || BREVO_LIST_DEFAULT, 10); }
@@ -1877,15 +1881,23 @@ function brevoUpdateUser(uid, status) {
   if (currentUser && currentUser.id === uid) currentUser.brevo = status;
 }
 
-async function brevoEnsureAttribute(key) {
+/* Crée au besoin les attributs propres à Club Catalist.
+   PSEUDO est un attribut texte dédié : on n'écrase pas PRENOM, qui sert
+   au vrai prénom des contacts dans le reste du CRM C'mon Sports. */
+async function brevoEnsureAttributes(key) {
   if (localStorage.getItem(BREVO_ATTR_OK)) return;
-  try {
-    const r = await fetch(`https://api.brevo.com/v3/contacts/attributes/normal/${BREVO_ATTR}`, {
-      method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ type: "boolean" }),
-    });
-    // 201 = créé ; 400 = existe déjà — les deux conviennent
-    if (r.status === 201 || r.status === 400) localStorage.setItem(BREVO_ATTR_OK, "1");
-  } catch (e) { /* non bloquant : la création du contact reste tentée */ }
+  const defs = [[BREVO_ATTR, "boolean"], [BREVO_ATTR_PSEUDO, "text"]];
+  let allOk = true;
+  for (const [name, type] of defs) {
+    try {
+      const r = await fetch(`https://api.brevo.com/v3/contacts/attributes/normal/${name}`, {
+        method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ type }),
+      });
+      // 201 = créé ; 400 = existe déjà — les deux conviennent
+      if (!(r.status === 201 || r.status === 400)) allOk = false;
+    } catch (e) { allOk = false; /* non bloquant : la création du contact reste tentée */ }
+  }
+  if (allOk) localStorage.setItem(BREVO_ATTR_OK, "1");
 }
 
 async function brevoSyncContact(u) {
@@ -1894,7 +1906,7 @@ async function brevoSyncContact(u) {
   if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
   const listId = brevoListId();
   try {
-    await brevoEnsureAttribute(key);
+    await brevoEnsureAttributes(key);
     const payload = {
       email: u.email,
       updateEnabled: true,           // met à jour le contact s'il existe déjà
@@ -1908,7 +1920,7 @@ async function brevoSyncContact(u) {
       attributes: {
         [BREVO_ATTR]: true,
         OPT_IN: !!u.optIn,
-        PRENOM: u.pseudo || "",
+        [BREVO_ATTR_PSEUDO]: u.pseudo || "",
       },
     };
     const r = await fetch("https://api.brevo.com/v3/contacts", {
@@ -1947,12 +1959,12 @@ function brevoFlushQueue() {
 /* Envoi d'un contact de test — vérifie la chaîne complète jusqu'à la liste. */
 async function brevoSendTest(key, listId, email) {
   try {
-    await brevoEnsureAttribute(key);
+    await brevoEnsureAttributes(key);
     const r = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST", headers: brevoHeaders(key),
       body: JSON.stringify({
         email, updateEnabled: true, listIds: [listId],
-        attributes: { [BREVO_ATTR]: true, PRENOM: "Test Club Catalist" },
+        attributes: { [BREVO_ATTR]: true, [BREVO_ATTR_PSEUDO]: "Test Club Catalist" },
       }),
     });
     if (r.ok || r.status === 204) return `✅ Contact de test « ${esc(email)} » envoyé dans la liste #${listId}`;
