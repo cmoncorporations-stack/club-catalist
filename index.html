@@ -1845,8 +1845,15 @@ async function createProfile() {
    Sans clé API configurée (⚙️ Admin) ou hors ligne, les contacts
    sont mis en file d'attente locale et synchronisés plus tard. */
 const BREVO_KEY = "mktclubgm_brevo_key";
+const BREVO_LIST_KEY = "mktclubgm_brevo_list";
 const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok";
 const BREVO_ATTR = "CMON_SOLUTION_CLUBCATALIST";
+const BREVO_LIST_DEFAULT = 63; // liste « Club Catalist » côté Brevo
+
+function brevoListId() { return parseInt(localStorage.getItem(BREVO_LIST_KEY) || BREVO_LIST_DEFAULT, 10); }
+function brevoHeaders(key) {
+  return { "api-key": key, "content-type": "application/json", accept: "application/json" };
+}
 
 function brevoUpdateUser(uid, status) {
   const users = loadUsers();
@@ -1857,32 +1864,54 @@ function brevoUpdateUser(uid, status) {
 
 async function brevoEnsureAttribute(key) {
   if (localStorage.getItem(BREVO_ATTR_OK)) return;
-  const r = await fetch(`https://api.brevo.com/v3/contacts/attributes/normal/${BREVO_ATTR}`, {
-    method: "POST",
-    headers: { "api-key": key, "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify({ type: "boolean" }),
-  });
-  // 201 = créé ; 400 = existe déjà — les deux conviennent
-  if (r.status === 201 || r.status === 400) localStorage.setItem(BREVO_ATTR_OK, "1");
+  try {
+    const r = await fetch(`https://api.brevo.com/v3/contacts/attributes/normal/${BREVO_ATTR}`, {
+      method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ type: "boolean" }),
+    });
+    // 201 = créé ; 400 = existe déjà — les deux conviennent
+    if (r.status === 201 || r.status === 400) localStorage.setItem(BREVO_ATTR_OK, "1");
+  } catch (e) { /* non bloquant : la création du contact reste tentée */ }
 }
 
 async function brevoSyncContact(u) {
   if (!u.optIn) return;
   const key = localStorage.getItem(BREVO_KEY);
   if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
+  const listId = brevoListId();
   try {
     await brevoEnsureAttribute(key);
+    const payload = {
+      email: u.email,
+      updateEnabled: true,           // met à jour le contact s'il existe déjà
+      listIds: [listId],             // ← l'inscription à la liste (indispensable pour l'y voir)
+      // NB : ne pas envoyer SOURCE_ACQUISITION — c'est un attribut « catégorie »
+      // à valeurs figées côté Brevo, un texte libre y provoquerait un HTTP 400.
+      attributes: {
+        [BREVO_ATTR]: true,
+        OPT_IN: true,
+        PRENOM: u.pseudo || "",
+      },
+    };
     const r = await fetch("https://api.brevo.com/v3/contacts", {
-      method: "POST",
-      headers: { "api-key": key, "content-type": "application/json", accept: "application/json" },
-      body: JSON.stringify({
-        email: u.email,
-        updateEnabled: true,
-        attributes: { [BREVO_ATTR]: true, OPT_IN: true },
-      }),
+      method: "POST", headers: brevoHeaders(key), body: JSON.stringify(payload),
     });
-    if (r.ok || r.status === 204) brevoUpdateUser(u.id, "synchronisé le " + new Date().toLocaleDateString("fr-CH"));
-    else brevoUpdateUser(u.id, "en attente (erreur " + r.status + ")");
+    if (r.ok || r.status === 204) {
+      brevoUpdateUser(u.id, `synchronisé (liste ${listId}) le ` + new Date().toLocaleDateString("fr-CH"));
+      return;
+    }
+    // Brevo renvoie parfois « contact déjà existant » : on le rattache alors explicitement à la liste
+    if (r.status === 400) {
+      const add = await fetch(`https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`, {
+        method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ emails: [u.email] }),
+      });
+      if (add.ok || add.status === 204) {
+        brevoUpdateUser(u.id, `déjà connu — rattaché à la liste ${listId}`);
+        return;
+      }
+    }
+    let detail = "";
+    try { const j = await r.json(); detail = j.message ? " — " + j.message : ""; } catch (e) {}
+    brevoUpdateUser(u.id, `échec (HTTP ${r.status}${detail})`);
   } catch (e) {
     brevoUpdateUser(u.id, "en attente (hors ligne)");
   }
@@ -1890,32 +1919,97 @@ async function brevoSyncContact(u) {
 
 function brevoFlushQueue() {
   if (!localStorage.getItem(BREVO_KEY)) return;
-  loadUsers().filter(u => u.optIn && String(u.brevo || "").startsWith("en attente"))
+  loadUsers().filter(u => u.optIn && !String(u.brevo || "").startsWith("synchronisé")
+                                  && !String(u.brevo || "").startsWith("déjà connu"))
              .forEach(u => brevoSyncContact(u));
+}
+
+/* Diagnostic complet : clé valide ? liste accessible ? combien de contacts ? */
+async function brevoDiagnose(key, listId) {
+  const out = [];
+  try {
+    const acc = await fetch("https://api.brevo.com/v3/account", { headers: brevoHeaders(key) });
+    if (acc.ok) {
+      const j = await acc.json();
+      out.push(`✅ Clé API valide — compte ${esc(j.companyName || j.email || "Brevo")}`);
+    } else {
+      out.push(`❌ Clé API refusée (HTTP ${acc.status})`);
+      return out;
+    }
+  } catch (e) { return ["❌ Impossible de joindre Brevo (réseau / hors ligne)"]; }
+  try {
+    const l = await fetch(`https://api.brevo.com/v3/contacts/lists/${listId}`, { headers: brevoHeaders(key) });
+    if (l.ok) {
+      const j = await l.json();
+      out.push(`✅ Liste #${listId} « ${esc(j.name)} » — ${j.uniqueSubscribers ?? j.totalSubscribers ?? 0} contact(s)`);
+    } else {
+      out.push(`❌ Liste #${listId} introuvable (HTTP ${l.status}) — vérifiez le numéro`);
+    }
+  } catch (e) { out.push("❌ Liste : erreur réseau"); }
+  return out;
 }
 
 function showAdmin() {
   const key = localStorage.getItem(BREVO_KEY) || "";
-  const pending = loadUsers().filter(u => u.optIn && String(u.brevo || "").startsWith("en attente"));
+  const users = loadUsers();
+  const optIns = users.filter(u => u.optIn);
+  const synced = optIns.filter(u => /^(synchronisé|déjà connu)/.test(String(u.brevo || "")));
+  const rows = optIns.length
+    ? optIns.map(u => {
+        const st = String(u.brevo || "—");
+        const col = /^(synchronisé|déjà connu)/.test(st) ? "var(--good)" : /échec/.test(st) ? "var(--bad)" : "var(--warn)";
+        return `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+          <span>${esc(u.email)}</span><span style="color:${col};font-weight:700;text-align:right">${esc(st)}</span></div>`;
+      }).join("")
+    : `<div style="color:var(--muted)">Aucun compte avec opt-in marketing sur cet appareil.</div>`;
   showModal(`
     <h2>⚙️ Administration — connexion Brevo</h2>
-    <p style="font-size:13px">Clé API Brevo (v3). Stockée uniquement dans ce navigateur — à configurer sur le poste
-    qui fait tourner la borne/démo. <b style="color:var(--warn)">Ne pas déployer publiquement avec une clé embarquée.</b></p>
+    <p style="font-size:13px">Clé API Brevo (v3) et liste de destination. Stockées uniquement dans ce navigateur.
+    <b style="color:var(--warn)">Ne saisissez pas la clé sur un poste public.</b></p>
     <input type="password" id="admin-key" placeholder="xkeysib-…" value="${esc(key)}" autocomplete="off">
-    <p style="font-size:12px; margin-top:10px">Contacts opt-in en attente de synchronisation : <b style="color:var(--text)">${pending.length}</b>
-    ${pending.length ? "<br>" + pending.map(u => esc(u.email)).join(", ") : ""}</p>
+    <div style="display:flex; align-items:center; gap:10px; margin-top:8px">
+      <span style="font-size:13px; color:var(--muted); white-space:nowrap">Liste n°</span>
+      <input type="text" id="admin-list" inputmode="numeric" value="${brevoListId()}" style="max-width:110px">
+    </div>
+    <div id="admin-diag" style="font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)"></div>
+    <p style="font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700">
+      Comptes opt-in : ${synced.length}/${optIns.length} synchronisés</p>
+    <div style="font-size:12px; max-height:150px; overflow-y:auto">${rows}</div>
     <div class="choices">
-      <button class="primary" id="admin-save">Enregistrer la clé & synchroniser</button>
+      <button id="admin-test">🔍 Tester la connexion & la liste</button>
+      <button class="primary" id="admin-save">Enregistrer & synchroniser maintenant</button>
       <button id="admin-clear">Effacer la clé</button>
       <button id="admin-close">Fermer</button>
     </div>`);
-  $("#admin-save").onclick = () => {
-    const v = $("#admin-key").value.trim();
-    if (v) localStorage.setItem(BREVO_KEY, v);
-    brevoFlushQueue();
-    closeModal();
+  const readInputs = () => {
+    const k = $("#admin-key").value.trim();
+    const l = parseInt($("#admin-list").value.trim(), 10) || BREVO_LIST_DEFAULT;
+    if (k) localStorage.setItem(BREVO_KEY, k);
+    localStorage.setItem(BREVO_LIST_KEY, String(l));
+    return { k, l };
   };
-  $("#admin-clear").onclick = () => { localStorage.removeItem(BREVO_KEY); localStorage.removeItem(BREVO_ATTR_OK); closeModal(); };
+  $("#admin-test").onclick = async () => {
+    const { k, l } = readInputs();
+    if (!k) { $("#admin-diag").innerHTML = "❌ Saisissez d'abord une clé API."; return; }
+    $("#admin-diag").innerHTML = "⏳ Test en cours…";
+    const res = await brevoDiagnose(k, l);
+    $("#admin-diag").innerHTML = res.join("<br>");
+  };
+  $("#admin-save").onclick = async () => {
+    const { k, l } = readInputs();
+    if (!k) { $("#admin-diag").innerHTML = "❌ Saisissez d'abord une clé API."; return; }
+    $("#admin-diag").innerHTML = "⏳ Synchronisation…";
+    localStorage.removeItem(BREVO_ATTR_OK); // re-vérifie l'attribut au cas où
+    const targets = loadUsers().filter(u => u.optIn);
+    for (const u of targets) await brevoSyncContact(u);
+    const diag = await brevoDiagnose(k, l);
+    showAdmin();
+    $("#admin-diag").innerHTML = diag.join("<br>") + `<br>↻ ${targets.length} compte(s) traité(s).`;
+  };
+  $("#admin-clear").onclick = () => {
+    localStorage.removeItem(BREVO_KEY); localStorage.removeItem(BREVO_ATTR_OK);
+    $("#admin-key").value = ""; $("#admin-diag").innerHTML = "Clé effacée.";
+  };
   $("#admin-close").onclick = closeModal;
 }
 
