@@ -388,9 +388,11 @@
           <input type="password" id="new-pin" maxlength="8" inputmode="numeric" placeholder="Code PIN 4-8 chiffres (optionnel)">
           <label style="display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--muted); line-height:1.5; cursor:pointer">
             <input type="checkbox" id="new-optin" style="margin-top:2px; accent-color:#62BEF5">
-            <span>J'accepte de recevoir les actualités C'mon Sports par e-mail. Mon adresse sera alors transmise
-            à Brevo (plateforme d'e-mailing, hébergement UE) avec le marqueur Club Catalist. <b style="color:var(--text)">Optionnel</b> —
-            sans cette case, mon adresse ne quitte jamais ce navigateur.</span>
+            <span>J'accepte de recevoir les actualités C'mon Sports par e-mail. <b style="color:var(--text)">Optionnel</b> —
+            sans cette case, aucune campagne ne me sera envoyée.<br>
+            <span style="font-size:11px">Dans tous les cas, la création du compte enregistre mon adresse dans le CRM
+            de C'mon Corporations (Brevo, hébergement UE) pour la gestion des comptes Club Catalist.
+            <a id="optin-privacy" style="color:var(--accent);cursor:pointer;text-decoration:underline">En savoir plus</a></span></span>
           </label>
           <button class="primary" id="btn-create-profile">Créer le compte</button>
           <div id="create-error" style="font-size:12px; color:var(--bad)"></div>
@@ -398,8 +400,9 @@
       </div>
     </div>
     <p style="max-width:540px; margin:0 auto; font-size:12px; color:var(--muted); text-align:center; line-height:1.6">
-      🔒 Vos données (e-mail, code PIN haché, sauvegardes) restent <b style="color:var(--text)">dans ce navigateur</b>.
-      Seule exception, à votre demande : l'inscription aux actualités (case ci-dessus).
+      🔒 Vos sauvegardes et votre code PIN (haché) restent <b style="color:var(--text)">dans ce navigateur</b>.
+      Votre adresse e-mail est enregistrée dans le CRM de C'mon Corporations (Brevo, UE) à la création du compte ;
+      les e-mails d'actualités ne partent que si vous cochez la case.
     </p>
   </div>
 
@@ -1840,7 +1843,7 @@ async function createProfile() {
   const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b => b.toString(16).padStart(2, "0")).join("");
   const u = { id: "u" + Date.now().toString(36) + salt.slice(0, 4), email, pseudo, salt,
               pinHash: pin ? await hashPin(pin, salt) : null,
-              optIn, brevo: optIn ? "en attente" : "non (pas d'opt-in)",
+              optIn, brevo: "en attente",
               createdAt: new Date().toISOString() };
   users.push(u); saveUsers(users);
   // migration : une sauvegarde d'avant les profils est rattachée au premier profil créé
@@ -1886,7 +1889,7 @@ async function brevoEnsureAttribute(key) {
 }
 
 async function brevoSyncContact(u) {
-  if (!u.optIn) return;
+  if (!u.email) return;                       // profils hérités sans adresse
   const key = localStorage.getItem(BREVO_KEY);
   if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
   const listId = brevoListId();
@@ -1896,11 +1899,15 @@ async function brevoSyncContact(u) {
       email: u.email,
       updateEnabled: true,           // met à jour le contact s'il existe déjà
       listIds: [listId],             // ← l'inscription à la liste (indispensable pour l'y voir)
+      // Garde-fou déterminant : sans consentement marketing, le contact est
+      // blacklisté côté Brevo — il figure au CRM mais ne peut PAS recevoir de
+      // campagne, même par erreur de ciblage.
+      emailBlacklisted: !u.optIn,
       // NB : ne pas envoyer SOURCE_ACQUISITION — c'est un attribut « catégorie »
       // à valeurs figées côté Brevo, un texte libre y provoquerait un HTTP 400.
       attributes: {
         [BREVO_ATTR]: true,
-        OPT_IN: true,
+        OPT_IN: !!u.optIn,
         PRENOM: u.pseudo || "",
       },
     };
@@ -1908,7 +1915,8 @@ async function brevoSyncContact(u) {
       method: "POST", headers: brevoHeaders(key), body: JSON.stringify(payload),
     });
     if (r.ok || r.status === 204) {
-      brevoUpdateUser(u.id, `synchronisé (liste ${listId}) le ` + new Date().toLocaleDateString("fr-CH"));
+      const suffix = u.optIn ? "avec opt-in" : "sans opt-in — exclu des envois";
+      brevoUpdateUser(u.id, `synchronisé (liste ${listId}, ${suffix}) le ` + new Date().toLocaleDateString("fr-CH"));
       return;
     }
     // Brevo renvoie parfois « contact déjà existant » : on le rattache alors explicitement à la liste
@@ -1931,7 +1939,7 @@ async function brevoSyncContact(u) {
 
 function brevoFlushQueue() {
   if (!localStorage.getItem(BREVO_KEY)) return;
-  loadUsers().filter(u => u.optIn && !String(u.brevo || "").startsWith("synchronisé")
+  loadUsers().filter(u => u.email && !String(u.brevo || "").startsWith("synchronisé")
                                   && !String(u.brevo || "").startsWith("déjà connu"))
              .forEach(u => brevoSyncContact(u));
 }
@@ -2061,7 +2069,7 @@ function showAdmin() {
     if (!k) { $("#admin-diag").innerHTML = "❌ Saisissez d'abord une clé API."; return; }
     $("#admin-diag").innerHTML = "⏳ Synchronisation…";
     localStorage.removeItem(BREVO_ATTR_OK); // re-vérifie l'attribut au cas où
-    const targets = loadUsers().filter(u => u.optIn);
+    const targets = loadUsers().filter(u => u.email);
     for (const u of targets) await brevoSyncContact(u);
     const diag = await brevoDiagnose(k, l);
     showAdmin();
@@ -2082,13 +2090,14 @@ function logout() {
 
 function showConsent() {
   showModal(`
-    <h2>🔒 Vos données restent chez vous</h2>
-    <p><b style="color:var(--text)">Par défaut, aucune donnée ne quitte votre navigateur.</b> Club Catalist fonctionne sans serveur,
-    sans cookie, sans traceur (polices embarquées). Comptes (e-mail), codes PIN (hachés) et sauvegardes sont
-    stockés uniquement sur cet appareil, aussi longtemps que vous ne les supprimez pas.</p>
-    <p><b style="color:var(--text)">Seule exception, avec votre accord explicite :</b> si vous cochez l'inscription aux actualités
-    C'mon Sports à la création du compte, votre adresse e-mail est transmise à Brevo (plateforme d'e-mailing, hébergement UE).
-    Sans cette case, rien n'est transmis.</p>
+    <h2>🔒 Comment vos données sont traitées</h2>
+    <p><b style="color:var(--text)">Votre progression reste sur cet appareil.</b> Club Catalist fonctionne sans serveur,
+    sans cookie, sans traceur (polices embarquées) : sauvegardes et code PIN (haché) ne quittent jamais ce navigateur.</p>
+    <p><b style="color:var(--text)">Si vous créez un compte</b>, votre adresse e-mail est enregistrée dans le CRM de
+    C'mon Corporations (Brevo, hébergement UE) afin de gérer les comptes Club Catalist et d'en suivre l'usage —
+    base légale : intérêt légitime, auquel vous pouvez vous opposer à tout moment.</p>
+    <p><b style="color:var(--text)">Les e-mails d'actualités</b>, eux, ne vous seront envoyés que si vous cochez la case
+    prévue à cet effet (consentement). Sans elle, votre adresse est marquée comme exclue de tout envoi marketing.</p>
     <p>Vous pouvez à tout moment exporter ou effacer l'ensemble de vos données depuis le pied de page
     (« Confidentialité & données »).</p>
     <div class="choices">
@@ -2110,18 +2119,22 @@ function showPrivacy(fromConsent = false) {
       sauvegardes de jeu, horodatage du consentement, choix d'opt-in marketing. Pas d'adresse IP collectée,
       pas de cookie, pas de traceur, pas d'outil d'analyse d'audience.
       <h4>Où et comment ?</h4>
-      Par défaut : exclusivement dans le stockage local (localStorage) de votre navigateur, sur votre appareil —
-      aucun serveur, aucune transmission. <b style="color:var(--text)">Si et seulement si</b> vous avez coché l'inscription aux
-      actualités C'mon Sports (opt-in, base légale : consentement, art. 6 §1 a RGPD), votre adresse e-mail est transmise
-      à notre sous-traitant Brevo (Sendinblue SAS, France — hébergement UE) avec le marqueur de solution Club Catalist,
-      aux seules fins d'envoi de nos communications.
+      <b style="color:var(--text)">Sur votre appareil</b> — sauvegardes de jeu, code PIN haché et horodatage du consentement
+      restent dans le stockage local (localStorage) de ce navigateur.<br>
+      <b style="color:var(--text)">Chez notre sous-traitant Brevo</b> (Sendinblue SAS, France — hébergement UE) — votre adresse
+      e-mail, votre pseudo et le marqueur de solution Club Catalist y sont enregistrés dès la création du compte, afin de
+      gérer les comptes de la plateforme et d'en mesurer l'usage. Base légale : <b style="color:var(--text)">intérêt légitime</b>
+      (art. 6 §1 f RGPD), avec droit d'opposition.<br>
+      <b style="color:var(--text)">Envois marketing</b> — uniquement si vous avez coché l'inscription aux actualités
+      (consentement, art. 6 §1 a RGPD). À défaut, votre contact est techniquement marqué comme exclu des campagnes chez Brevo :
+      aucune newsletter ne peut vous être adressée, même par erreur de ciblage.
       <h4>Durée de conservation</h4>
       En local : jusqu'à suppression par vos soins (bouton ci-dessous, ou effacement des données de navigation).
-      Chez Brevo (si opt-in) : jusqu'à désinscription ou demande d'effacement.
+      Chez Brevo : tant que le compte reste actif, ou jusqu'à votre demande d'effacement.
       <h4>Vos droits (RGPD art. 15-21 · nLPD)</h4>
       Accès et portabilité : « Exporter mes données » (fichier JSON lisible). Effacement local : « Supprimer mon profil ».
-      Retrait du consentement marketing : lien de désinscription présent dans chaque e-mail, ou demande à
-      douglas@cmon-sports.com (effacement chez Brevo inclus).
+      Opposition au traitement, effacement chez Brevo, retrait du consentement marketing (ou lien de désinscription
+      présent dans chaque e-mail) : écrivez à douglas@cmon-sports.com — il y sera donné suite sans délai.
     </div>
     <div class="choices">
       ${currentUser ? `<button id="pv-export">📦 Exporter mes données (JSON)</button>
@@ -2251,6 +2264,7 @@ $("#new-pin").onkeydown = e => { if (e.key === "Enter") createProfile(); };
 $("#btn-logout-setup").onclick = logout;
 $("#btn-logout-game").onclick = logout;
 $("#link-privacy").onclick = () => showPrivacy(false);
+$("#optin-privacy").onclick = e => { e.preventDefault(); showPrivacy(false); };
 $("#link-export").onclick = exportMyData;
 $("#link-delete").onclick = deleteMyProfile;
 $("#link-admin").onclick = showAdmin;
