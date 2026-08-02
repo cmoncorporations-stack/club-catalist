@@ -570,8 +570,8 @@
     <div class="footer-links">
       <a id="link-privacy">🔒 Confidentialité & données (RGPD / nLPD)</a> ·
       <a id="link-export">Exporter mes données</a> ·
-      <a id="link-delete">Supprimer mon profil</a> ·
-      <a id="link-admin" style="color:var(--muted)">⚙️ Admin</a>
+      <a id="link-delete">Supprimer mon profil</a><span id="admin-wrap" style="display:none"> ·
+      <a id="link-admin" style="color:var(--muted)">⚙️ Admin</a></span>
     </div></div>
 </div>
 
@@ -1762,9 +1762,21 @@ async function hashPin(pin, salt) {
   return "djb2-" + x.toString(16);
 }
 
+/* Le panneau d'administration Brevo est réservé au compte administrateur.
+   ⚠️ Garde-fou d'interface uniquement : l'application étant 100 % côté client,
+   elle ne peut pas authentifier qui que ce soit de façon contraignante.
+   Ce qui protège réellement la clé API, c'est qu'elle n'est jamais dans le
+   code publié et reste dans le navigateur où elle a été saisie. */
+const ADMIN_EMAIL = "douglas@cmon-sports.com";
+function isAdmin() {
+  return !!currentUser && String(currentUser.email || "").toLowerCase() === ADMIN_EMAIL;
+}
+
 function showScreen(id) {
   ["screen-login", "screen-setup", "screen-game"].forEach(s =>
     $("#" + s).classList.toggle("hidden", s !== id));
+  const wrap = $("#admin-wrap");
+  if (wrap) wrap.style.display = isAdmin() ? "" : "none";
 }
 
 function renderLogin() {
@@ -1950,6 +1962,14 @@ async function brevoDiagnose(key, listId) {
 }
 
 function showAdmin() {
+  if (!isAdmin()) {
+    showModal(`<h2>🔒 Accès réservé</h2>
+      <p>Le panneau d'administration Brevo est réservé au compte
+      <b style="color:var(--text)">${esc(ADMIN_EMAIL)}</b>. Connectez-vous avec ce compte pour y accéder.</p>
+      <div class="choices"><button class="primary" id="na-close">Fermer</button></div>`);
+    $("#na-close").onclick = closeModal;
+    return;
+  }
   const key = localStorage.getItem(BREVO_KEY) || "";
   const users = loadUsers();
   const optIns = users.filter(u => u.optIn);
