@@ -2,7 +2,7 @@
 
 **Simulateur de gestion marketing d'un club de sport — by C'mon Sports.**
 
-▶ **Jouer : [cmoncorporations-stack.github.io/club-catalist](https://cmoncorporations-stack.github.io/club-catalist/)**
+▶ **Jouer : [clubcatalist.cmon-sports.com](https://clubcatalist.cmon-sports.com/)**
 
 Vous êtes recruté·e comme Responsable Marketing Digital d'un club de sport suisse.
 Chaque semaine, répartissez vos points d'action entre contenu, campagnes, collecte de
