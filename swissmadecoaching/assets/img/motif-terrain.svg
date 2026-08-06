@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-labelledby="t-terrain">
+  <title id="t-terrain">Composition géométrique évoquant les tracés d'un terrain de sport</title>
+  <rect width="800" height="1000" fill="#F1F0EB"/>
+  <g stroke="#101114" stroke-opacity=".14" stroke-width="1.5" fill="none">
+    <path d="M0 120h800M0 260h800M0 400h800M0 540h800M0 680h800M0 820h800"/>
+    <path d="M120 0v1000M280 0v1000M440 0v1000M600 0v1000M760 0v1000"/>
+  </g>
+  <g fill="none" stroke="#101114" stroke-width="2.5">
+    <rect x="120" y="120" width="560" height="760"/>
+    <path d="M120 500h560"/>
+    <circle cx="400" cy="500" r="120"/>
+    <rect x="260" y="120" width="280" height="150"/>
+    <rect x="260" y="730" width="280" height="150"/>
+  </g>
+  <circle cx="400" cy="500" r="14" fill="#D8232A"/>
+  <g fill="#D8232A">
+    <rect x="120" y="120" width="90" height="10"/>
+    <rect x="120" y="120" width="10" height="90"/>
+    <rect x="590" y="870" width="90" height="10"/>
+    <rect x="670" y="790" width="10" height="90"/>
+  </g>
+  <path d="M400 620 452 700h-34v120h-36V700h-34z" fill="#101114" fill-opacity=".08"/>
+</svg>

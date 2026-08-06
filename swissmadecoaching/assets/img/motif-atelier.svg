@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" role="img" aria-labelledby="t-atelier">
+  <title id="t-atelier">Composition géométrique évoquant un atelier : tableau, trajectoires et joueurs</title>
+  <rect width="900" height="600" fill="#F1F0EB"/>
+  <rect x="90" y="70" width="720" height="460" fill="none" stroke="#101114" stroke-width="2.5"/>
+  <g stroke="#101114" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="10 10" fill="none">
+    <path d="M190 440 330 250l150 130 180-200"/>
+    <path d="M190 440 470 470l190-90"/>
+  </g>
+  <g fill="#101114">
+    <circle cx="190" cy="440" r="16"/>
+    <circle cx="330" cy="250" r="16"/>
+    <circle cx="480" cy="380" r="16"/>
+  </g>
+  <circle cx="660" cy="180" r="22" fill="#D8232A"/>
+  <rect x="90" y="70" width="130" height="8" fill="#D8232A"/>
+  <rect x="680" y="522" width="130" height="8" fill="#D8232A"/>
+</svg>

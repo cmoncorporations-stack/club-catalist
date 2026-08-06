@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-labelledby="t-reseau">
+  <title id="t-reseau">Réseau de points reliés, évoquant une communauté de coachs</title>
+  <rect width="1200" height="800" fill="#F1F0EB"/>
+  <g stroke="#101114" stroke-opacity=".22" stroke-width="1.5">
+    <path d="M180 620 400 250 640 560 900 200 1050 470 640 560M400 250 180 620 640 560M400 250 900 200M180 620 620 720 900 200M620 720 1050 470"/>
+  </g>
+  <g fill="#101114">
+    <circle cx="180" cy="620" r="12"/>
+    <circle cx="400" cy="250" r="12"/>
+    <circle cx="900" cy="200" r="12"/>
+    <circle cx="620" cy="720" r="12"/>
+    <circle cx="1050" cy="470" r="12"/>
+  </g>
+  <circle cx="640" cy="560" r="24" fill="#D8232A"/>
+  <circle cx="640" cy="560" r="46" fill="none" stroke="#D8232A" stroke-width="2" stroke-opacity=".5"/>
+</svg>

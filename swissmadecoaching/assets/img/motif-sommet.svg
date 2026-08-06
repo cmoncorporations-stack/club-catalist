@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-labelledby="t-sommet">
+  <title id="t-sommet">Silhouette géométrique de sommets alpins et de paliers de progression</title>
+  <rect width="1200" height="800" fill="#F1F0EB"/>
+  <g stroke="#101114" stroke-opacity=".10" stroke-width="1.5">
+    <path d="M0 100h1200M0 200h1200M0 300h1200M0 400h1200M0 500h1200M0 600h1200M0 700h1200"/>
+  </g>
+  <path d="M0 800 300 340l180 230 210-330 250 350 260-190v400z" fill="#101114" fill-opacity=".08"/>
+  <path d="M0 800 300 340l180 230 210-330 250 350 260-190" fill="none" stroke="#101114" stroke-width="3"/>
+  <path d="M690 240 780 366h-64l-26 40-70-92z" fill="#D8232A"/>
+  <g fill="#101114">
+    <rect x="120" y="620" width="70" height="180"/>
+    <rect x="230" y="540" width="70" height="260"/>
+    <rect x="340" y="470" width="70" height="330"/>
+  </g>
+  <rect x="450" y="380" width="70" height="420" fill="#D8232A"/>
+</svg>

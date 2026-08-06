@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr"
+      data-title-en="Contact — Swiss-made Coaching"
+      data-desc-en="Contact Swiss-made Coaching: membership, workshops, blog, partnerships. Association based in Lausanne.">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Swiss-made Coaching</title>
+<meta name="description" content="Contacter Swiss-made Coaching : adhésion, workshops, blog, partenariats. Association basée à Lausanne.">
+<link rel="canonical" href="https://www.swissmadecoaching.com/contact">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact — Swiss-made Coaching">
+<meta property="og:description" content="Contacter Swiss-made Coaching : adhésion, workshops, blog, partenariats. Association basée à Lausanne.">
+<meta property="og:url" content="https://www.swissmadecoaching.com/contact">
+<meta property="og:locale" content="fr_CH">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FAFAF8">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<!-- ============ EN-TÊTE (bloc commun à toutes les pages) ============ -->
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html" aria-label="Swiss-made Coaching, accueil" data-i18n-attr="aria-label:brand.aria">
+      <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="4" fill="#D8232A"/><path d="M32 9 43 21H36v10h13v8H36v16h-8V39H15v-8h13V21h-7z" fill="#FFFFFF"/></svg>
+      <span class="brand__name">Swiss-made<span>Coaching · Lausanne</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Navigation principale" data-i18n-attr="aria-label:nav.aria">
+      <ul class="nav__list">
+        <li><a class="nav__link" href="association.html" data-i18n="nav.about">L'association</a></li>
+        <li><a class="nav__link" href="coachs.html" data-i18n="nav.coaches">Coachs</a></li>
+        <li><a class="nav__link" href="workshops.html" data-i18n="nav.workshops">Workshops</a></li>
+        <li><a class="nav__link" href="blog.html" data-i18n="nav.blog">Blog</a></li>
+        <li><a class="nav__link" href="contact.html" aria-current="page" data-i18n="nav.contact">Contact</a></li>
+        <li><a class="btn btn--primary" href="membre.html" data-i18n="nav.join">Devenir membre</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-switch" role="group" aria-label="Choix de la langue" data-i18n-attr="aria-label:lang.aria">
+        <button type="button" data-lang-btn="fr" aria-pressed="true">FR</button>
+        <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="burger" type="button" data-burger aria-expanded="false" aria-controls="drawer"
+              aria-label="Ouvrir le menu" data-i18n-attr="aria-label:menu.aria"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" data-drawer aria-hidden="true">
+  <a href="index.html"><span class="num-tag">01</span><span data-i18n="nav.home">Accueil</span></a>
+  <a href="association.html"><span class="num-tag">02</span><span data-i18n="nav.about">L'association</span></a>
+  <a href="coachs.html"><span class="num-tag">03</span><span data-i18n="nav.coaches">Coachs</span></a>
+  <a href="workshops.html"><span class="num-tag">04</span><span data-i18n="nav.workshops">Workshops</span></a>
+  <a href="blog.html"><span class="num-tag">05</span><span data-i18n="nav.blog">Blog</span></a>
+  <a href="contact.html" aria-current="page"><span class="num-tag">06</span><span data-i18n="nav.contact">Contact</span></a>
+  <a class="btn btn--primary" href="membre.html" data-i18n="nav.join">Devenir membre</a>
+</div>
+
+<main id="main">
+  <section class="section--tight container" style="padding-top:clamp(40px,6vw,80px)">
+    <div class="grid">
+      <div class="col-8">
+        <p class="eyebrow" data-i18n="contact.eyebrow">Contact</p>
+        <h1 class="h1" style="margin-top:20px" data-i18n="contact.title">Nous écrire</h1>
+        <p class="lead" style="margin-top:24px" data-i18n="contact.lead">Une question sur un workshop, une adhésion, un partenariat, ou un article que vous aimeriez publier : le même formulaire couvre tout ça.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container bordered-top">
+    <div class="grid">
+      <div class="col-7">
+        <h2 class="h2" data-i18n="contact.form.title">Formulaire de contact</h2>
+      <form class="form" data-mailto="contact@swissmadecoaching.com" data-subject="Message depuis le site — Swiss-made Coaching">
+        <div class="form__row">
+        <div class="field">
+          <label for="c-prenom"><span data-i18n="form.firstname">Prénom</span> <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="c-prenom" name="c-prenom" required autocomplete="given-name" aria-describedby="c-prenom-err">
+          <p class="field__error" id="c-prenom-err" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="c-nom"><span data-i18n="form.lastname">Nom</span> <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="c-nom" name="c-nom" required autocomplete="family-name" aria-describedby="c-nom-err">
+          <p class="field__error" id="c-nom-err" role="alert"></p>
+        </div>
+        </div>
+        <div class="form__row">
+        <div class="field">
+          <label for="c-email"><span data-i18n="form.email">E-mail</span> <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="c-email" name="c-email" required autocomplete="email" aria-describedby="c-email-err">
+          <p class="field__error" id="c-email-err" role="alert"></p>
+        </div>
+          <div class="field">
+            <label for="c-sujet"><span data-i18n="form.subject">Sujet</span> <span class="req" aria-hidden="true">*</span></label>
+            <select id="c-sujet" name="sujet" required aria-describedby="c-sujet-err">
+              <option value="" data-i18n="form.select">Choisissez</option>
+              <option data-i18n="subject.join">Adhésion</option>
+              <option data-i18n="subject.workshop">Workshops</option>
+              <option data-i18n="subject.blog">Blog / article</option>
+              <option data-i18n="subject.other">Autre sujet</option>
+            </select>
+            <p class="field__error" id="c-sujet-err" role="alert"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-message"><span data-i18n="form.message">Message</span> <span class="req" aria-hidden="true">*</span></label>
+          <textarea id="c-message" name="message" required aria-describedby="c-message-err"></textarea>
+          <p class="field__error" id="c-message-err" role="alert"></p>
+        </div>
+        <div class="field field--check">
+          <input type="checkbox" id="c-consent" name="consent" required aria-describedby="c-consent-err">
+          <label for="c-consent" data-i18n="form.consent">J'accepte que Swiss-made Coaching utilise ces informations pour répondre à ma demande.</label>
+          <p class="field__error" id="c-consent-err" role="alert" style="grid-column:1/-1"></p>
+        </div>
+        <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+        <div>
+          <button class="btn btn--primary" type="submit" data-i18n="form.send">Préparer mon message</button>
+        </div>
+        <p class="form__note" data-i18n="form.privacy">
+          Ce site n'a ni serveur ni base de données. Vos saisies restent dans votre navigateur jusqu'à
+          ce que vous envoyiez vous-même l'e-mail.
+        </p>
+      </form>
+      </div>
+      <div class="col-4 col-start-7">
+        <h2 class="h4" data-i18n="contact.direct">En direct</h2>
+        <p style="margin-top:10px"><a class="link-arrow" href="mailto:contact@swissmadecoaching.com">contact@swissmadecoaching.com</a></p>
+
+        <h2 class="h4" style="margin-top:32px" data-i18n="contact.where">Où nous sommes</h2>
+        <p class="muted" style="margin-top:10px" data-i18n="contact.where.p">
+          L'association est basée à Lausanne et organise ses séances en Suisse romande, ainsi que des
+          formats en ligne ouverts à tout le pays.
+        </p>
+
+        <h2 class="h4" style="margin-top:32px" data-i18n="contact.social">Ailleurs</h2>
+        <p class="muted" style="margin-top:10px" data-i18n="contact.social.p">
+          L'association est aussi présente sur les réseaux sociaux habituels. Les liens ne sont pas
+          encore renseignés ici — transmettez-les et ils seront ajoutés.
+        </p>
+
+        <h2 class="h4" style="margin-top:32px" data-i18n="contact.reasons.title">Ce sur quoi on peut aider</h2>
+        <ul class="prose" style="margin-top:12px">
+          <li data-i18n="contact.r1">Adhérer à l'association ou renouveler une adhésion</li>
+          <li data-i18n="contact.r2">S'inscrire à un workshop ou en proposer un</li>
+          <li data-i18n="contact.r3">Écrire un article pour le blog</li>
+          <li data-i18n="contact.r4">Inviter l'association à animer une séance dans votre club</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ PIED DE PAGE (bloc commun à toutes les pages) ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <a class="brand" href="index.html">
+          <svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="4" fill="#D8232A"/><path d="M32 9 43 21H36v10h13v8H36v16h-8V39H15v-8h13V21h-7z" fill="#FFFFFF"/></svg>
+          <span class="brand__name">Swiss-made<span>Coaching · Lausanne</span></span>
+        </a>
+        <p class="muted" style="margin-top:18px;max-width:34ch" data-i18n="footer.tagline">
+          Association à but non lucratif qui relie les coachs sportifs de Suisse depuis 2015.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h3 data-i18n="footer.explore">Explorer</h3>
+        <ul>
+          <li><a href="association.html" data-i18n="nav.about">L'association</a></li>
+          <li><a href="coachs.html" data-i18n="nav.coaches">Coachs</a></li>
+          <li><a href="workshops.html" data-i18n="nav.workshops">Workshops</a></li>
+          <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 data-i18n="footer.join">Participer</h3>
+        <ul>
+          <li><a href="membre.html" data-i18n="nav.join">Devenir membre</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+          <li><a href="workshops.html" data-i18n="footer.proposews">Proposer un workshop</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 data-i18n="footer.contact">Nous écrire</h3>
+        <ul>
+          <li><a href="mailto:contact@swissmadecoaching.com">contact@swissmadecoaching.com</a></li>
+          <li><span class="muted" data-i18n="footer.address">Lausanne, Vaud, Suisse</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> Swiss-made Coaching</span>
+      <span data-i18n="footer.privacy">Aucun cookie, aucun traceur, aucune requête externe.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/i18n.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
