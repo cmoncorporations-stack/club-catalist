@@ -408,6 +408,19 @@ tbody tr:hover{background:var(--brand-soft)}
 .pillar-row span{color:var(--ink-3);font-size:var(--t1);line-height:1.45}
 .cert-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
 
+/* Bloc de calcul dans les fenêtres d'explication */
+.calc{background:var(--sunken);border:1px solid var(--edge);border-radius:var(--r-sm);
+  padding:14px 16px;margin:14px 0}
+.calc-row{display:flex;justify-content:space-between;gap:14px;align-items:baseline;
+  padding:7px 0;font-size:var(--t1)}
+.calc-row + .calc-row{border-top:1px solid var(--edge)}
+.calc-row span{color:var(--ink-3)}
+.calc-row b{color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.calc-total{border-top:1px solid var(--brand-line)!important;margin-top:4px;padding-top:11px}
+.calc-total b{color:var(--brand)}
+.calc-note{font-size:var(--t0);color:var(--ink-3);line-height:1.5;padding:2px 0 6px}
+.kpi .lbl .info-btn{width:16px;height:16px;font-size:10.5px;vertical-align:-.18em;margin-left:5px}
+
 /* ── Blasons ──────────────────────────────────────────────────────────── */
 .crest{display:block;width:100%;height:100%;overflow:visible}
 .crest-field{fill:rgba(4,9,18,.72)}
@@ -1639,10 +1652,12 @@ function kpiList(s) {
     { lbl:"Fans", val: fmt(s.fans), raw: s.fans },
     { lbl:"Engagement", val: Math.round(s.engagement)+" %", raw: s.engagement },
     { lbl:"Contacts CRM", val: fmt(s.contacts), raw: s.contacts },
-    { lbl:"Pénétration bassin", val: insightActive(s) ? (Math.round(penetration(s)*1000)/10)+" %" : "?",
+    { lbl:"Pénétration bassin", info:"penetration",
+      val: insightActive(s) ? (Math.round(penetration(s)*1000)/10)+" %" : "?",
       raw: insightActive(s) ? penetration(s)*100 : 0,
       color: insightActive(s) ? (penetration(s) >= 0.5 ? "var(--accent)" : "") : "var(--muted)" },
-    { lbl:"Qualité données", val: insightActive(s) ? (Math.round(s.dataQuality*10)/10)+"/10" : "?",
+    { lbl:"Qualité données", info:"quality",
+      val: insightActive(s) ? (Math.round(s.dataQuality*10)/10)+"/10" : "?",
       raw: insightActive(s) ? s.dataQuality : 0,
       color: insightActive(s) ? "" : "var(--muted)" },
     { lbl:"Score DMOS", val: dmosDisplay(s), raw: s.services.audited ? dmosTotal(s) : 0,
@@ -1662,8 +1677,14 @@ function renderKpis() {
       if (Math.abs(d) >= 0.5) delta = `<div class="delta ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${fmt(Math.abs(d))}</div>`;
       else delta = `<div class="delta flat">—</div>`;
     }
-    return `<div class="kpi"><div class="lbl">${k.lbl}</div><div class="val" style="color:${k.color||'var(--text)'}">${k.val}</div>${delta}</div>`;
+    const aide = k.info
+      ? ` <button class="info-btn info-kpi" data-info="${k.info}" aria-label="Comprendre : ${esc(k.lbl)}" title="Comprendre : ${esc(k.lbl)}">i</button>`
+      : "";
+    return `<div class="kpi"><div class="lbl">${k.lbl}${aide}</div><div class="val" style="color:${k.color||'var(--text)'}">${k.val}</div>${delta}</div>`;
   }).join("");
+  el.querySelectorAll(".info-kpi").forEach(b => {
+    b.onclick = () => (b.dataset.info === "penetration" ? showPenetrationInfo() : showQualityInfo());
+  });
 }
 
 function renderHeader() {
@@ -1748,6 +1769,68 @@ function renderLog() {
   $("#log").innerHTML = state.log.map(e =>
     `<div class="entry"><span class="wk">S${e.season}·Sem${e.w}</span><span class="${e.cls}">${e.msg}</span></div>`
   ).join("") || `<div class="entry">Le journal est vide.</div>`;
+}
+
+/* Explication du taux de pénétration, avec les chiffres réels du club. */
+function showPenetrationInfo() {
+  const su = insightActive(state);
+  const bassin = marketCap(state), pool = collectiblePool(state), pen = penetration(state);
+  const rendement = Math.round(clamp(1 - pen, 0.05, 1) * 100);
+  showModal(`
+    <h2><span class="sig-cap">L</span>a pénétration du bassin<span class="sig-cap">.</span></h2>
+    <p>Elle répond à une question simple : <b>quelle part des gens que vous pourriez atteindre
+    figure déjà dans votre base de contacts ?</b> Un club peut avoir beaucoup de fans et presque
+    aucune donnée sur eux — c'est tout l'écart que cet indicateur mesure.</p>
+    <div class="calc">
+      <div class="calc-row"><span>Bassin atteignable</span><b>${su ? fmt(bassin) : "?"}</b></div>
+      <div class="calc-note">Vos fans initiaux × 3 en 2<sup>e</sup> division, × 8 dans l'élite :
+      l'exposition nationale élargit le marché.</div>
+      <div class="calc-row"><span>Dont réellement collectable</span><b>${su ? fmt(pool) : "?"}</b></div>
+      <div class="calc-note">Environ 35 % du bassin accepte de laisser ses coordonnées. Les autres
+      resteront des spectateurs anonymes.</div>
+      <div class="calc-row calc-total"><span>Pénétration = contacts ÷ collectable</span>
+        <b>${su ? fmt(state.contacts) + " ÷ " + fmt(pool) + " = " + (Math.round(pen*1000)/10) + " %" : "?"}</b></div>
+    </div>
+    <p><b>Pourquoi cela compte :</b> plus le bassin est déjà couvert, plus les nouveaux contacts
+    sont difficiles à trouver. Vos jeux concours rendent aujourd'hui
+    <b style="color:var(--brand)">${su ? rendement + " %" : "?"}</b> de leur rendement initial.
+    Monter en division agrandit le bassin et relance la collecte.</p>
+    ${su ? "" : `<p class="lock"><i class=ic-lock></i> Chiffres masqués : seule une analyse
+      <b>Fan Lab Insight</b> ou <b>Pro</b> mesure votre bassin et votre pénétration.</p>`}
+    <div class="choices"><button class="primary" id="pen-close">Fermer</button></div>`);
+  $("#pen-close").onclick = closeModal;
+}
+
+/* Explication de la qualité des données : d'où elle vient, ce qu'elle rapporte. */
+function showQualityInfo() {
+  const su = insightActive(state);
+  const q = state.dataQuality, df = state.services.datafactory;
+  const parContact = Math.round((0.15 + q * 0.06) * 100) / 100;
+  showModal(`
+    <h2><span class="sig-cap">L</span>a qualité des données<span class="sig-cap">.</span></h2>
+    <p>Une note sur 10 qui résume la <b>fiabilité de votre base</b> : adresses valides, doublons
+    éliminés, consentements en règle, segmentation exploitable. Deux clubs peuvent avoir le même
+    nombre de contacts et des bases de valeur très différente.</p>
+    <div class="calc">
+      <div class="calc-row"><span>Point de départ</span><b>3 + pilier « Données fans » × 0,4</b></div>
+      <div class="calc-note">Un club dont le DMOS « Données fans » est déjà solide part de plus haut.</div>
+      <div class="calc-row"><span>Jeu concours / collecte</span><b>+0,3</b></div>
+      <div class="calc-row"><span>Chantier conformité RGPD</span><b>+0,4</b></div>
+      <div class="calc-row"><span>Data Factory à l'activation</span><b>+1,0</b></div>
+      <div class="calc-row"><span>Érosion hebdomadaire</span>
+        <b style="color:${df ? "var(--good)" : "var(--bad)"}">${df ? "neutralisée" : "−0,05 / semaine"}</b></div>
+      <div class="calc-note">${df
+        ? "Data Factory entretient la base en continu : elle ne se dégrade plus."
+        : "Sans entretien, les adresses vieillissent et les doublons s'accumulent."}</div>
+    </div>
+    <p><b>Ce qu'elle rapporte :</b> chaque campagne d'emailing rend
+    <b style="color:var(--brand)">${su ? "0,15 + qualité × 0,06 = " + parContact.toFixed(2) + " CHF" : "?"}</b>
+    par contact sollicité, et la qualité pèse directement dans la valorisation Fan Lab de votre
+    audience. Elle protège aussi des purges de contacts obsolètes.</p>
+    ${su ? "" : `<p class="lock"><i class=ic-lock></i> Note masquée : seule une analyse
+      <b>Fan Lab Insight</b> ou <b>Pro</b> évalue la santé de votre base.</p>`}
+    <div class="choices"><button class="primary" id="qual-close">Fermer</button></div>`);
+  $("#qual-close").onclick = closeModal;
 }
 
 /* Explication du DMOS, accessible depuis le « i » du panneau. */
