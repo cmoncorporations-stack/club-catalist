@@ -64,12 +64,17 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
+html{background-color:var(--ground)}
 body{
   background:
     radial-gradient(1200px 620px at 82% -12%, rgba(98,190,245,.16), transparent 58%),
     radial-gradient(900px 520px at -10% 8%, rgba(46,134,196,.10), transparent 55%),
     linear-gradient(178deg,#070D1A 0%, var(--ground) 52%);
   background-attachment:fixed;
+  /* Fond opaque de base : le raccourci ci-dessus remet background-color à
+     transparent, et des dégradés « fixed » ne peignent pas tout le canevas —
+     sans cette ligne, des bandes blanches apparaissent au défilement. */
+  background-color:var(--ground);
   color:var(--ink);
   font-family:var(--sans);
   font-size:var(--t2);
@@ -421,6 +426,29 @@ tbody tr:hover{background:var(--brand-soft)}
 .calc-note{font-size:var(--t0);color:var(--ink-3);line-height:1.5;padding:2px 0 6px}
 .kpi .lbl .info-btn{width:16px;height:16px;font-size:10.5px;vertical-align:-.18em;margin-left:5px}
 
+/* Carte de partage */
+.share-preview{display:block;width:100%;height:auto;border-radius:var(--r);
+  border:1px solid var(--edge-lit);box-shadow:var(--shadow);margin:6px 0 2px}
+.share-text{width:100%;font-family:inherit;font-size:12.5px;line-height:1.65;color:var(--ink-2);
+  background:var(--sunken);border:1px solid var(--edge);border-radius:var(--r);
+  padding:12px 14px;resize:vertical;outline:none}
+.share-text:focus{border-color:var(--brand-line)}
+.btn-like{display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}
+.dot{display:inline-block;width:9px;height:9px;border-radius:99px;vertical-align:middle}
+
+/* Mode défi */
+.challenge-card{display:flex;flex-direction:column;gap:11px;margin-top:14px}
+.challenge-card b{display:block;color:var(--ink);font-size:var(--t3);letter-spacing:.01em}
+.challenge-card span{display:block;margin-top:4px;font-size:var(--t1);color:var(--ink-3);line-height:1.6}
+.challenge-actions{display:flex;gap:9px;flex-wrap:wrap}
+.challenge-actions input{flex:1 1 190px;margin-bottom:0;text-transform:uppercase;
+  letter-spacing:.10em;font-weight:800;font-variant-numeric:tabular-nums}
+.challenge-actions button{flex:0 0 auto}
+#challenge-msg:not(:empty){font-size:var(--t1);line-height:1.6}
+.chip-challenge{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:99px;
+  border:1px solid var(--brand-line);background:var(--brand-soft);color:var(--brand-2);
+  font-size:11px;font-weight:800;letter-spacing:.09em;font-variant-numeric:tabular-nums}
+
 /* Bandeau du mode démo commercial */
 .demo-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
   margin-bottom:12px;padding:9px 15px;border-radius:var(--r);
@@ -615,6 +643,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
       <div class="setup-clubs" id="setup-clubs"></div>
     </div>
     <div id="resume-zone"></div>
+    <div id="challenge-zone"></div>
   </div>
 
   <!-- ============ GAME SCREEN ============ -->
@@ -963,7 +992,7 @@ const DECISIONS = [
     choices:[
       { label:"Accepter le partenariat", sub:"−6 000 CHF · forte chance de croissance fans/engagement",
         run(s){ s.budget-=6000;
-          if (Math.random()<0.75){ const g=Math.round(s.fans*0.05); s.fans+=g; s.engagement=clamp(s.engagement+6,0,100);
+          if (rnd()<0.75){ const g=Math.round(s.fans*0.05); s.fans+=g; s.engagement=clamp(s.engagement+6,0,100);
             log(s,`<i class=ic-broadcast></i> Le partenariat influenceur cartonne : +${fmt(g)} fans !`,"good");}
           else { log(s,`<i class=ic-broadcast></i> Le partenariat influenceur fait un flop. 6 000 CHF envolés.`,"bad"); } } },
       { label:"Décliner poliment", sub:"Aucun risque, aucune récompense",
@@ -977,7 +1006,7 @@ const DECISIONS = [
         run(s){ s.budget-=2000; s.engagement=clamp(s.engagement-2,0,100); s.dmos.conformite=clamp(s.dmos.conformite+1,0,10);
           log(s,`<i class=ic-lock></i> Vous communiquez sur l'incident avec transparence. Les fans apprécient l'honnêteté (+1 conformité DMOS).`,"good"); } },
       { label:"Étouffer l'affaire", sub:"Gratuit… sauf si ça se sait (risque d'amende et de crise)",
-        run(s){ if (Math.random()<0.4){ s.budget-=9000; s.boardConfidence=clamp(s.boardConfidence-12,0,100); s.engagement=clamp(s.engagement-8,0,100);
+        run(s){ if (rnd()<0.4){ s.budget-=9000; s.boardConfidence=clamp(s.boardConfidence-12,0,100); s.engagement=clamp(s.engagement-8,0,100);
             log(s,`<i class=ic-lock></i> La fuite est révélée par la presse. Amende de 9 000 CHF et crise de confiance majeure.`,"bad"); }
           else { log(s,`<i class=ic-lock></i> L'incident passe inaperçu. Cette fois.`,"warn"); } } },
     ]},
@@ -1000,7 +1029,7 @@ const DECISIONS = [
         run(s){ s.budget-=5000; const g=Math.round(s.fans*0.02); s.fans+=g; s.engagement=clamp(s.engagement+4,0,100);
           log(s,`<i class=ic-trophy></i> La star signe. Ses stories font exploser les compteurs : +${fmt(g)} fans.`,"good"); } },
       { label:"Refuser", sub:"Gratuit · risque de clash public (50 %)",
-        run(s){ if(Math.random()<0.5){ s.engagement=clamp(s.engagement-7,0,100); s.boardConfidence=clamp(s.boardConfidence-4,0,100);
+        run(s){ if(rnd()<0.5){ s.engagement=clamp(s.engagement-7,0,100); s.boardConfidence=clamp(s.boardConfidence-4,0,100);
             log(s,`<i class=ic-trophy></i> La star boude publiquement et like des tweets critiques du club. Bad buzz.`,"bad"); }
           else log(s,`<i class=ic-trophy></i> L'agent bluffait. La star continue comme avant.`,"good"); } },
     ]},
@@ -1121,7 +1150,49 @@ function buyService(id) {
 /* ================= Helpers ================= */
 const $ = sel => document.querySelector(sel);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const pick = arr => arr[Math.floor(rnd() * arr.length)];
+
+/* ================= Hasard reproductible (P5) =========================
+   Tout le hasard du jeu passe par ici (mulberry32). L'état vit dans la
+   sauvegarde : une partie reprise déroule exactement la même suite
+   d'événements, et deux joueurs qui entrent le même code de défi
+   affrontent la même saison — sinon comparer les scores n'aurait aucun
+   sens. Hors partie (écran de sélection), on retombe sur l'horloge. */
+function rnd() {
+  if (!state || typeof state.rng !== "number") return Math.random();
+  let t = (state.rng = (state.rng + 0x6D2B79F5) >>> 0);
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+function freshSeed() { return Math.floor(Math.random() * 4294967296) >>> 0; }
+
+/* Code de défi lisible à voix haute : club, comité, graine. */
+function makeChallengeCode(clubId, difficulty, seed) {
+  return `${clubId.toUpperCase()}-${difficulty}-${seed.toString(36).toUpperCase()}`;
+}
+function parseChallengeCode(code) {
+  const m = /^([A-Za-z]{2})-?([1-3])-?([0-9A-Za-z]{1,8})$/.exec(String(code).trim().replace(/\s+/g, ""));
+  if (!m) return null;
+  const club = CLUBS.find(c => c.id === m[1].toLowerCase());
+  const seed = parseInt(m[3], 36);
+  if (!club || !isFinite(seed)) return null;
+  return { club, difficulty: +m[2], seed: seed >>> 0, code: makeChallengeCode(club.id, +m[2], seed >>> 0) };
+}
+
+/* Score de défi : une seule note qui pèse ce que C'mon Sports fait
+   progresser — maturité digitale, pénétration du bassin, confiance du
+   comité — plus la longévité et la santé financière. */
+function challengeScore(s) {
+  const pen = clamp(penetration(s), 0, 1);
+  return Math.max(0, Math.round(
+    dmosTotal(s) * 40 +
+    pen * 3000 +
+    s.boardConfidence * 12 +
+    Math.max(0, s.budget) / 250 +
+    (s.season - 1) * 500
+  ));
+}
 const fmt = n => Math.round(n).toLocaleString("fr-CH");
 const fmtCHF = n => fmt(n) + " CHF";
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
@@ -1190,7 +1261,7 @@ function weightedPick(list, s) {
   const w = e => e.weight * (e.ego ? diff(s).egoWeight : 1);
   const total = list.reduce((t,e)=>t+w(e),0);
   if (total <= 0) return null;
-  let r = Math.random() * total;
+  let r = rnd() * total;
   for (const e of list) { r -= w(e); if (r <= 0) return e; }
   return list[list.length-1];
 }
@@ -1199,7 +1270,7 @@ function weightedPick(list, s) {
 let state = null;
 let selected = {};   // actionId -> count (sélection de la semaine en cours)
 
-function newGame(club, difficulty = 1) {
+function newGame(club, difficulty = 1, challenge = null) {
   // Qualification : le sport du premier club choisi renseigne le profil
   // (valeurs de la catégorie Brevo SPORT : basket 1, foot 2, hockey 4, volley 6).
   if (currentUser && !currentUser.sportBrevo && !demoMode) {
@@ -1215,8 +1286,12 @@ function newGame(club, difficulty = 1) {
     }
     brevoSyncContact(currentUser);
   }
-  state = {
-    version: 5,
+  // La graine est posée avant tout le reste : même le tirage des sponsors
+  // de départ doit être identique d'un joueur à l'autre sur un même défi.
+  state = { rng: challenge ? challenge.seed : freshSeed() };
+  Object.assign(state, {
+    version: 6,
+    challenge: challenge ? challenge.code : null,
     clubId: club.id,
     difficulty,
     division: club.division,
@@ -1242,7 +1317,7 @@ function newGame(club, difficulty = 1) {
     log: [],
     history: [],
     gameOver: false,
-  };
+  });
   // éviter deux sponsors identiques au départ
   while (state.sponsors[1].name === state.sponsors[0].name) state.sponsors[1].name = pick(SPONSOR_POOL).name;
   state.usedSponsors = state.sponsors.map(sp=>sp.name);
@@ -1323,7 +1398,13 @@ function load() {
       delete s.services.fanlab;
       s.version = 5;
     }
-    if (s && s.version === 5) return s;
+    if (s && s.version === 5) {
+      // migration v5 → v6 : hasard reproductible et défis
+      s.rng = freshSeed();
+      s.challenge = null;
+      s.version = 6;
+    }
+    if (s && s.version === 6) return s;
   } catch(e){}
   return null;
 }
@@ -1342,7 +1423,7 @@ function playMatch(s) {
   // en élite les adversaires sont plus forts ; en 2e division on domine plus souvent
   const divAdj = s.division === 1 ? -0.10 : 0.03;
   const winProb = clamp(club.strength/100 + divAdj + (home?0.08:-0.05) + (s.engagement-50)/400, 0.12, 0.85);
-  const win = Math.random() < winProb;
+  const win = rnd() < winProb;
   const ticketPrice = Math.round(club.ticket * (s.division === 1 ? 1.25 : 1));
   let att = 0, ticketRev = 0;
   if (home) {
@@ -1432,7 +1513,7 @@ function resolveActions(s) {
           const flv = s.services.fanlabPro ? fanlabValue(s) : 0;
           const p = clamp(0.15 + dmosTotal(s)/120 + Math.min(flv/400000, 0.25), 0.1, 0.85);
           if (s.sponsors.length >= 6) { summary.push(`Prospection : portefeuille sponsors déjà plein (6 max)`); break; }
-          if (Math.random() < p) {
+          if (rnd() < p) {
             const pool = SPONSOR_POOL.filter(x=>!s.usedSponsors.includes(x.name));
             const base = pool.length ? pick(pool) : { name:"Sponsor Mystère SA", sector:"Divers" };
             // la certification (donc les gros contrats) exige un audit officiel
@@ -1522,7 +1603,7 @@ function advanceWeek() {
   if (s.europe && s.week % 3 === 0 && s.week <= 15) {
     const club = clubOf(s);
     const p = clamp(0.30 + (club.strength - 50)/200 + (s.engagement - 50)/500, 0.12, 0.60);
-    const euroWin = Math.random() < p;
+    const euroWin = rnd() < p;
     s.budget -= 3000; // déplacement, organisation, dispositif média
     let gain = 2500;  // part marketing des droits TV / billetterie européenne
     if (euroWin) {
@@ -1576,9 +1657,9 @@ function advanceWeek() {
 
   // 7. Événement aléatoire — fréquence et poids des scénarios d'ego selon la difficulté
   let pendingDecision = null;
-  if (Math.random() < diff(s).eventChance) {
+  if (rnd() < diff(s).eventChance) {
     const decisionEligible = DECISIONS.filter(d=>d.cond(s));
-    if (Math.random() < 0.35 && decisionEligible.length) {
+    if (rnd() < 0.35 && decisionEligible.length) {
       pendingDecision = weightedPick(decisionEligible, s);
     } else {
       const eligible = EVENTS.filter(e=>e.cond(s));
@@ -1620,7 +1701,7 @@ function endSeason(s) {
   // Classement final (12 équipes) : le bilan sportif + un peu de hasard
   const games = s.seasonStats.wins + s.seasonStats.losses;
   const winRate = games ? s.seasonStats.wins / games : 0.5;
-  const pos = clamp(Math.round(1 + (1 - winRate) * 11 + (Math.random() * 2 - 1)), 1, 12);
+  const pos = clamp(Math.round(1 + (1 - winRate) * 11 + (rnd() * 2 - 1)), 1, 12);
   const playedDivision = s.division;
   const wasEurope = s.europe;
   let promoted = false, relegated = false, euroQualified = false;
@@ -1768,7 +1849,8 @@ function renderHeader() {
   const divBadge = `<span class="badge ${state.division===1?'gold':'silver'}">${divisionName(state.division)}</span>`;
   const euroBadge = state.europe ? ` <span class="badge gold"><i class=ic-globe></i> Coupe d'Europe</span>` : "";
   const d = diff(state);
-  $("#hdr-cert").innerHTML = `${divBadge}${euroBadge} <span class="badge none"><i class=ic-${d.icon}></i> ${d.name}</span> <span class="badge ${cert.cls}">${cert.label}</span>`;
+  const chalBadge = state.challenge ? ` <span class="chip-challenge"><i class=ic-target></i> ${esc(state.challenge)}</span>` : "";
+  $("#hdr-cert").innerHTML = `${divBadge}${euroBadge} <span class="badge none"><i class=ic-${d.icon}></i> ${d.name}</span> <span class="badge ${cert.cls}">${cert.label}</span>${chalBadge}`;
 }
 
 function apUsed() {
@@ -2077,9 +2159,198 @@ function showSeasonModal(b) {
     <p><b style="color:var(--text)">Sponsors :</b></p>
     <ul style="margin:0 0 12px 18px; font-size:13px; line-height:1.7">${ren}</ul>
     <p style="font-size:13px">Revenus générés : <b style="color:var(--accent)">${fmtCHF(b.revenue)}</b> · Bilan sportif : ${b.wins}V-${b.losses}D · ${b.cert}</p>
-    <button class="primary" style="width:100%;margin-top:8px" onclick="document.querySelector('#modal-root').innerHTML=''">
-      <i class=ic-arrow></i> Attaquer la saison ${b.season+1}
-    </button>`);
+    <div class="choices">
+      <button id="sm-share"><i class=ic-layers></i> Partager ma saison</button>
+      <button class="primary" id="sm-next"><i class=ic-arrow></i> Attaquer la saison ${b.season+1}</button>
+    </div>`);
+  $("#sm-next").onclick = closeModal;
+  $("#sm-share").onclick = () => showShareCard(() => showSeasonModal(b));
+}
+
+/* ================= Carte de partage (P5) =============================
+   Une image 1200×630 — le format que LinkedIn affiche en pleine largeur —
+   dessinée entièrement dans le navigateur : aucune requête sortante,
+   aucun service tiers, rien qui quitte l'appareil tant que le joueur n'a
+   pas décidé de publier. Le blason est sérialisé en SVG autonome puis
+   posé sur le canvas, donc la couleur du club porte jusque dans l'image. */
+const SHARE_W = 1200, SHARE_H = 630;
+
+function crestStandalone(club) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 74" width="256" height="296">
+    <path d="M32 2.5 58 10.6V37c0 16.4-11.7 27.9-26 33.6C17.7 64.9 6 53.4 6 37V10.6Z" fill="rgba(4,9,18,.72)"/>
+    <path d="M32 2.5 58 10.6V37c0 16.4-11.7 27.9-26 33.6C17.7 64.9 6 53.4 6 37V10.6Z"
+          fill="none" stroke="${club.color}" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M32 7 53.5 13.7V36.6c0 13.8-9.7 23.6-21.5 28.6C20.2 60.2 10.5 50.4 10.5 36.6V13.7Z"
+          fill="none" stroke="${club.color}" stroke-width=".9" opacity=".34"/>
+    <g style="color:${club.color}">${CREST_MARKS[club.id] || ""}</g>
+  </svg>`;
+}
+
+function roundRect(ctx, x, y, w, hgt, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + hgt, r);
+  ctx.arcTo(x + w, y + hgt, x, y + hgt, r);
+  ctx.arcTo(x, y + hgt, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/* Les quatre chiffres de la carte. Ce qui n'a pas été mesuré s'affiche
+   « non mesuré » — c'est le propos du jeu, pas une valeur manquante. */
+function shareStats(s) {
+  const audited = s.services.audited;
+  const insight = insightActive(s);
+  return [
+    { k: "Score DMOS", v: audited ? `${dmosTotal(s)}/60` : "non audité", on: audited },
+    { k: "Fans", v: fmt(s.fans), on: true },
+    { k: "Contacts CRM", v: fmt(s.contacts), on: true },
+    { k: "Valeur Fan Lab", v: insight ? fmtCHF(Math.round(fanlabValue(s))) : "non mesurée", on: insight },
+  ];
+}
+
+async function buildShareCard(s) {
+  const club = clubOf(s);
+  const cv = document.createElement("canvas");
+  cv.width = SHARE_W; cv.height = SHARE_H;
+  const ctx = cv.getContext("2d");
+  try { await document.fonts.ready; } catch (e) {}
+  const F = (w, sz) => `${w} ${sz}px Raleway, "Helvetica Neue", Arial, sans-serif`;
+
+  // Fond : le même étagement sombre que l'application, réchauffé par la couleur du club
+  const bg = ctx.createLinearGradient(0, 0, SHARE_W, SHARE_H);
+  bg.addColorStop(0, "#070C16"); bg.addColorStop(1, "#101B2C");
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, SHARE_W, SHARE_H);
+  const glow = ctx.createRadialGradient(170, 250, 20, 170, 250, 560);
+  glow.addColorStop(0, club.color + "26"); glow.addColorStop(1, "transparent");
+  ctx.fillStyle = glow; ctx.fillRect(0, 0, SHARE_W, SHARE_H);
+  ctx.fillStyle = club.color; ctx.fillRect(0, 0, SHARE_W, 6);
+
+  // Blason
+  try {
+    const img = new Image();
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(crestStandalone(club));
+    await new Promise((ok, ko) => { img.onload = ok; img.onerror = ko; });
+    ctx.drawImage(img, 74, 74, 128, 148);
+  } catch (e) { /* sans blason, la carte reste lisible */ }
+
+  // Identité du club
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#94A6B8"; ctx.font = F(800, 20);
+  ctx.letterSpacing = "3px";
+  ctx.fillText("BILAN DE CARRIÈRE", 236, 108);
+  ctx.letterSpacing = "0px";
+  ctx.fillStyle = "#F4F8FC"; ctx.font = F(900, 54);
+  let name = club.name;
+  while (ctx.measureText(name).width > 880 && name.length > 8) name = name.slice(0, -2);
+  if (name !== club.name) name += "…";
+  ctx.fillText(name, 236, 164);
+  ctx.fillStyle = "#C3D1DE"; ctx.font = F(600, 23);
+  const seasons = Math.max(1, s.season);
+  ctx.fillText(`${club.sport} · ${divisionName(s.division)} · ${seasons} saison${seasons > 1 ? "s" : ""}`, 236, 204);
+
+  // Quatre chiffres
+  const stats = shareStats(s);
+  const gap = 22, tileW = (SHARE_W - 148 - gap * 3) / 4, tileY = 268, tileH = 138;
+  stats.forEach((st, i) => {
+    const x = 74 + i * (tileW + gap);
+    ctx.fillStyle = "rgba(255,255,255,.045)";
+    roundRect(ctx, x, tileY, tileW, tileH, 16); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.085)"; ctx.lineWidth = 1;
+    roundRect(ctx, x + .5, tileY + .5, tileW - 1, tileH - 1, 16); ctx.stroke();
+    ctx.fillStyle = "#94A6B8"; ctx.font = F(800, 16); ctx.letterSpacing = "1.6px";
+    ctx.fillText(st.k.toUpperCase(), x + 24, tileY + 42);
+    ctx.letterSpacing = "0px";
+    ctx.fillStyle = st.on ? "#F4F8FC" : "#6E7F90";
+    let sz = st.on ? 40 : 27;
+    ctx.font = F(st.on ? 900 : 700, sz);
+    while (ctx.measureText(st.v).width > tileW - 44 && sz > 15) { sz -= 2; ctx.font = F(st.on ? 900 : 700, sz); }
+    ctx.fillText(st.v, x + 24, tileY + 100);
+  });
+
+  // Certification et défi
+  const cert = certification(s);
+  const certCol = cert.cls === "gold" ? "#E9C46A" : cert.cls === "silver" ? "#C6D2DC" : "#8494A4";
+  ctx.font = F(800, 20);
+  const cw = ctx.measureText(cert.label).width + 44;
+  ctx.fillStyle = certCol + "1F"; roundRect(ctx, 74, 448, cw, 50, 24); ctx.fill();
+  ctx.strokeStyle = certCol + "66"; roundRect(ctx, 74.5, 448.5, cw - 1, 49, 24); ctx.stroke();
+  ctx.fillStyle = certCol; ctx.fillText(cert.label, 96, 480);
+  if (s.challenge) {
+    ctx.fillStyle = "#9AD9FF"; ctx.font = F(800, 20);
+    ctx.fillText(`Défi ${s.challenge} — ${fmt(challengeScore(s))} points`, 74 + cw + 26, 480);
+  }
+
+  // Pied de carte
+  ctx.fillStyle = "rgba(255,255,255,.07)"; ctx.fillRect(74, 532, SHARE_W - 148, 1);
+  ctx.fillStyle = "#F4F8FC"; ctx.font = F(900, 27); ctx.letterSpacing = "1.5px";
+  ctx.fillText("CLUB CATALIST", 74, 584);
+  const cw2 = ctx.measureText("CLUB CATALIST").width;
+  ctx.letterSpacing = "0px";
+  ctx.fillStyle = "#94A6B8"; ctx.font = F(600, 21);
+  ctx.fillText("by C'mon Sports", 74 + cw2 + 16, 584);
+  ctx.fillStyle = club.color; ctx.font = F(800, 21);
+  const url = "clubcatalist.cmon-sports.com";
+  ctx.fillText(url, SHARE_W - 74 - ctx.measureText(url).width, 584);
+  return cv;
+}
+
+/* Le texte prêt à coller : le score du joueur, puis l'enseignement du jeu. */
+function shareText(s) {
+  const club = clubOf(s);
+  const seasons = Math.max(1, s.season);
+  const L = [];
+  L.push(`Bilan de ma carrière au ${club.name} sur Club Catalist.`);
+  L.push("");
+  shareStats(s).forEach(st => L.push(`${st.k} : ${st.v}`));
+  L.push(`Certification : ${certification(s).label}`);
+  L.push(`${seasons} saison${seasons > 1 ? "s" : ""} à la tête du marketing digital`);
+  if (s.challenge) L.push(`Défi ${s.challenge} — ${fmt(challengeScore(s))} points. À vous de faire mieux.`);
+  L.push("");
+  L.push(insightActive(s) || s.services.audited
+    ? `Ce que le jeu m'a rappelé : tant qu'on ne mesure pas, on pilote à l'aveugle. Le score est resté une fourchette jusqu'à l'audit.`
+    : `Ce que le jeu m'a rappelé : sans mesure, la valeur d'une fanbase reste une intuition — et une intuition ne convainc aucun sponsor.`);
+  L.push("");
+  L.push(`À votre tour : https://clubcatalist.cmon-sports.com`);
+  L.push(`#SportBusiness #MarketingSportif #Data`);
+  return L.join("\n");
+}
+
+async function showShareCard(back) {
+  const s = state;
+  showModal(`<h2><i class=ic-layers></i> Partager mon bilan</h2>
+    <p style="color:var(--ink-3)"><i class=ic-hourglass></i> Génération de la carte…</p>`);
+  let cv;
+  try { cv = await buildShareCard(s); }
+  catch (e) {
+    showModal(`<h2><i class=ic-alert></i> Carte indisponible</h2>
+      <p>La génération de l'image a échoué sur ce navigateur. Le texte reste copiable ci-dessous.</p>
+      <textarea class="share-text" readonly rows="10">${esc(shareText(s))}</textarea>
+      <div class="choices"><button class="primary" id="sc-back">Retour</button></div>`);
+    $("#sc-back").onclick = () => { closeModal(); if (back) back(); };
+    return;
+  }
+  const png = cv.toDataURL("image/png");
+  const slug = (clubOf(s).name || "bilan").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const fileName = `club-catalist-${slug || "bilan"}.png`;
+  showModal(`<h2><i class=ic-layers></i> Partager mon bilan</h2>
+    <p style="font-size:13px">Votre carte est prête. L'image est générée sur votre appareil —
+    rien n'est envoyé nulle part tant que vous ne la publiez pas vous-même.</p>
+    <img class="share-preview" src="${png}" alt="Carte de bilan ${esc(clubOf(s).name)}">
+    <p style="font-size:12px;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.06em;font-weight:700">Texte prêt à coller</p>
+    <textarea class="share-text" readonly rows="9">${esc(shareText(s))}</textarea>
+    <div class="choices">
+      <a class="btn-like primary" id="sc-dl" href="${png}" download="${fileName}"><i class=ic-save></i> Télécharger l'image</a>
+      <button id="sc-copy"><i class=ic-layers></i> Copier le texte</button>
+      <button id="sc-back">Retour</button>
+    </div>`);
+  $("#sc-copy").onclick = async () => {
+    const ta = document.querySelector(".share-text");
+    try { await navigator.clipboard.writeText(ta.value); $("#sc-copy").innerHTML = "<i class=ic-check></i> Texte copié";
+    } catch (e) { ta.focus(); ta.select(); $("#sc-copy").innerHTML = "Sélectionné — Cmd/Ctrl+C"; }
+  };
+  $("#sc-back").onclick = () => { closeModal(); if (back) back(); };
 }
 
 function showGameOver() {
@@ -2105,7 +2376,11 @@ function showGameOver() {
       <b>Et pour votre vrai club ?</b> Ce bilan est une fiction — le diagnostic DMOS, lui, existe.
       <a href="${BOOKING_URL}" target="_blank" rel="noopener">Réserver un échange de 30 minutes</a>
     </div>
-    <button class="primary" style="width:100%;margin-top:12px" id="btn-restart"><i class=ic-arrow></i> Recommencer une carrière</button>`);
+    <div class="choices">
+      <button id="go-share"><i class=ic-layers></i> Partager mon bilan</button>
+      <button class="primary" id="btn-restart"><i class=ic-arrow></i> Recommencer une carrière</button>
+    </div>`);
+  $("#go-share").onclick = () => showShareCard(showGameOver);
   $("#btn-restart").onclick = () => { localStorage.removeItem(currentSaveKey()); location.reload(); };
 }
 
@@ -2186,6 +2461,31 @@ function attemptLogin(uid) {
 function finishLogin(u) {
   currentUser = u;
   try { sessionStorage.setItem(SESSION_KEY, u.id); } catch(e) {}
+  $("#challenge-zone").innerHTML = `<div class="card challenge-card">
+    <div>
+      <b><i class=ic-target></i> Mode défi</b>
+      <span>Même club, même comité, exactement les mêmes événements — le seul écart, c'est vous.
+      Créez un défi ou relevez celui qu'on vous a transmis.</span>
+    </div>
+    <div class="challenge-actions">
+      <input type="text" id="challenge-code" maxlength="16" placeholder="HC-1-A7K9F2" autocomplete="off" spellcheck="false">
+      <button class="primary" id="challenge-go">Relever le défi</button>
+      <button id="challenge-new">Créer un défi</button>
+    </div>
+    <div id="challenge-msg"></div>
+  </div>`;
+  $("#challenge-go").onclick = () => {
+    const parsed = parseChallengeCode($("#challenge-code").value);
+    if (!parsed) {
+      $("#challenge-msg").innerHTML = `<span style="color:var(--bad)"><i class=ic-cross></i>
+        Code non reconnu. Format attendu : deux lettres de club, le niveau, puis la graine — par exemple HC-1-A7K9F2.</span>`;
+      return;
+    }
+    startChallenge(parsed);
+  };
+  $("#challenge-code").onkeydown = e => { if (e.key === "Enter") $("#challenge-go").click(); };
+  $("#challenge-new").onclick = showChallengeCreate;
+
   const saved = load();
   if (saved) { state = saved; startGame(); }
   else { state = null; showSetup(); }
@@ -2226,7 +2526,7 @@ async function createProfile() {
    sont mis en file d'attente locale et synchronisés plus tard. */
 /* Sorties de conversion — liens tracés pour mesurer ce que le jeu apporte */
 const BOOKING_URL = "https://calendly.com/meeting-douglas-finazzi/c-mon-sports-huddle-clone?utm_source=clubcatalist&utm_medium=game";
-const FANLAB_CALC_URL = "https://fanlab.cmon-sports.com/calculator?utm_source=clubcatalist&utm_medium=game";
+const FANLAB_CALC_URL = "https://fanlab.cmon-sports.com/?utm_source=clubcatalist&utm_medium=game";
 
 const BREVO_KEY = "mktclubgm_brevo_key";
 const BREVO_LIST_KEY = "mktclubgm_brevo_list";
@@ -2821,6 +3121,33 @@ function showSetup() {
       <button class="primary" id="btn-resume"><i class=ic-play></i> Reprendre la partie</button></div>`;
     $("#btn-resume").onclick = () => { state = saved; startGame(); };
   }
+}
+
+function showChallengeCreate() {
+  const seed = freshSeed();
+  showModal(`
+    <h2><i class=ic-target></i> Créer un défi</h2>
+    <p>Choisissez le club et le comité : le code produit fige la saison entière.
+    Transmettez-le, et vos adversaires affronteront exactement les mêmes événements que vous.</p>
+    <div class="choices" id="cc-list"></div>
+    <button style="width:100%;margin-top:10px" id="cc-cancel">Annuler</button>`);
+  const box = $("#cc-list");
+  CLUBS.forEach(c => DIFFICULTIES.forEach(d => {
+    if (d.id !== 1) return;                    // un défi par club, sur le comité de référence
+    const b = document.createElement("button");
+    b.innerHTML = `<b><span class="dot" style="background:${c.color}"></span> ${esc(c.name)}</b>
+      <span style="font-size:12px;color:var(--muted)">${esc(c.sport)} · ${divisionName(c.division)} · ${esc(d.name)}
+      — code ${makeChallengeCode(c.id, d.id, seed)}</span>`;
+    b.onclick = () => { closeModal(); startChallenge({ club: c, difficulty: d.id, seed, code: makeChallengeCode(c.id, d.id, seed) }); };
+    box.appendChild(b);
+  }));
+  $("#cc-cancel").onclick = closeModal;
+}
+
+function startChallenge(ch) {
+  closeModal();
+  newGame(ch.club, ch.difficulty, ch);
+  startGame();
 }
 
 function showDifficultyChoice(club) {
