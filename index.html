@@ -336,8 +336,13 @@ header .meta button{padding:6px 11px;font-size:var(--t0)}
 .meter .fill{height:100%;border-radius:6px;transition:width .45s cubic-bezier(.2,.7,.3,1)}
 .meter .hint{font-size:var(--t0);color:var(--ink-3);margin-top:5px;line-height:1.45}
 .fogged{opacity:.55}
-.lock{display:flex;gap:9px;align-items:flex-start;font-size:var(--t1);color:var(--brand);
+/* Bloc « chiffre masqué ». En flex, chaque <b> de la phrase devenait un
+   élément de flux distinct et le texte se disloquait — d'autant plus dans
+   les langues aux mots longs. Le texte doit couler normalement autour de
+   l'icône, qui reste simplement en tête. */
+.lock{display:block;font-size:var(--t1);color:var(--brand);
   line-height:1.55;margin-top:12px;border-left:2px solid var(--brand-line);padding-left:11px}
+.lock i{margin-right:7px;vertical-align:-1px}
 
 /* ── Objectifs ────────────────────────────────────────────────────────── */
 .objectives{list-style:none}
@@ -2048,8 +2053,8 @@ function showPenetrationInfo() {
   const su = insightActive(state);
   const bassin = marketCap(state), pool = collectiblePool(state), pen = penetration(state);
   const rendement = Math.round(clamp(1 - pen, 0.05, 1) * 100);
-  showModal(tr("ui.b918b2", {v0: su ? fmt(bassin) : "?", v1: su ? fmt(pool) : "?", v2: su ? fmt(state.contacts) + " ÷ " + fmt(pool) + " = " + (Math.round(pen*1000)/10) + " %" : "?", v3: su ? rendement + " %" : "?", v4: su ? "" : `<p class="lock"><i class=ic-lock></i> Chiffres masqués : seule une analyse
-      <b>Fan Lab Insight</b> ou <b>Pro</b> mesure votre bassin et votre pénétration.</p>`}, `
+  showModal(tr("ui.b918b2", {v0: su ? fmt(bassin) : "?", v1: su ? fmt(pool) : "?", v2: su ? fmt(state.contacts) + " ÷ " + fmt(pool) + " = " + (Math.round(pen*1000)/10) + " %" : "?", v3: su ? rendement + " %" : "?", v4: su ? "" : tr("lbl.6cf1f1", null, `<p class="lock"><i class=ic-lock></i> Chiffres masqués : seule une analyse
+      <b>Fan Lab Insight</b> ou <b>Pro</b> mesure votre bassin et votre pénétration.</p>`)}, `
     <h2><span class="sig-cap">L</span>a pénétration du bassin<span class="sig-cap">.</span></h2>
     <p>Elle répond à une question simple : <b>quelle part des gens que vous pourriez atteindre
     figure déjà dans votre base de contacts ?</b> Un club peut avoir beaucoup de fans et presque
@@ -2078,10 +2083,10 @@ function showQualityInfo() {
   const su = insightActive(state);
   const q = state.dataQuality, df = state.services.datafactory;
   const parContact = Math.round((0.15 + q * 0.06) * 100) / 100;
-  showModal(tr("ui.7152b0", {v0: df ? "var(--good)" : "var(--bad)", v1: df ? "neutralisée" : "−0,05 / semaine", v2: df
-        ? "Data Factory entretient la base en continu : elle ne se dégrade plus."
-        : "Sans entretien, les adresses vieillissent et les doublons s'accumulent.", v3: su ? "0,15 + qualité × 0,06 = " + parContact.toFixed(2) + " CHF" : "?", v4: su ? "" : `<p class="lock"><i class=ic-lock></i> Note masquée : seule une analyse
-      <b>Fan Lab Insight</b> ou <b>Pro</b> évalue la santé de votre base.</p>`}, `
+  showModal(tr("ui.7152b0", {v0: df ? "var(--good)" : "var(--bad)", v1: df ? tr("lbl.ce4a5c", null, "neutralisée") : tr("lbl.1317a2", null, "−0,05 / semaine"), v2: df
+        ? tr("lbl.fb7315", null, "Data Factory entretient la base en continu : elle ne se dégrade plus.")
+        : tr("lbl.a7e971", null, "Sans entretien, les adresses vieillissent et les doublons s'accumulent."), v3: su ? "0,15 + qualité × 0,06 = " + parContact.toFixed(2) + " CHF" : "?", v4: su ? "" : tr("lbl.d20782", null, `<p class="lock"><i class=ic-lock></i> Note masquée : seule une analyse
+      <b>Fan Lab Insight</b> ou <b>Pro</b> évalue la santé de votre base.</p>`)}, `
     <h2><span class="sig-cap">L</span>a qualité des données<span class="sig-cap">.</span></h2>
     <p>Une note sur 10 qui résume la <b>fiabilité de votre base</b> : adresses valides, doublons
     éliminés, consentements en règle, segmentation exploitable. Deux clubs peuvent avoir le même
@@ -2110,9 +2115,9 @@ function showDmosInfo() {
   const audite = state && state.services && state.services.audited;
   showModal(tr("ui.109be2", {v0: PILLARS.map(p => `<div class="pillar-row"><b>${esc(p.label)}</b><span>${esc(p.hint)}</span></div>`).join(""), v1: audite
       ? tr("lbl.88d388", null, `Votre club a été audité : les scores affichés sont exacts, et la certification est active dès le seuil atteint.`)
-      : `<b>Tant que votre club n'a pas commandé l'Audit DMOS</b>, ces scores restent des estimations internes —
+      : tr("lbl.930e1d", null, `<b>Tant que votre club n'a pas commandé l'Audit DMOS</b>, ces scores restent des estimations internes —
          affichés en fourchette, et aucune certification n'est possible. C'est précisément ce que débloque
-         l'audit dans l'onglet C'mon Sports.`, v2: BOOKING_URL}, `
+         l'audit dans l'onglet C'mon Sports.`), v2: BOOKING_URL}, `
     <h2><span class="sig-cap">L</span>e score DMOS<span class="sig-cap">.</span></h2>
     <p><b>Digital Maturity &amp; Operations Score.</b> C'est le diagnostic que C'mon Sports utilise
     réellement auprès des clubs : il mesure, pilier par pilier, la maturité digitale d'une organisation
@@ -3033,7 +3038,7 @@ function demoClubFrom(o) {
     id: t.id, color: t.color, icon: t.icon, sport: t.sport,
     code: initials, name: o.name, city: o.city,
     division: o.division,
-    desc: `${o.name} — démonstration Club Catalist.`,
+    desc: tr("demo.391d15", {v0: o.name}, `{v0} — démonstration Club Catalist.`),
     fans,
     contacts: clamp(o.contacts || Math.round(t.contacts * scale), 60, fans),
     engagement: t.engagement,
@@ -3078,6 +3083,14 @@ function demoFastForward(s, club) {
     merchRevenue: Math.round(club.fans * 0.42),
   });
   s.seasonStats.revenue = s.seasonStats.ticketRevenue + s.seasonStats.sponsorRevenue + s.seasonStats.merchRevenue;
+  s.demoLang = lang;
+  demoJournal(s, club);
+}
+
+/* Le journal de démo est écrit une fois pour toutes dans la sauvegarde :
+   changer de langue en plein rendez-vous le laisserait dans l'ancienne.
+   On le regénère donc si la langue a bougé depuis sa création. */
+function demoJournal(s, club) {
   const n = club.name;
   s.log = [
     { w:11, season:1, msg: tr("demo.706e8f", {v0: esc(n)}, `<i class=ic-alert></i> Le comité réclame un point d'étape chiffré. Sans mesure, {v0} ne peut présenter que des impressions.`), cls:"bad" },
@@ -3092,7 +3105,7 @@ function demoFastForward(s, club) {
 }
 
 function exitDemo() {
-  if (!confirm("Quitter le mode démo et effacer la partie de démonstration ?")) return;
+  if (!confirm(tr("demo.a2f79a", null, "Quitter le mode démo et effacer la partie de démonstration ?"))) return;
   localStorage.removeItem(DEMO_SAVE_KEY);
   try { sessionStorage.removeItem(DEMO_FLAG); } catch (e) {}
   demoMode = false;
@@ -3412,8 +3425,10 @@ const TX = {
     "demo.08c165": "<i class=ic-check></i> Drei Siege in Serie: +{v0} Fans in den sozialen Medien.",
     "demo.147800": "<i class=ic-mail></i> E-Mail-Kampagne an die gesamte Kontaktbasis versandt: 41 % Öffnungen, 96 Abmeldungen. Eine Segmentierung ist so nicht möglich.",
     "demo.174095": "Willkommen bei {v0}! Der Vorstand erwartet schon in dieser Saison Resultate.",
+    "demo.391d15": "{v0} — Club-Catalist-Demonstration.",
     "demo.4356a4": "<i class=ic-check></i> Saisonstart: regelmässige Inhalte, Engagement im Aufwind.",
     "demo.706e8f": "<i class=ic-alert></i> Der Vorstand verlangt einen bezifferten Zwischenstand. Ohne Messung kann {v0} nur Eindrücke vorlegen.",
+    "demo.a2f79a": "Demo-Modus verlassen und die Demonstrationspartie löschen?",
     "demo.bd84e9": "<i class=ic-alert></i> Dubletten und tote Adressen von Hand in der Kontaktdatei entdeckt. Die Bereinigung wird verschoben — es fehlt ein Prozess.",
     "demo.e2bcc2": "<i class=ic-check></i> Schöne Kulisse beim letzten Heimspiel. Wie viele dieser Zuschauer stehen im CRM? Niemand weiss es.",
     "demo.fe9e6d": "<i class=ic-target></i> Ein Sponsor will vor der Verlängerung den Wert des Publikums wissen. Keine einzige Zahl, die Sie ihm entgegenhalten könnten.",
@@ -3428,6 +3443,7 @@ const TX = {
     "lbl.099144": " — die Gewinnung neuer Kontakte stösst an ihre Grenzen",
     "lbl.0db8f9": "Hauptpartner",
     "lbl.0f0395": "nicht auditiert",
+    "lbl.1317a2": "−0,05 / Woche",
     "lbl.143e0f": " · <i class=ic-globe></i> Europapokal",
     "lbl.1dbba8": "Markiert — Cmd/Ctrl+C",
     "lbl.25198d": "Vorstandsvertrauen",
@@ -3456,6 +3472,7 @@ const TX = {
     "lbl.65873e": "gesetzt (gehasht, nicht im Klartext wiederherstellbar)",
     "lbl.67b4b4": "Nicht auditiert",
     "lbl.6b349f": "Fans: {v0} · DMOS: {v1}",
+    "lbl.6cf1f1": "<p class=\"lock\"><i class=ic-lock></i> Zahlen noch verborgen: Nur eine Analyse mit\n      <b>Fan Lab Insight</b> oder <b>Pro</b> misst Ihr Einzugsgebiet und Ihre Durchdringung.</p>",
     "lbl.6eda18": "Melden Sie sich zuerst an.",
     "lbl.6ff677": "<li style='color:var(--muted)'>Kein Vertrag lief aus.</li>",
     "lbl.73d38d": "Fans",
@@ -3464,9 +3481,11 @@ const TX = {
     "lbl.83eef3": "Ausrüster",
     "lbl.860fc9": "<i class=ic-trash></i> Mein Profil und alle zugehörigen Daten löschen",
     "lbl.88d388": "Ihr Club wurde auditiert: Die angezeigten Scores sind exakt, und die Zertifizierung ist ab Erreichen der Schwelle aktiv.",
+    "lbl.930e1d": "<b>Solange Ihr Club kein DMOS-Audit bestellt hat</b>, bleiben diese Scores interne Schätzungen —\n         als Schätzbereich angezeigt, und eine Zertifizierung ist nicht möglich. Genau das schaltet\n         das Audit im Tab C'mon Sports frei.",
     "lbl.97b5d0": "Niederlage",
     "lbl.99103f": "{v0} · {v1} · {v2} Saison{v3}",
     "lbl.9f8025": "Noch keine Saison abgeschlossen.",
+    "lbl.a7e971": "Ohne Pflege veralten die Adressen und Dubletten häufen sich.",
     "lbl.abc281": "1. Liga",
     "lbl.aca0ff": "noch {v0} Saison{v1}",
     "lbl.c21603": "<i class=ic-layers></i> Meine Daten exportieren (JSON)",
@@ -3474,7 +3493,9 @@ const TX = {
     "lbl.c518d2": "<b style=\"color:var(--text)\">Saison {v0}</b> — {v1}{v2}/{v3} Ziele · {v4}S-{v5}N · {v6}{v7}",
     "lbl.c784fc": "Fan-Lab-Wert",
     "lbl.c78646": "auswärts",
+    "lbl.ce4a5c": "neutralisiert",
     "lbl.cff84a": "Gebietsdurchdringung",
+    "lbl.d20782": "<p class=\"lock\"><i class=ic-lock></i> Note noch verborgen: Nur eine Analyse mit\n      <b>Fan Lab Insight</b> oder <b>Pro</b> beurteilt den Zustand Ihrer Datenbasis.</p>",
     "lbl.d44d2b": "<i class=ic-save></i> Speichern",
     "lbl.d47134": "Datenqualität",
     "lbl.de13a4": "<i class=ic-globe></i> Erreichbares Einzugsgebiet: <span style=\"color:var(--muted)\">unbekannt</span><br>",
@@ -3484,6 +3505,7 @@ const TX = {
     "lbl.ef3c28": " (Ermüdung der Kontaktbasis)",
     "lbl.f1b40a": "#Sportbusiness #Sportmarketing #Fandaten",
     "lbl.f5f932": "Der PIN-Code muss 4 bis 8 Ziffern haben.",
+    "lbl.fb7315": "Data Factory pflegt die Datenbasis laufend: Sie altert nicht mehr.",
     "lbl.fd6f54": "<i class=ic-pulse></i> Engagement: {v0} %<br>",
     "lbl.fea822": "Saison {v0} · Woche {v1} — {v2} · {v3}. von {v4}",
     "msg.00151d": "Schulung: Alle Säulen sind am Maximum!",
@@ -3779,8 +3801,10 @@ const TX = {
     "demo.08c165": "<i class=ic-check></i> Three wins in a row: +{v0} fans on social.",
     "demo.147800": "<i class=ic-mail></i> Email campaign sent to the entire base: 41% opens, 96 unsubscribes. Segmentation is impossible as things stand.",
     "demo.174095": "Welcome to {v0}! The board expects results this season already.",
+    "demo.391d15": "{v0} — Club Catalist demonstration.",
     "demo.4356a4": "<i class=ic-check></i> Season launch: regular content, engagement on the rise.",
     "demo.706e8f": "<i class=ic-alert></i> The board is asking for a progress update with numbers in it. With nothing measured, {v0} has only impressions to offer.",
+    "demo.a2f79a": "Exit demo mode and delete the demonstration game?",
     "demo.bd84e9": "<i class=ic-alert></i> Duplicates and dead addresses spotted by hand in the contact file. The clean-up is put off for want of a procedure.",
     "demo.e2bcc2": "<i class=ic-check></i> A fine turnout at the last home match. How many of those spectators are in the CRM? Nobody knows.",
     "demo.fe9e6d": "<i class=ic-target></i> A sponsor is asking what the audience is worth before renewing. Not one figure to put in front of them.",
@@ -3795,6 +3819,7 @@ const TX = {
     "lbl.099144": " — collecting new contacts is nearing saturation",
     "lbl.0db8f9": "Main partner",
     "lbl.0f0395": "not audited",
+    "lbl.1317a2": "−0,05 / week",
     "lbl.143e0f": " · <i class=ic-globe></i> European cup",
     "lbl.1dbba8": "Selected — Cmd/Ctrl+C",
     "lbl.25198d": "Board confidence",
@@ -3823,6 +3848,7 @@ const TX = {
     "lbl.65873e": "set (hashed, never recoverable in plain text)",
     "lbl.67b4b4": "Not audited",
     "lbl.6b349f": "Fans: {v0} · DMOS: {v1}",
+    "lbl.6cf1f1": "<p class=\"lock\"><i class=ic-lock></i> Figures still hidden: only a\n      <b>Fan Lab Insight</b> or <b>Pro</b> analysis measures your catchment and your penetration.</p>",
     "lbl.6eda18": "Sign in first.",
     "lbl.6ff677": "<li style='color:var(--muted)'>No contract was up for renewal.</li>",
     "lbl.73d38d": "Fans",
@@ -3831,9 +3857,11 @@ const TX = {
     "lbl.83eef3": "Kit supplier",
     "lbl.860fc9": "<i class=ic-trash></i> Delete my profile and all its data",
     "lbl.88d388": "Your club has been audited: the scores shown are exact, and certification is active as soon as the threshold is reached.",
+    "lbl.930e1d": "<b>Until your club orders the DMOS Audit</b>, these scores stay internal estimates —\n         shown as a range, and no certification is possible. Unlocking that is exactly what\n         the audit in the C'mon Sports tab does.",
     "lbl.97b5d0": "Defeat",
     "lbl.99103f": "{v0} · {v1} · {v2} season{v3}",
     "lbl.9f8025": "No season completed yet.",
+    "lbl.a7e971": "Without upkeep, addresses go stale and duplicates pile up.",
     "lbl.abc281": "1st division",
     "lbl.aca0ff": "{v0} season{v1} left",
     "lbl.c21603": "<i class=ic-layers></i> Export my data (JSON)",
@@ -3841,7 +3869,9 @@ const TX = {
     "lbl.c518d2": "<b style=\"color:var(--text)\">Season {v0}</b> — {v1}{v2}/{v3} objectives · {v4}W-{v5}L · {v6}{v7}",
     "lbl.c784fc": "Fan Lab value",
     "lbl.c78646": "away",
+    "lbl.ce4a5c": "neutralised",
     "lbl.cff84a": "Catchment penetration",
+    "lbl.d20782": "<p class=\"lock\"><i class=ic-lock></i> Score still hidden: only a\n      <b>Fan Lab Insight</b> or <b>Pro</b> analysis rates the health of your base.</p>",
     "lbl.d44d2b": "<i class=ic-save></i> Save",
     "lbl.d47134": "Data quality",
     "lbl.de13a4": "<i class=ic-globe></i> Reachable catchment: <span style=\"color:var(--muted)\">unknown</span><br>",
@@ -3851,6 +3881,7 @@ const TX = {
     "lbl.ef3c28": " (contact base fatigue)",
     "lbl.f1b40a": "#SportsBusiness #SportsMarketing #Data",
     "lbl.f5f932": "The PIN must be 4 to 8 digits long.",
+    "lbl.fb7315": "Data Factory maintains the base continuously: it no longer decays.",
     "lbl.fd6f54": "<i class=ic-pulse></i> Engagement: {v0}%<br>",
     "lbl.fea822": "Season {v0} · Week {v1} — {v2} · position {v3} in {v4}",
     "msg.00151d": "Training: every pillar is already maxed out!",
@@ -4090,7 +4121,19 @@ renderLangSwitch();
 if (!localStorage.getItem(CONSENT_KEY)) showConsent();
 else initAuth();
 // Un rafraîchissement en plein rendez-vous ne doit pas coûter la démo
-if (demoMode) { const d = load(); if (d) { state = d; startGame(); } }
+if (demoMode) {
+  const d = load();
+  if (d) {
+    state = d;
+    // Langue changée depuis la création de la démo : on réécrit le journal.
+    if (state.demoClub && state.demoLang !== lang) {
+      demoJournal(state, state.demoClub);
+      state.demoLang = lang;
+      save();
+    }
+    startGame();
+  }
+}
 brevoFlushQueue();
 </script>
 </body>
