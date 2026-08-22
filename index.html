@@ -421,6 +421,15 @@ tbody tr:hover{background:var(--brand-soft)}
 .calc-note{font-size:var(--t0);color:var(--ink-3);line-height:1.5;padding:2px 0 6px}
 .kpi .lbl .info-btn{width:16px;height:16px;font-size:10.5px;vertical-align:-.18em;margin-left:5px}
 
+/* Bandeau du mode démo commercial */
+.demo-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-bottom:12px;padding:9px 15px;border-radius:var(--r);
+  border:1px solid rgba(255,183,77,.34);background:rgba(255,183,77,.10);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  font-size:var(--t1);color:#FFD9A0;font-weight:700}
+.demo-banner b{color:#FFB74D;letter-spacing:.04em;text-transform:uppercase}
+.demo-banner button{font-size:12px;padding:5px 12px}
+
 /* Sorties de conversion */
 select{font-family:inherit;font-size:var(--t2);color:var(--ink);background:var(--sunken);
   border:1px solid var(--edge);border-radius:var(--r);padding:12px 15px;width:100%;
@@ -610,6 +619,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
 
   <!-- ============ GAME SCREEN ============ -->
   <div id="screen-game" class="hidden">
+    <div id="demo-banner" class="demo-banner hidden"></div>
     <header>
       <div class="brand">
         <div class="logo" id="club-logo">M</div>
@@ -765,7 +775,17 @@ const USERS_KEY = "mktclubgm_users";
 const CONSENT_KEY = "mktclubgm_consent";
 const SESSION_KEY = "mktclubgm_session";
 let currentUser = null;
-function currentSaveKey() { return currentUser ? "mktclubgm1_p" + currentUser.id : LEGACY_SAVE_KEY; }
+function currentSaveKey() {
+  if (demoMode) return DEMO_SAVE_KEY;
+  return currentUser ? "mktclubgm1_p" + currentUser.id : LEGACY_SAVE_KEY;
+}
+
+/* Le club d'une partie vient normalement du catalogue ; en mode démo,
+   c'est celui du prospect, porté par la sauvegarde elle-même. */
+function clubOf(s) {
+  if (s && s.demoClub) return s.demoClub;
+  return CLUBS.find(c => c.id === (s && s.clubId));
+}
 const WEEKS_PER_SEASON = 26;
 
 /* ---------------- Clubs jouables ---------------- */
@@ -1094,6 +1114,7 @@ function buyService(id) {
   }
   log(state, MSG[id], "good");
   save();
+  ccTrack();          // signal le plus fort : le joueur a essayé un service
   renderAll();
 }
 
@@ -1141,7 +1162,7 @@ function projectedPos(s) {
 /* Bassin de fans atteignable : la région sature en 2e division,
    l'élite (et son exposition nationale) élargit le marché. */
 function marketCap(s) {
-  const club = CLUBS.find(c=>c.id===s.clubId);
+  const club = clubOf(s);
   return club.fans * (s.division === 1 ? 8 : 3);
 }
 function marketSaturation(s) { return clamp(1 - s.fans / marketCap(s), 0.05, 1); }
@@ -1181,7 +1202,7 @@ let selected = {};   // actionId -> count (sélection de la semaine en cours)
 function newGame(club, difficulty = 1) {
   // Qualification : le sport du premier club choisi renseigne le profil
   // (valeurs de la catégorie Brevo SPORT : basket 1, foot 2, hockey 4, volley 6).
-  if (currentUser && !currentUser.sportBrevo) {
+  if (currentUser && !currentUser.sportBrevo && !demoMode) {
     const sportMap = { hc: 4, fc: 2, bb: 1, vb: 6 };
     currentUser.sportBrevo = sportMap[club.id];
     const users = loadUsers();
@@ -1278,7 +1299,7 @@ function load() {
     const s = JSON.parse(raw);
     if (s && s.version === 1) {
       // migration v1 → v2 : système de divisions / coupe d'Europe
-      const club = CLUBS.find(c=>c.id===s.clubId);
+      const club = clubOf(s);
       s.division = club ? club.division : 2;
       s.europe = false;
       s.seasonStats.euroWins = 0;
@@ -1316,7 +1337,7 @@ function weekCost() {
 }
 
 function playMatch(s) {
-  const club = CLUBS.find(c=>c.id===s.clubId);
+  const club = clubOf(s);
   const home = s.week % 2 === 1;
   // en élite les adversaires sont plus forts ; en 2e division on domine plus souvent
   const divAdj = s.division === 1 ? -0.10 : 0.03;
@@ -1499,7 +1520,7 @@ function advanceWeek() {
   // 3b. Match de coupe d'Europe (semaines 3 à 15, une semaine sur trois)
   let euroMsg = null;
   if (s.europe && s.week % 3 === 0 && s.week <= 15) {
-    const club = CLUBS.find(c=>c.id===s.clubId);
+    const club = clubOf(s);
     const p = clamp(0.30 + (club.strength - 50)/200 + (s.engagement - 50)/500, 0.12, 0.60);
     const euroWin = Math.random() < p;
     s.budget -= 3000; // déplacement, organisation, dispositif média
@@ -1582,6 +1603,7 @@ function advanceWeek() {
 
   selected = {};
   save();
+  ccTrack();          // fin de saison, audit livré, certification obtenue…
   renderAll();
 
   if (s.gameOver) showGameOver();
@@ -1731,7 +1753,7 @@ function renderKpis() {
 }
 
 function renderHeader() {
-  const club = CLUBS.find(c=>c.id===state.clubId);
+  const club = clubOf(state);
   $("#club-logo").innerHTML = clubCrest(club);
   // La couleur du club irrigue l'accent de l'écran (jauges, halos, liserés).
   document.documentElement.style.setProperty("--club", club.color);
@@ -2062,7 +2084,7 @@ function showSeasonModal(b) {
 
 function showGameOver() {
   const seasons = state.season;
-  const club = CLUBS.find(c=>c.id===state.clubId);
+  const club = clubOf(state);
   const cert = certification(state);
   const usedServices = SERVICES.filter(sv => serviceActive(state, sv.id)).map(sv=>sv.name);
   showModal(`
@@ -2211,7 +2233,7 @@ const BREVO_LIST_KEY = "mktclubgm_brevo_list";
 // Suffixe de version : à incrémenter dès que la liste des attributs change,
 // sinon les navigateurs ayant déjà synchronisé sauteraient la création des
 // nouveaux attributs et Brevo rejetterait le contact (HTTP 400).
-const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok_v2";
+const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok_v3";
 const BREVO_ATTR = "CMON_SOLUTION_CLUBCATALIST";
 const BREVO_ATTR_PSEUDO = "PSEUDO";
 const BREVO_LIST_DEFAULT = 63; // liste « Club Catalist » côté Brevo
@@ -2233,7 +2255,13 @@ function brevoUpdateUser(uid, status) {
    au vrai prénom des contacts dans le reste du CRM C'mon Sports. */
 async function brevoEnsureAttributes(key) {
   if (localStorage.getItem(BREVO_ATTR_OK)) return;
-  const defs = [[BREVO_ATTR, "boolean"], [BREVO_ATTR_PSEUDO, "text"]];
+  const defs = [
+    [BREVO_ATTR, "boolean"], [BREVO_ATTR_PSEUDO, "text"],
+    // Signaux d'usage (P4) — préfixe CC_ pour ne jamais heurter les
+    // attributs métier existants du CRM C'mon Sports.
+    ["CC_SEASONS", "float"], ["CC_SERVICES", "text"],
+    ["CC_CERT", "text"], ["CC_LAST_PLAYED", "date"],
+  ];
   let allOk = true;
   for (const [name, type] of defs) {
     try {
@@ -2249,6 +2277,7 @@ async function brevoEnsureAttributes(key) {
 
 async function brevoSyncContact(u) {
   if (!u.email) return;                       // profils hérités sans adresse
+  if (demoMode) return;                       // démo commerciale : aucune écriture CRM
   const key = localStorage.getItem(BREVO_KEY);
   if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
   const listId = brevoListId();
@@ -2268,7 +2297,13 @@ async function brevoSyncContact(u) {
         { [BREVO_ATTR]: true, OPT_IN: !!u.optIn, [BREVO_ATTR_PSEUDO]: u.pseudo || "" },
         u.org ? { COMPANY: u.org } : {},
         u.role ? { JOB_TITLE: u.role } : {},
-        u.sportBrevo ? { SPORT: u.sportBrevo } : {}   // catégorie Brevo : valeur numérique
+        u.sportBrevo ? { SPORT: u.sportBrevo } : {},  // catégorie Brevo : valeur numérique
+        u.cc ? {
+          CC_SEASONS: u.cc.seasons,
+          CC_SERVICES: u.cc.services,
+          CC_CERT: u.cc.cert,
+          CC_LAST_PLAYED: u.cc.lastPlayed,
+        } : {}
       ),
     };
     const r = await fetch("https://api.brevo.com/v3/contacts", {
@@ -2294,6 +2329,42 @@ async function brevoSyncContact(u) {
     brevoUpdateUser(u.id, `échec (HTTP ${r.status}${detail})`);
   } catch (e) {
     brevoUpdateUser(u.id, "en attente (hors ligne)");
+  }
+}
+
+/* ================= Signaux d'usage (P4) ==============================
+   Quatre indicateurs agrégés sur l'usage de la plateforme, rattachés au
+   compte déjà présent au CRM : nombre de saisons terminées, services
+   C'mon Sports essayés dans le jeu, certification atteinte, dernière
+   partie. Ils décrivent l'usage du produit, pas la navigation : ni page
+   vue, ni clic, ni adresse IP, ni traceur. Ils sont annoncés dans la
+   politique de confidentialité et restitués dans l'export RGPD.
+
+   Le mode démo n'en produit aucun : le club affiché n'est pas le joueur. */
+function ccSignals(s) {
+  if (!s) return null;
+  return {
+    seasons: Math.max(0, (s.season || 1) - 1),
+    services: SERVICES.filter(sv => serviceActive(s, sv.id)).map(sv => sv.name).join(", "),
+    cert: certification(s).label,
+    lastPlayed: new Date().toISOString().slice(0, 10),   // AAAA-MM-JJ attendu par Brevo
+  };
+}
+
+let ccTimer = null;
+function ccTrack() {
+  if (demoMode || !currentUser || !state) return;
+  const sig = ccSignals(state);
+  const users = loadUsers();
+  const u = users.find(x => x.id === currentUser.id);
+  if (!u) return;
+  const changed = JSON.stringify(u.cc || null) !== JSON.stringify(sig);
+  u.cc = sig; currentUser.cc = sig;
+  saveUsers(users);
+  // Les achats s'enchaînent : on temporise pour n'envoyer qu'une mise à jour
+  if (changed && localStorage.getItem(BREVO_KEY)) {
+    clearTimeout(ccTimer);
+    ccTimer = setTimeout(() => { if (currentUser && !demoMode) brevoSyncContact(currentUser); }, 15000);
   }
 }
 
@@ -2394,6 +2465,7 @@ function showAdmin() {
       <i class=ic-alert></i> Aucun compte n'a coché l'opt-in : c'est pourquoi la liste Brevo reste vide.
       Seuls les comptes ayant consenti sont transmis.</p>` : ""}
     <div class="choices">
+      <button id="admin-demo"><i class=ic-play></i> Lancer une démo commerciale</button>
       <button id="admin-test"><i class=ic-target></i> Tester la connexion & la liste</button>
       <button id="admin-testcontact"><i class=ic-mail></i> Envoyer un contact de test</button>
       <button class="primary" id="admin-save">Enregistrer & synchroniser maintenant</button>
@@ -2407,6 +2479,7 @@ function showAdmin() {
     localStorage.setItem(BREVO_LIST_KEY, String(l));
     return { k, l };
   };
+  $("#admin-demo").onclick = () => { closeModal(); showDemoSetup(); };
   $("#admin-test").onclick = async () => {
     const { k, l } = readInputs();
     if (!k) { $("#admin-diag").innerHTML = "<i class=ic-cross></i> Saisissez d'abord une clé API."; return; }
@@ -2440,6 +2513,169 @@ function showAdmin() {
     $("#admin-key").value = ""; $("#admin-diag").innerHTML = "Clé effacée.";
   };
   $("#admin-close").onclick = closeModal;
+}
+
+/* ================= Mode démo commercial (P3) =========================
+   Une partie jouable au nom du club du prospect, préchargée en semaine 12
+   d'une première saison pilotée à l'aveugle : le brouillard de données est
+   déjà installé, le comité déjà tiède. Il ne reste qu'à ouvrir l'onglet
+   C'mon Sports pour montrer ce que l'accompagnement dissipe.
+
+   Trois garanties, parce qu'une démo se joue devant quelqu'un :
+   — aucune écriture Brevo (garde-fou dans brevoSyncContact) ;
+   — sauvegarde dans une clé dédiée, la partie personnelle est intacte ;
+   — état entièrement déterministe : aucun tirage aléatoire, donc aucune
+     surprise en rendez-vous. */
+const DEMO_SAVE_KEY = "mktclubgm_demo";
+const DEMO_FLAG = "mktclubgm_demo_on";
+let demoMode = false;
+try { demoMode = sessionStorage.getItem(DEMO_FLAG) === "1"; } catch (e) {}
+
+function showDemoSetup() {
+  if (!isAdmin()) return;
+  const opts = CLUBS.map(c => `<option value="${c.id}">${esc(c.sport)}</option>`).join("");
+  showModal(`
+    <h2><i class=ic-target></i> Mode démo commercial</h2>
+    <p style="font-size:13px">Lance une partie au nom du club en face de vous, déjà engagée en
+    semaine 12 — score DMOS dans le flou, valeur de fanbase inconnue, comité qui doute.
+    <b style="color:var(--text)">Aucune donnée n'est envoyée à Brevo</b> et votre partie personnelle
+    n'est pas touchée.</p>
+    <input type="text" id="demo-name" maxlength="46" placeholder="Nom du club prospect" autocomplete="off">
+    <input type="text" id="demo-city" maxlength="34" placeholder="Ville (optionnel)" autocomplete="off">
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <select id="demo-sport" style="flex:1 1 150px">${opts}</select>
+      <select id="demo-div" style="flex:1 1 150px">
+        <option value="1">Élite / 1re division</option>
+        <option value="2">2e division</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <input type="text" id="demo-fans" inputmode="numeric" style="flex:1 1 150px" placeholder="Fans (estimation)">
+      <input type="text" id="demo-contacts" inputmode="numeric" style="flex:1 1 150px" placeholder="Contacts CRM">
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:2px">
+      Fans et contacts sont facultatifs — à défaut, les ordres de grandeur du sport choisi s'appliquent.</p>
+    <div class="choices">
+      <button class="primary" id="demo-go"><i class=ic-play></i> Lancer la démo</button>
+      <button id="demo-cancel">Annuler</button>
+    </div>`);
+  const syncPlaceholders = () => {
+    const t = CLUBS.find(c => c.id === $("#demo-sport").value);
+    $("#demo-fans").placeholder = `Fans (ex. ${fmt(t.fans)})`;
+    $("#demo-contacts").placeholder = `Contacts CRM (ex. ${fmt(t.contacts)})`;
+    $("#demo-div").value = String(t.division);
+  };
+  $("#demo-sport").onchange = syncPlaceholders;
+  syncPlaceholders();
+  $("#demo-cancel").onclick = closeModal;
+  $("#demo-name").onkeydown = e => { if (e.key === "Enter") $("#demo-go").click(); };
+  $("#demo-go").onclick = () => {
+    const name = $("#demo-name").value.trim();
+    if (!name) { $("#demo-name").focus(); return; }
+    const tpl = CLUBS.find(c => c.id === $("#demo-sport").value);
+    const num = sel => parseInt(String($(sel).value).replace(/[^\d]/g, ""), 10) || 0;
+    closeModal();
+    startDemo({
+      name,
+      city: $("#demo-city").value.trim() || tpl.city,
+      tpl,
+      division: parseInt($("#demo-div").value, 10) || tpl.division,
+      fans: num("#demo-fans"),
+      contacts: num("#demo-contacts"),
+    });
+  };
+}
+
+/* Construit le club du prospect à partir du gabarit de son sport :
+   les grandeurs dépendantes de la taille (budget, capacité) suivent le
+   rapport de fanbase, pour que l'économie affichée reste crédible. */
+function demoClubFrom(o) {
+  const t = o.tpl;
+  const fans = clamp(o.fans || t.fans, 800, 400000);
+  const scale = fans / t.fans;
+  const initials = o.name.split(/[\s-]+/).filter(Boolean).slice(0, 3)
+    .map(w => w[0].toUpperCase()).join("") || t.code;
+  return {
+    id: t.id, color: t.color, icon: t.icon, sport: t.sport,
+    code: initials, name: o.name, city: o.city,
+    division: o.division,
+    desc: `${o.name} — démonstration Club Catalist.`,
+    fans,
+    contacts: clamp(o.contacts || Math.round(t.contacts * scale), 60, fans),
+    engagement: t.engagement,
+    budget: Math.round(t.budget * clamp(scale, 0.35, 3) / 500) * 500,
+    strength: t.strength,
+    capacity: Math.max(400, Math.round(t.capacity * clamp(scale, 0.4, 2.5) / 100) * 100),
+    ticket: t.ticket,
+    dmos: { ...t.dmos },
+  };
+}
+
+function startDemo(o) {
+  const club = demoClubFrom(o);
+  demoMode = true;
+  try { sessionStorage.setItem(DEMO_FLAG, "1"); } catch (e) {}
+  newGame(club, 1);                 // comité exigeant : la démo doit avoir un enjeu
+  state.demoClub = club;
+  state.demo = true;
+  demoFastForward(state, club);
+  save();
+  startGame();
+}
+
+/* Avance la partie à la semaine 12 sans tirage aléatoire : une saison
+   « normale » de club qui travaille sans mesurer. Les objectifs restent
+   calés sur les valeurs de début de saison — ils étaient déjà fixés. */
+function demoFastForward(s, club) {
+  s.week = 12;
+  s.fans = Math.round(club.fans * 1.035);
+  s.contacts = Math.round(club.contacts * 1.06);
+  s.engagement = clamp(club.engagement - 3, 5, 100);
+  s.dataQuality = clamp(s.dataQuality - 0.8, 0, 10);
+  s.budget = Math.round(club.budget * 0.68);
+  s.boardConfidence = clamp(s.boardConfidence - 13, 0, 100);
+  s.emailFatigue = 24;
+  s.dmos.contenu = clamp(s.dmos.contenu + 1, 0, 10);
+  s.sponsors.forEach((sp, i) => { sp.satisfaction = i === 0 ? 54 : 47; });
+  Object.assign(s.seasonStats, {
+    wins: 6, losses: 5,
+    ticketRevenue: Math.round(club.capacity * club.ticket * 0.62 * 5),
+    sponsorRevenue: Math.round(s.sponsors.reduce((t, sp) => t + sp.amount, 0) * 0.42),
+    merchRevenue: Math.round(club.fans * 0.42),
+  });
+  s.seasonStats.revenue = s.seasonStats.ticketRevenue + s.seasonStats.sponsorRevenue + s.seasonStats.merchRevenue;
+  const n = club.name;
+  s.log = [
+    { w:11, season:1, msg:`<i class=ic-alert></i> Le comité réclame un point d'étape chiffré. Sans mesure, ${esc(n)} ne peut présenter que des impressions.`, cls:"bad" },
+    { w:10, season:1, msg:`<i class=ic-mail></i> Campagne e-mail envoyée à toute la base : 41 % d'ouvertures, 96 désabonnements. Segmentation impossible en l'état.`, cls:"bad" },
+    { w:9,  season:1, msg:`<i class=ic-check></i> Belle affluence au dernier match à domicile. Combien de ces spectateurs sont dans le CRM ? Personne ne le sait.`, cls:"" },
+    { w:8,  season:1, msg:`<i class=ic-target></i> Un sponsor demande la valeur de l'audience avant de renouveler. Aucun chiffre à lui opposer.`, cls:"bad" },
+    { w:6,  season:1, msg:`<i class=ic-check></i> Série de trois victoires : +${fmt(Math.round(club.fans*0.018))} fans sur les réseaux.`, cls:"good" },
+    { w:4,  season:1, msg:`<i class=ic-alert></i> Doublons et adresses mortes détectés à la main dans le fichier contacts. Nettoyage repoussé faute de procédure.`, cls:"bad" },
+    { w:2,  season:1, msg:`<i class=ic-check></i> Lancement de la saison : contenus réguliers, engagement en hausse.`, cls:"good" },
+    { w:1,  season:1, msg:`Bienvenue au ${esc(n)} ! Le comité attend des résultats dès cette saison.`, cls:"" },
+  ];
+}
+
+function exitDemo() {
+  if (!confirm("Quitter le mode démo et effacer la partie de démonstration ?")) return;
+  localStorage.removeItem(DEMO_SAVE_KEY);
+  try { sessionStorage.removeItem(DEMO_FLAG); } catch (e) {}
+  demoMode = false;
+  location.reload();
+}
+
+function renderDemoBanner() {
+  const el = $("#demo-banner");
+  if (!el) return;
+  el.classList.toggle("hidden", !demoMode);
+  if (demoMode) {
+    const c = clubOf(state) || {};
+    el.innerHTML = `<span><i class=ic-target></i> <b>Mode démo</b> — ${esc(c.name || "")} ·
+      aucune donnée transmise au CRM</span>
+      <button id="demo-exit">Quitter la démo</button>`;
+    $("#demo-exit").onclick = exitDemo;
+  }
 }
 
 function logout() {
@@ -2477,15 +2713,20 @@ function showPrivacy(fromConsent = false) {
       <h4>Quelles données ?</h4>
       Adresse e-mail (identifiant de compte), pseudo affiché, et — uniquement si vous les renseignez —
       votre organisation, votre rôle et le sport de votre premier club joué. Code PIN haché (SHA-256 salé, jamais stocké en clair),
-      sauvegardes de jeu, horodatage du consentement, choix d'opt-in marketing. Pas d'adresse IP collectée,
-      pas de cookie, pas de traceur, pas d'outil d'analyse d'audience.
+      sauvegardes de jeu, horodatage du consentement, choix d'opt-in marketing.
+      S'y ajoutent quatre <b style="color:var(--text)">indicateurs d'usage agrégés</b> : nombre de saisons terminées,
+      services C'mon Sports essayés dans le jeu, niveau de certification atteint et date de la dernière partie.
+      Pas d'adresse IP collectée, pas de cookie, pas de traceur, pas d'outil d'analyse d'audience :
+      aucune page vue ni aucun clic n'est enregistré.
       <h4>Où et comment ?</h4>
       <b style="color:var(--text)">Sur votre appareil</b> — sauvegardes de jeu, code PIN haché et horodatage du consentement
       restent dans le stockage local (localStorage) de ce navigateur.<br>
       <b style="color:var(--text)">Chez notre sous-traitant Brevo</b> (Sendinblue SAS, France — hébergement UE) — votre adresse
-      e-mail, votre pseudo et le marqueur de solution Club Catalist y sont enregistrés dès la création du compte, afin de
-      gérer les comptes de la plateforme et d'en mesurer l'usage. Base légale : <b style="color:var(--text)">intérêt légitime</b>
-      (art. 6 §1 f RGPD), avec droit d'opposition.<br>
+      e-mail, votre pseudo, le marqueur de solution Club Catalist, les informations facultatives que vous avez
+      renseignées et les quatre indicateurs d'usage ci-dessus y sont enregistrés, afin de gérer les comptes de la
+      plateforme, d'en mesurer l'usage et d'adapter nos échanges commerciaux à votre intérêt pour nos services.
+      Base légale : <b style="color:var(--text)">intérêt légitime</b> (art. 6 §1 f RGPD), avec droit d'opposition —
+      il suffit d'un e-mail pour que ces indicateurs cessent d'être transmis et soient effacés.<br>
       <b style="color:var(--text)">Envois marketing</b> — uniquement si vous avez coché l'inscription aux actualités
       (consentement, art. 6 §1 a RGPD). À défaut, votre contact est techniquement marqué comme exclu des campagnes chez Brevo :
       aucune newsletter ne peut vous être adressée, même par erreur de ciblage.
@@ -2520,6 +2761,10 @@ function exportMyData() {
     consentement_information: localStorage.getItem(CONSENT_KEY),
     optin_actualites: !!currentUser.optIn,
     statut_brevo: currentUser.brevo || "non (pas d'opt-in)",
+    signaux_usage_transmis: currentUser.cc
+      ? { saisons_terminees: currentUser.cc.seasons, services_essayes: currentUser.cc.services,
+          certification: currentUser.cc.cert, derniere_partie: currentUser.cc.lastPlayed }
+      : null,
     sauvegarde_de_jeu: saveData,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -2596,6 +2841,8 @@ function showDifficultyChoice(club) {
 
 function startGame() {
   showScreen("screen-game");
+  renderDemoBanner();
+  ccTrack();
   $("#game-user").innerHTML = currentUser ? '<i class=ic-user></i> ' + esc(currentUser.pseudo) : "";
   prevKpis = null;
   renderAll();
@@ -2635,6 +2882,8 @@ $("#link-admin").onclick = showAdmin;
 // et tentative de synchronisation des contacts opt-in en attente
 if (!localStorage.getItem(CONSENT_KEY)) showConsent();
 else initAuth();
+// Un rafraîchissement en plein rendez-vous ne doit pas coûter la démo
+if (demoMode) { const d = load(); if (d) { state = d; startGame(); } }
 brevoFlushQueue();
 </script>
 </body>
