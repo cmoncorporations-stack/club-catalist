@@ -421,6 +421,25 @@ tbody tr:hover{background:var(--brand-soft)}
 .calc-note{font-size:var(--t0);color:var(--ink-3);line-height:1.5;padding:2px 0 6px}
 .kpi .lbl .info-btn{width:16px;height:16px;font-size:10.5px;vertical-align:-.18em;margin-left:5px}
 
+/* Sorties de conversion */
+select{font-family:inherit;font-size:var(--t2);color:var(--ink);background:var(--sunken);
+  border:1px solid var(--edge);border-radius:var(--r);padding:12px 15px;width:100%;
+  outline:none;margin-bottom:9px;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 21px) 55%,calc(100% - 15px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+select:focus{border-color:var(--brand-line);box-shadow:0 0 0 3px var(--brand-soft)}
+select option{background:var(--card);color:var(--ink)}
+.cta-out{margin-top:16px;padding:14px 16px;border:1px solid var(--brand-line);border-radius:var(--r);
+  background:linear-gradient(100deg,var(--brand-soft),transparent 70%);font-size:var(--t1);
+  color:var(--ink-2);line-height:1.6}
+.cta-out b{display:block;color:var(--ink);margin-bottom:3px}
+.cta-out a{display:inline-block;margin-top:7px;font-weight:800;color:var(--brand)}
+.cta-out a:hover{color:var(--brand-2);text-decoration:underline}
+.cta-line{font-size:var(--t1);color:var(--ink-3);margin-top:14px}
+.cta-line a{font-weight:800}
+.out-link{display:inline-block;margin-top:8px;font-size:var(--t1);font-weight:800;color:var(--brand)}
+.out-link:hover{color:var(--brand-2);text-decoration:underline}
+
 /* ── Blasons ──────────────────────────────────────────────────────────── */
 .crest{display:block;width:100%;height:100%;overflow:visible}
 .crest-field{fill:rgba(4,9,18,.72)}
@@ -527,6 +546,15 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
         <div style="display:flex; flex-direction:column; gap:8px">
           <input type="text" id="new-email" maxlength="80" inputmode="email" autocomplete="email" placeholder="Adresse e-mail">
           <input type="text" id="new-pseudo" maxlength="20" placeholder="Pseudo affiché (optionnel)">
+          <input type="text" id="new-org" maxlength="60" autocomplete="organization" placeholder="Votre organisation — club, ligue… (optionnel)">
+          <select id="new-role" aria-label="Votre rôle">
+            <option value="">Votre rôle (optionnel)</option>
+            <option>Direction générale</option>
+            <option>Marketing & communication</option>
+            <option>Sponsoring & commercial</option>
+            <option>Data & billetterie</option>
+            <option>Autre</option>
+          </select>
           <input type="password" id="new-pin" maxlength="8" inputmode="numeric" placeholder="Code PIN 4-8 chiffres (optionnel)">
           <label style="display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--muted); line-height:1.5; cursor:pointer">
             <input type="checkbox" id="new-optin" style="margin-top:2px; accent-color:#62BEF5">
@@ -1151,6 +1179,21 @@ let state = null;
 let selected = {};   // actionId -> count (sélection de la semaine en cours)
 
 function newGame(club, difficulty = 1) {
+  // Qualification : le sport du premier club choisi renseigne le profil
+  // (valeurs de la catégorie Brevo SPORT : basket 1, foot 2, hockey 4, volley 6).
+  if (currentUser && !currentUser.sportBrevo) {
+    const sportMap = { hc: 4, fc: 2, bb: 1, vb: 6 };
+    currentUser.sportBrevo = sportMap[club.id];
+    const users = loadUsers();
+    const uu = users.find(x => x.id === currentUser.id);
+    if (uu) {
+      uu.sportBrevo = currentUser.sportBrevo;
+      // repasse le contact en file : la prochaine synchro portera le sport
+      if (/^(synchronisé|déjà connu)/.test(String(uu.brevo || ""))) uu.brevo = "en attente (mise à jour du profil)";
+      saveUsers(users);
+    }
+    brevoSyncContact(currentUser);
+  }
   state = {
     version: 5,
     clubId: club.id,
@@ -1856,6 +1899,8 @@ function showDmosInfo() {
       : `<b>Tant que votre club n'a pas commandé l'Audit DMOS</b>, ces scores restent des estimations internes —
          affichés en fourchette, et aucune certification n'est possible. C'est précisément ce que débloque
          l'audit dans l'onglet C'mon Sports.`}</p>
+    <p class="cta-line">Le DMOS n'est pas qu'une mécanique de jeu :
+      <a href="${BOOKING_URL}" target="_blank" rel="noopener">parlez-en 30 minutes avec C'mon Sports</a>.</p>
     <div class="choices"><button class="primary" id="dmos-info-close">Fermer</button></div>`);
   $("#dmos-info-close").onclick = closeModal;
 }
@@ -1903,7 +1948,8 @@ function renderDmos() {
         `<i class=ic-beaker></i> Qualité des données : <span style="color:var(--muted)">inconnue</span><br>`) +
     `<i class=ic-pulse></i> Engagement : ${Math.round(state.engagement)} %<br>` +
     (pro
-      ? `<span style="font-size:12px">Formule : contacts × (1,5 + qualité×0,6) × (0,5 + engagement/100) · ROI ticketing & merch optimisés</span>`
+      ? `<span style="font-size:12px">Formule : contacts × (1,5 + qualité×0,6) × (0,5 + engagement/100) · ROI ticketing & merch optimisés</span><br>
+         <a class="out-link" href="${FANLAB_CALC_URL}" target="_blank" rel="noopener">Calculez la valeur réelle de votre fanbase — Fan Lab</a>`
       : insight
         ? `<span style="font-size:12px; color:var(--accent)"><i class=ic-lock></i> Passez à <b>Fan Lab Pro</b> (onglet <i class=ic-launch></i> C'mon Sports) pour chiffrer la valeur de votre audience et convaincre les sponsors.</span>`
         : `<span style="font-size:12px; color:var(--accent)"><i class=ic-lock></i> Commandez <b>Fan Lab Insight</b> ou <b>Pro</b> (onglet <i class=ic-launch></i> C'mon Sports) pour mesurer et valoriser votre fanbase.</span>`);
@@ -2033,6 +2079,10 @@ function showGameOver() {
         <i class=ic-launch></i> Accompagnement : ${usedServices.length ? usedServices.join(", ") : "aucun — le club a piloté à l'aveugle"}
       </div>
     </div>
+    <div class="cta-out">
+      <b>Et pour votre vrai club ?</b> Ce bilan est une fiction — le diagnostic DMOS, lui, existe.
+      <a href="${BOOKING_URL}" target="_blank" rel="noopener">Réserver un échange de 30 minutes</a>
+    </div>
     <button class="primary" style="width:100%;margin-top:12px" id="btn-restart"><i class=ic-arrow></i> Recommencer une carrière</button>`);
   $("#btn-restart").onclick = () => { localStorage.removeItem(currentSaveKey()); location.reload(); };
 }
@@ -2123,6 +2173,8 @@ async function createProfile() {
   const email = $("#new-email").value.trim().toLowerCase();
   const pseudoInput = $("#new-pseudo").value.trim();
   const pin = $("#new-pin").value.trim();
+  const org = $("#new-org").value.trim().slice(0, 60);
+  const role = $("#new-role").value;
   const optIn = $("#new-optin").checked;
   const err = $("#create-error");
   err.textContent = "";
@@ -2132,7 +2184,7 @@ async function createProfile() {
   if (users.some(u => (u.email || "").toLowerCase() === email)) { err.textContent = "Un compte existe déjà avec cette adresse sur cet appareil."; return; }
   const pseudo = pseudoInput || email.split("@")[0];
   const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b => b.toString(16).padStart(2, "0")).join("");
-  const u = { id: "u" + Date.now().toString(36) + salt.slice(0, 4), email, pseudo, salt,
+  const u = { id: "u" + Date.now().toString(36) + salt.slice(0, 4), email, pseudo, org, role, salt,
               pinHash: pin ? await hashPin(pin, salt) : null,
               optIn, brevo: "en attente",
               createdAt: new Date().toISOString() };
@@ -2150,6 +2202,10 @@ async function createProfile() {
    CMON_SOLUTION_CLUBCATALIST (créé automatiquement au besoin).
    Sans clé API configurée (<i class=ic-sliders></i> Admin) ou hors ligne, les contacts
    sont mis en file d'attente locale et synchronisés plus tard. */
+/* Sorties de conversion — liens tracés pour mesurer ce que le jeu apporte */
+const BOOKING_URL = "https://calendly.com/meeting-douglas-finazzi/c-mon-sports-huddle-clone?utm_source=clubcatalist&utm_medium=game";
+const FANLAB_CALC_URL = "https://fanlab.cmon-sports.com/calculator?utm_source=clubcatalist&utm_medium=game";
+
 const BREVO_KEY = "mktclubgm_brevo_key";
 const BREVO_LIST_KEY = "mktclubgm_brevo_list";
 // Suffixe de version : à incrémenter dès que la liste des attributs change,
@@ -2208,11 +2264,12 @@ async function brevoSyncContact(u) {
       emailBlacklisted: !u.optIn,
       // NB : ne pas envoyer SOURCE_ACQUISITION — c'est un attribut « catégorie »
       // à valeurs figées côté Brevo, un texte libre y provoquerait un HTTP 400.
-      attributes: {
-        [BREVO_ATTR]: true,
-        OPT_IN: !!u.optIn,
-        [BREVO_ATTR_PSEUDO]: u.pseudo || "",
-      },
+      attributes: Object.assign(
+        { [BREVO_ATTR]: true, OPT_IN: !!u.optIn, [BREVO_ATTR_PSEUDO]: u.pseudo || "" },
+        u.org ? { COMPANY: u.org } : {},
+        u.role ? { JOB_TITLE: u.role } : {},
+        u.sportBrevo ? { SPORT: u.sportBrevo } : {}   // catégorie Brevo : valeur numérique
+      ),
     };
     const r = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST", headers: brevoHeaders(key), body: JSON.stringify(payload),
@@ -2418,7 +2475,8 @@ function showPrivacy(fromConsent = false) {
       <h4>Responsable du traitement</h4>
       C'mon Corporations SàRL (C'mon Sports), La Chaux-de-Fonds, Suisse — douglas@cmon-sports.com
       <h4>Quelles données ?</h4>
-      Adresse e-mail (identifiant de compte), pseudo affiché, code PIN haché (SHA-256 salé, jamais stocké en clair),
+      Adresse e-mail (identifiant de compte), pseudo affiché, et — uniquement si vous les renseignez —
+      votre organisation, votre rôle et le sport de votre premier club joué. Code PIN haché (SHA-256 salé, jamais stocké en clair),
       sauvegardes de jeu, horodatage du consentement, choix d'opt-in marketing. Pas d'adresse IP collectée,
       pas de cookie, pas de traceur, pas d'outil d'analyse d'audience.
       <h4>Où et comment ?</h4>
