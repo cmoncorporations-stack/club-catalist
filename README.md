@@ -19,6 +19,8 @@ sous peine de licenciement.
   les charges et les attentes des fans
 - **Score DMOS** (6 piliers /60), **valorisation Fan Lab**, portefeuille sponsors,
   taux de pénétration du bassin CRM
+- **Mode défi** : un code fige la saison entière — mêmes événements pour tous, scores comparables
+- **Carte de partage** : une image 1200×630 du bilan, générée dans le navigateur
 
 ### Le rôle de C'mon Sports
 
@@ -27,6 +29,18 @@ valeur de la fanbase inconnue, qualité des données invisible. L'onglet **C'mon
 donne accès aux vraies solutions — Audit DMOS, Fan Lab Insight & Pro, Data Factory,
 Blue Penguin, Griddy Picks — qui révèlent ces indicateurs et transforment durablement
 le tableau de bord.
+
+### Trois langues
+
+Français, allemand (orthographe suisse) et anglais, au choix depuis le pied de page.
+Le français est la **langue source** : il reste écrit en clair dans le balisage, dans les
+tables de contenu et à l'appel de `tr()`, si bien que le fichier se relit sans dictionnaire.
+Les autres langues le remplacent au démarrage depuis l'objet `TX` ; une clé absente
+retombe automatiquement sur le français plutôt que d'afficher un identifiant technique.
+
+Les valeurs envoyées au CRM restent volontairement en français (rôle déclaré à
+l'inscription) afin de rester comparables d'une langue à l'autre ; la langue d'usage
+part de son côté dans l'attribut `CC_LANG`.
 
 ## Technique
 
