@@ -1388,7 +1388,7 @@ function newGame(club, difficulty = 1, challenge = null) {
     if (uu) {
       uu.sportBrevo = currentUser.sportBrevo;
       // repasse le contact en file : la prochaine synchro portera le sport
-      if (/^(synchronisé|déjà connu)/.test(String(uu.brevo || ""))) uu.brevo = "en attente (mise à jour du profil)";
+      if (brevoIsSynced(uu)) uu.brevo = { code: "profile" };
       saveUsers(users);
     }
     brevoSyncContact(currentUser);
@@ -2642,7 +2642,7 @@ async function createProfile() {
   const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b => b.toString(16).padStart(2, "0")).join("");
   const u = { id: "u" + Date.now().toString(36) + salt.slice(0, 4), email, pseudo, org, role, lang, salt,
               pinHash: pin ? await hashPin(pin, salt) : null,
-              optIn, brevo: "en attente",
+              optIn, brevo: { code: "pending" },
               createdAt: new Date().toISOString() };
   users.push(u); saveUsers(users);
   // migration : une sauvegarde d'avant les profils est rattachée au premier profil créé
@@ -2675,6 +2675,49 @@ const BREVO_LIST_DEFAULT = 63; // liste « Club Catalist » côté Brevo
 function brevoListId() { return parseInt(localStorage.getItem(BREVO_LIST_KEY) || BREVO_LIST_DEFAULT, 10); }
 function brevoHeaders(key) {
   return { "api-key": key, "content-type": "application/json", accept: "application/json" };
+}
+
+/* ================= Statut de synchronisation ==========================
+   Le statut était stocké en français dans le profil, et le code filtrait
+   dessus par expression régulière. Traduit tel quel, « synchronisé » serait
+   devenu « synchronisiert » et la file de synchronisation aurait rejoué
+   indéfiniment les mêmes contacts. Le statut est donc désormais un code
+   avec ses paramètres ; la phrase se compose à l'affichage, dans la langue
+   du moment. Les profils créés avant ce changement portent encore une
+   chaîne : les accesseurs ci-dessous les acceptent toujours. */
+const BREVO_STATUS = {
+  pending: () => tr("adm.st.pending", null, "en attente"),
+  nokey:   () => tr("adm.st.nokey", null, "en attente (clé API non configurée)"),
+  profile: () => tr("adm.st.profile", null, "en attente (mise à jour du profil)"),
+  offline: () => tr("adm.st.offline", null, "en attente (hors ligne)"),
+  synced:  s => tr("adm.st.synced", {v0: s.listId, v1: s.optIn
+                     ? tr("adm.st.optin", null, "avec opt-in")
+                     : tr("adm.st.nooptin", null, "sans opt-in — exclu des envois"),
+                   v2: dateLocale(s.date)}, `synchronisé (liste {v0}, {v1}) le {v2}`),
+  known:   s => tr("adm.st.known", {v0: s.listId}, `déjà connu — rattaché à la liste {v0}`),
+  failed:  s => tr("adm.st.failed", {v0: s.http, v1: s.detail || ""}, `échec (HTTP {v0}{v1})`),
+};
+const DATE_LOCALES = { fr: "fr-CH", de: "de-CH", en: "en-GB" };
+function dateLocale(iso) {
+  try { return new Date(iso).toLocaleDateString(DATE_LOCALES[lang] || "fr-CH"); }
+  catch (e) { return iso; }
+}
+function brevoStatusText(u) {
+  const s = u && u.brevo;
+  if (!s) return "—";
+  if (typeof s === "string") return s;          // profil antérieur au changement
+  const f = BREVO_STATUS[s.code];
+  return f ? f(s) : "—";
+}
+function brevoIsSynced(u) {
+  const s = u && u.brevo;
+  if (typeof s === "string") return /^(synchronisé|déjà connu)/.test(s);
+  return !!s && (s.code === "synced" || s.code === "known");
+}
+function brevoFailed(u) {
+  const s = u && u.brevo;
+  if (typeof s === "string") return /échec/.test(s);
+  return !!s && s.code === "failed";
 }
 
 function brevoUpdateUser(uid, status) {
@@ -2717,7 +2760,7 @@ async function brevoSyncContact(u) {
   if (!u.email) return;                       // profils hérités sans adresse
   if (demoMode) return;                       // démo commerciale : aucune écriture CRM
   const key = localStorage.getItem(BREVO_KEY);
-  if (!key) { brevoUpdateUser(u.id, "en attente (clé API non configurée)"); return; }
+  if (!key) { brevoUpdateUser(u.id, { code: "nokey" }); return; }
   const listId = brevoListId();
   try {
     await brevoEnsureAttributes(key);
@@ -2749,8 +2792,7 @@ async function brevoSyncContact(u) {
       method: "POST", headers: brevoHeaders(key), body: JSON.stringify(payload),
     });
     if (r.ok || r.status === 204) {
-      const suffix = u.optIn ? "avec opt-in" : "sans opt-in — exclu des envois";
-      brevoUpdateUser(u.id, `synchronisé (liste ${listId}, ${suffix}) le ` + new Date().toLocaleDateString("fr-CH"));
+      brevoUpdateUser(u.id, { code: "synced", listId, optIn: !!u.optIn, date: new Date().toISOString() });
       return;
     }
     // Brevo renvoie parfois « contact déjà existant » : on le rattache alors explicitement à la liste
@@ -2759,15 +2801,15 @@ async function brevoSyncContact(u) {
         method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ emails: [u.email] }),
       });
       if (add.ok || add.status === 204) {
-        brevoUpdateUser(u.id, `déjà connu — rattaché à la liste ${listId}`);
+        brevoUpdateUser(u.id, { code: "known", listId });
         return;
       }
     }
     let detail = "";
     try { const j = await r.json(); detail = j.message ? " — " + j.message : ""; } catch (e) {}
-    brevoUpdateUser(u.id, `échec (HTTP ${r.status}${detail})`);
+    brevoUpdateUser(u.id, { code: "failed", http: r.status, detail });
   } catch (e) {
-    brevoUpdateUser(u.id, "en attente (hors ligne)");
+    brevoUpdateUser(u.id, { code: "offline" });
   }
 }
 
@@ -2809,8 +2851,7 @@ function ccTrack() {
 
 function brevoFlushQueue() {
   if (!localStorage.getItem(BREVO_KEY)) return;
-  loadUsers().filter(u => u.email && !String(u.brevo || "").startsWith("synchronisé")
-                                  && !String(u.brevo || "").startsWith("déjà connu"))
+  loadUsers().filter(u => u.email && !brevoIsSynced(u))
              .forEach(u => brevoSyncContact(u));
 }
 
@@ -2825,17 +2866,17 @@ async function brevoSendTest(key, listId, email) {
         attributes: { [BREVO_ATTR]: true, [BREVO_ATTR_PSEUDO]: "Test Club Catalist" },
       }),
     });
-    if (r.ok || r.status === 204) return `<i class=ic-check></i> Contact de test « ${esc(email)} » envoyé dans la liste #${listId}`;
+    if (r.ok || r.status === 204) return tr("adm.1a2173", {v0: esc(email), v1: listId}, `<i class=ic-check></i> Contact de test « {v0} » envoyé dans la liste #{v1}`);
     let detail = "";
     try { const j = await r.json(); detail = j.message ? " — " + j.message : ""; } catch (e) {}
     if (r.status === 400) {
       const add = await fetch(`https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`, {
         method: "POST", headers: brevoHeaders(key), body: JSON.stringify({ emails: [email] }),
       });
-      if (add.ok || add.status === 204) return `<i class=ic-check></i> Contact déjà connu — rattaché à la liste #${listId}`;
+      if (add.ok || add.status === 204) return tr("adm.072a6d", {v0: listId}, `<i class=ic-check></i> Contact déjà connu — rattaché à la liste #{v0}`);
     }
-    return `<i class=ic-cross></i> Échec HTTP ${r.status}${esc(detail)}`;
-  } catch (e) { return "<i class=ic-cross></i> Réseau : " + esc(e.message); }
+    return tr("adm.2207c0", {v0: r.status, v1: esc(detail)}, `<i class=ic-cross></i> Échec HTTP {v0}{v1}`);
+  } catch (e) { return tr("adm.56e2bf", null, "<i class=ic-cross></i> Réseau : ") + esc(e.message); }
 }
 
 /* Diagnostic complet : clé valide ? liste accessible ? combien de contacts ? */
@@ -2845,64 +2886,65 @@ async function brevoDiagnose(key, listId) {
     const acc = await fetch("https://api.brevo.com/v3/account", { headers: brevoHeaders(key) });
     if (acc.ok) {
       const j = await acc.json();
-      out.push(`<i class=ic-check></i> Clé API valide — compte ${esc(j.companyName || j.email || "Brevo")}`);
+      out.push(tr("adm.31bb71", {v0: esc(j.companyName || j.email || "Brevo")}, `<i class=ic-check></i> Clé API valide — compte {v0}`));
     } else {
-      out.push(`<i class=ic-cross></i> Clé API refusée (HTTP ${acc.status})`);
+      out.push(tr("adm.5c7594", {v0: acc.status}, `<i class=ic-cross></i> Clé API refusée (HTTP {v0})`));
       return out;
     }
-  } catch (e) { return ["<i class=ic-cross></i> Impossible de joindre Brevo (réseau / hors ligne)"]; }
+  } catch (e) { return [tr("adm.8c4665", null, "<i class=ic-cross></i> Impossible de joindre Brevo (réseau / hors ligne)")]; }
   try {
     const l = await fetch(`https://api.brevo.com/v3/contacts/lists/${listId}`, { headers: brevoHeaders(key) });
     if (l.ok) {
       const j = await l.json();
-      out.push(`<i class=ic-check></i> Liste #${listId} « ${esc(j.name)} » — ${j.uniqueSubscribers ?? j.totalSubscribers ?? 0} contact(s)`);
+      out.push(tr("adm.c06700", {v0: listId, v1: esc(j.name), v2: j.uniqueSubscribers ?? j.totalSubscribers ?? 0},
+        `<i class=ic-check></i> Liste #{v0} « {v1} » — {v2} contact(s)`));
     } else {
-      out.push(`<i class=ic-cross></i> Liste #${listId} introuvable (HTTP ${l.status}) — vérifiez le numéro`);
+      out.push(tr("adm.3dce22", {v0: listId, v1: l.status}, `<i class=ic-cross></i> Liste #{v0} introuvable (HTTP {v1}) — vérifiez le numéro`));
     }
-  } catch (e) { out.push("<i class=ic-cross></i> Liste : erreur réseau"); }
+  } catch (e) { out.push(tr("adm.7a02c8", null, "<i class=ic-cross></i> Liste : erreur réseau")); }
   return out;
 }
 
 function showAdmin() {
   if (!isAdmin()) {
-    showModal(`<h2><i class=ic-lock></i> Accès réservé</h2>
+    showModal(tr("adm.97b4f3", {v0: esc(ADMIN_EMAIL)}, tr("adm.97b4f3", null, `<h2><i class=ic-lock></i> Accès réservé</h2>
       <p>Le panneau d'administration Brevo est réservé au compte
-      <b style="color:var(--text)">${esc(ADMIN_EMAIL)}</b>. Connectez-vous avec ce compte pour y accéder.</p>
-      <div class="choices"><button class="primary" id="na-close">Fermer</button></div>`);
+      <b style="color:var(--text)">{v0}</b>. Connectez-vous avec ce compte pour y accéder.</p>
+      <div class="choices"><button class="primary" id="na-close">Fermer</button></div>`)));
     $("#na-close").onclick = closeModal;
     return;
   }
   const key = localStorage.getItem(BREVO_KEY) || "";
   const users = loadUsers();
   const optIns = users.filter(u => u.optIn);
-  const synced = optIns.filter(u => /^(synchronisé|déjà connu)/.test(String(u.brevo || "")));
+  const synced = optIns.filter(brevoIsSynced);
   // On liste TOUS les comptes : voir « pas d'opt-in » explique à lui seul une liste vide.
   const rows = users.length
     ? users.map(u => {
-        const st = u.optIn ? String(u.brevo || "—") : "pas d'opt-in — non transmis";
+        const st = u.optIn ? brevoStatusText(u) : tr("adm.st.noconsent", null, "pas d'opt-in — non transmis");
         const col = !u.optIn ? "var(--muted)"
-          : /^(synchronisé|déjà connu)/.test(st) ? "var(--good)"
-          : /échec/.test(st) ? "var(--bad)" : "var(--warn)";
+          : brevoIsSynced(u) ? "var(--good)"
+          : brevoFailed(u) ? "var(--bad)" : "var(--warn)";
         return `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">
           <span>${esc(u.email || u.pseudo)}</span><span style="color:${col};font-weight:700;text-align:right">${esc(st)}</span></div>`;
       }).join("")
-    : `<div style="color:var(--muted)">Aucun compte sur cet appareil.</div>`;
-  showModal(`
+    : tr("adm.380ff8", null, `<div style="color:var(--muted)">Aucun compte sur cet appareil.</div>`);
+  showModal(tr("adm.c95505", {v0: esc(key), v1: brevoListId(), v2: users.length, v3: optIns.length, v4: synced.length, v5: rows, v6: optIns.length === 0 && users.length > 0 ? `<p style="font-size:12px;color:var(--warn);line-height:1.5;margin-top:8px">
+      <i class=ic-alert></i> Aucun compte n'a coché l'opt-in : c'est pourquoi la liste Brevo reste vide.
+      Seuls les comptes ayant consenti sont transmis.</p>` : ""}, `
     <h2><i class=ic-sliders></i> Administration — connexion Brevo</h2>
     <p style="font-size:13px">Clé API Brevo (v3) et liste de destination. Stockées uniquement dans ce navigateur.
     <b style="color:var(--warn)">Ne saisissez pas la clé sur un poste public.</b></p>
-    <input type="password" id="admin-key" placeholder="xkeysib-…" value="${esc(key)}" autocomplete="off">
+    <input type="password" id="admin-key" placeholder="xkeysib-…" value="{v0}" autocomplete="off">
     <div style="display:flex; align-items:center; gap:10px; margin-top:8px">
       <span style="font-size:13px; color:var(--muted); white-space:nowrap">Liste n°</span>
-      <input type="text" id="admin-list" inputmode="numeric" value="${brevoListId()}" style="max-width:110px">
+      <input type="text" id="admin-list" inputmode="numeric" value="{v1}" style="max-width:110px">
     </div>
     <div id="admin-diag" style="font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)"></div>
     <p style="font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700">
-      ${users.length} compte(s) · ${optIns.length} avec opt-in · ${synced.length} synchronisé(s)</p>
-    <div style="font-size:12px; max-height:150px; overflow-y:auto">${rows}</div>
-    ${optIns.length === 0 && users.length > 0 ? `<p style="font-size:12px;color:var(--warn);line-height:1.5;margin-top:8px">
-      <i class=ic-alert></i> Aucun compte n'a coché l'opt-in : c'est pourquoi la liste Brevo reste vide.
-      Seuls les comptes ayant consenti sont transmis.</p>` : ""}
+      {v2} compte(s) · {v3} avec opt-in · {v4} synchronisé(s)</p>
+    <div style="font-size:12px; max-height:150px; overflow-y:auto">{v5}</div>
+    {v6}
     <div class="choices">
       <button id="admin-demo"><i class=ic-play></i> Lancer une démo commerciale</button>
       <button id="admin-test"><i class=ic-target></i> Tester la connexion & la liste</button>
@@ -2910,7 +2952,7 @@ function showAdmin() {
       <button class="primary" id="admin-save">Enregistrer & synchroniser maintenant</button>
       <button id="admin-clear">Effacer la clé</button>
       <button id="admin-close">Fermer</button>
-    </div>`);
+    </div>`));
   const readInputs = () => {
     const k = $("#admin-key").value.trim();
     const l = parseInt($("#admin-list").value.trim(), 10) || BREVO_LIST_DEFAULT;
@@ -2921,35 +2963,35 @@ function showAdmin() {
   $("#admin-demo").onclick = () => { closeModal(); showDemoSetup(); };
   $("#admin-test").onclick = async () => {
     const { k, l } = readInputs();
-    if (!k) { $("#admin-diag").innerHTML = "<i class=ic-cross></i> Saisissez d'abord une clé API."; return; }
-    $("#admin-diag").innerHTML = "<i class=ic-hourglass></i> Test en cours…";
+    if (!k) { $("#admin-diag").innerHTML = tr("adm.446233", null, "<i class=ic-cross></i> Saisissez d'abord une clé API."); return; }
+    $("#admin-diag").innerHTML = tr("adm.bdcba7", null, "<i class=ic-hourglass></i> Test en cours…");
     const res = await brevoDiagnose(k, l);
     $("#admin-diag").innerHTML = res.join("<br>");
   };
   $("#admin-testcontact").onclick = async () => {
     const { k, l } = readInputs();
-    if (!k) { $("#admin-diag").innerHTML = "<i class=ic-cross></i> Saisissez d'abord une clé API."; return; }
-    const mail = prompt("Adresse e-mail du contact de test :", ADMIN_EMAIL);
+    if (!k) { $("#admin-diag").innerHTML = tr("adm.446233", null, "<i class=ic-cross></i> Saisissez d'abord une clé API."); return; }
+    const mail = prompt(tr("adm.58f9cd", null, "Adresse e-mail du contact de test :"), ADMIN_EMAIL);
     if (!mail) return;
-    $("#admin-diag").innerHTML = "<i class=ic-hourglass></i> Envoi du contact de test…";
+    $("#admin-diag").innerHTML = tr("adm.934aba", null, "<i class=ic-hourglass></i> Envoi du contact de test…");
     const res = await brevoSendTest(k, l, mail.trim().toLowerCase());
     const diag = await brevoDiagnose(k, l);
     $("#admin-diag").innerHTML = res + "<br>" + diag.join("<br>");
   };
   $("#admin-save").onclick = async () => {
     const { k, l } = readInputs();
-    if (!k) { $("#admin-diag").innerHTML = "<i class=ic-cross></i> Saisissez d'abord une clé API."; return; }
+    if (!k) { $("#admin-diag").innerHTML = tr("adm.446233", null, "<i class=ic-cross></i> Saisissez d'abord une clé API."); return; }
     $("#admin-diag").innerHTML = "<i class=ic-hourglass></i> Synchronisation…";
     localStorage.removeItem(BREVO_ATTR_OK); // re-vérifie l'attribut au cas où
     const targets = loadUsers().filter(u => u.email);
     for (const u of targets) await brevoSyncContact(u);
     const diag = await brevoDiagnose(k, l);
     showAdmin();
-    $("#admin-diag").innerHTML = diag.join("<br>") + `<br><i class=ic-arrow></i> ${targets.length} compte(s) traité(s).`;
+    $("#admin-diag").innerHTML = diag.join("<br>") + tr("adm.e6b539", {v0: targets.length}, tr("adm.e6b539", null, `<br><i class=ic-arrow></i> {v0} compte(s) traité(s).`));
   };
   $("#admin-clear").onclick = () => {
     localStorage.removeItem(BREVO_KEY); localStorage.removeItem(BREVO_ATTR_OK);
-    $("#admin-key").value = ""; $("#admin-diag").innerHTML = "Clé effacée.";
+    $("#admin-key").value = ""; $("#admin-diag").innerHTML = tr("adm.2b99dc", null, "Clé effacée.");
   };
   $("#admin-close").onclick = closeModal;
 }
@@ -2973,7 +3015,7 @@ try { demoMode = sessionStorage.getItem(DEMO_FLAG) === "1"; } catch (e) {}
 function showDemoSetup() {
   if (!isAdmin()) return;
   const opts = CLUBS.map(c => `<option value="${c.id}">${esc(c.sport)}</option>`).join("");
-  showModal(`
+  showModal(tr("adm.f3f027", {v0: opts}, `
     <h2><i class=ic-target></i> Mode démo commercial</h2>
     <p style="font-size:13px">Lance une partie au nom du club en face de vous, déjà engagée en
     semaine 12 — score DMOS dans le flou, valeur de fanbase inconnue, comité qui doute.
@@ -2982,7 +3024,7 @@ function showDemoSetup() {
     <input type="text" id="demo-name" maxlength="46" placeholder="Nom du club prospect" autocomplete="off">
     <input type="text" id="demo-city" maxlength="34" placeholder="Ville (optionnel)" autocomplete="off">
     <div style="display:flex;gap:9px;flex-wrap:wrap">
-      <select id="demo-sport" style="flex:1 1 150px">${opts}</select>
+      <select id="demo-sport" style="flex:1 1 150px">{v0}</select>
       <select id="demo-div" style="flex:1 1 150px">
         <option value="1">Élite / 1re division</option>
         <option value="2">2e division</option>
@@ -2997,11 +3039,11 @@ function showDemoSetup() {
     <div class="choices">
       <button class="primary" id="demo-go"><i class=ic-play></i> Lancer la démo</button>
       <button id="demo-cancel">Annuler</button>
-    </div>`);
+    </div>`));
   const syncPlaceholders = () => {
     const t = CLUBS.find(c => c.id === $("#demo-sport").value);
-    $("#demo-fans").placeholder = `Fans (ex. ${fmt(t.fans)})`;
-    $("#demo-contacts").placeholder = `Contacts CRM (ex. ${fmt(t.contacts)})`;
+    $("#demo-fans").placeholder = tr("adm.8f657d", {v0: fmt(t.fans)}, `Fans (ex. {v0})`);
+    $("#demo-contacts").placeholder = tr("adm.62547c", {v0: fmt(t.contacts)}, `Contacts CRM (ex. {v0})`);
     $("#demo-div").value = String(t.division);
   };
   $("#demo-sport").onchange = syncPlaceholders;
@@ -3013,15 +3055,18 @@ function showDemoSetup() {
     if (!name) { $("#demo-name").focus(); return; }
     const tpl = CLUBS.find(c => c.id === $("#demo-sport").value);
     const num = sel => parseInt(String($(sel).value).replace(/[^\d]/g, ""), 10) || 0;
-    closeModal();
-    startDemo({
+    // Toutes les valeurs sont relevées AVANT de fermer : closeModal() vide
+    // #modal-root, et les champs n'existent plus une fois la fenêtre fermée.
+    const opts = {
       name,
       city: $("#demo-city").value.trim() || tpl.city,
       tpl,
       division: parseInt($("#demo-div").value, 10) || tpl.division,
       fans: num("#demo-fans"),
       contacts: num("#demo-contacts"),
-    });
+    };
+    closeModal();
+    startDemo(opts);
   };
 }
 
@@ -3209,7 +3254,7 @@ function exportMyData() {
     consentement_information: localStorage.getItem(CONSENT_KEY),
     optin_actualites: !!currentUser.optIn,
     langue_plateforme: currentUser.lang || lang,
-    statut_brevo: currentUser.brevo || "non (pas d'opt-in)",
+    statut_brevo: currentUser.brevo ? brevoStatusText(currentUser) : tr("adm.st.none", null, "non (pas d'opt-in)"),
     signaux_usage_transmis: currentUser.cc
       ? { saisons_terminees: currentUser.cc.seasons, services_essayes: currentUser.cc.services,
           certification: currentUser.cc.cert, derniere_partie: currentUser.cc.lastPlayed }
@@ -3374,6 +3419,39 @@ const TX = {
     "action.rgpd.name": "<i class=ic-shield></i> DSGVO-Compliance-Projekt",
     "action.training.desc": "Strukturelle Investition: +1 Punkt auf der schwächsten DMOS-Säule.",
     "action.training.name": "<i class=ic-clipboard></i> Schulung & Tools",
+    "adm.072a6d": "<i class=ic-check></i> Kontakt bereits bekannt — der Liste #{v0} zugeordnet",
+    "adm.1a2173": "<i class=ic-check></i> Testkontakt «{v0}» in die Liste #{v1} gesendet",
+    "adm.2207c0": "<i class=ic-cross></i> HTTP-Fehler {v0}{v1}",
+    "adm.2b99dc": "Schlüssel gelöscht.",
+    "adm.31bb71": "<i class=ic-check></i> API-Schlüssel gültig — Konto {v0}",
+    "adm.380ff8": "<div style=\"color:var(--muted)\">Kein Konto auf diesem Gerät.</div>",
+    "adm.3dce22": "<i class=ic-cross></i> Liste #{v0} nicht gefunden (HTTP {v1}) — prüfen Sie die Nummer",
+    "adm.446233": "<i class=ic-cross></i> Geben Sie zuerst einen API-Schlüssel ein.",
+    "adm.56e2bf": "<i class=ic-cross></i> Netzwerk: ",
+    "adm.58f9cd": "E-Mail-Adresse des Testkontakts:",
+    "adm.5c7594": "<i class=ic-cross></i> API-Schlüssel abgelehnt (HTTP {v0})",
+    "adm.62547c": "CRM-Kontakte (z. B. {v0})",
+    "adm.7a02c8": "<i class=ic-cross></i> Liste: Netzwerkfehler",
+    "adm.8c4665": "<i class=ic-cross></i> Brevo nicht erreichbar (Netzwerk / offline)",
+    "adm.8f657d": "Fans (z. B. {v0})",
+    "adm.934aba": "<i class=ic-hourglass></i> Testkontakt wird gesendet…",
+    "adm.97b4f3": "<h2><i class=ic-lock></i> Zugriff beschränkt</h2>\n      <p>Das Brevo-Administrationspanel ist dem Konto\n      <b style=\"color:var(--text)\">{v0}</b> vorbehalten. Melden Sie sich mit diesem Konto an, um darauf zuzugreifen.</p>\n      <div class=\"choices\"><button class=\"primary\" id=\"na-close\">Schliessen</button></div>",
+    "adm.bdcba7": "<i class=ic-hourglass></i> Test läuft…",
+    "adm.c06700": "<i class=ic-check></i> Liste #{v0} «{v1}» — {v2} Kontakt(e)",
+    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo-Verbindung</h2>\n    <p style=\"font-size:13px\">Brevo-API-Schlüssel (v3) und Zielliste. Werden ausschliesslich in diesem Browser gespeichert.\n    <b style=\"color:var(--warn)\">Geben Sie den Schlüssel nicht an einem öffentlichen Gerät ein.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">Liste Nr.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} Konto/Konten · {v3} mit Opt-in · {v4} synchronisiert</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Vertriebsdemo starten</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Verbindung & Liste testen</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Testkontakt senden</button>\n      <button class=\"primary\" id=\"admin-save\">Speichern & jetzt synchronisieren</button>\n      <button id=\"admin-clear\">Schlüssel löschen</button>\n      <button id=\"admin-close\">Schliessen</button>\n    </div>",
+    "adm.e6b539": "<br><i class=ic-arrow></i> {v0} Konto/Konten verarbeitet.",
+    "adm.f3f027": "\n    <h2><i class=ic-target></i> Vertriebsdemo-Modus</h2>\n    <p style=\"font-size:13px\">Startet eine Partie im Namen des Clubs, der Ihnen gegenübersitzt, bereits laufend in\n    Woche 12 — DMOS-Score im Ungefähren, Wert der Fanbase unbekannt, ein zweifelnder Vorstand.\n    <b style=\"color:var(--text)\">Es werden keine Daten an Brevo gesendet</b>, und Ihre persönliche Partie\n    bleibt unberührt.</p>\n    <input type=\"text\" id=\"demo-name\" maxlength=\"46\" placeholder=\"Name des Interessenten-Clubs\" autocomplete=\"off\">\n    <input type=\"text\" id=\"demo-city\" maxlength=\"34\" placeholder=\"Stadt (optional)\" autocomplete=\"off\">\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <select id=\"demo-sport\" style=\"flex:1 1 150px\">{v0}</select>\n      <select id=\"demo-div\" style=\"flex:1 1 150px\">\n        <option value=\"1\">Höchste Liga / 1. Liga</option>\n        <option value=\"2\">2. Liga</option>\n      </select>\n    </div>\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <input type=\"text\" id=\"demo-fans\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"Fans (Schätzung)\">\n      <input type=\"text\" id=\"demo-contacts\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"CRM-Kontakte\">\n    </div>\n    <p style=\"font-size:12px;color:var(--muted);margin-top:2px\">\n      Fans und Kontakte sind freiwillig — ohne Angabe gelten die Grössenordnungen der gewählten Sportart.</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"demo-go\"><i class=ic-play></i> Demo starten</button>\n      <button id=\"demo-cancel\">Abbrechen</button>\n    </div>",
+    "adm.st.failed": "fehlgeschlagen (HTTP {v0}{v1})",
+    "adm.st.known": "bereits bekannt — der Liste {v0} zugeordnet",
+    "adm.st.noconsent": "kein Opt-in — nicht übermittelt",
+    "adm.st.nokey": "ausstehend (API-Schlüssel nicht konfiguriert)",
+    "adm.st.none": "nein (kein Opt-in)",
+    "adm.st.nooptin": "ohne Opt-in — vom Versand ausgeschlossen",
+    "adm.st.offline": "ausstehend (offline)",
+    "adm.st.optin": "mit Opt-in",
+    "adm.st.pending": "ausstehend",
+    "adm.st.profile": "ausstehend (Profilaktualisierung)",
+    "adm.st.synced": "synchronisiert (Liste {v0}, {v1}) am {v2}",
     "club.bb.desc": "Kleines Budget, grosse Energie, zweite Liga. Junge, engagierte Community – aber kein CRM und eine DSGVO-Compliance, die diesen Namen kaum verdient.",
     "club.bb.name": "Lions Basket 89",
     "club.bb.sport": "Basketball",
@@ -3750,6 +3828,39 @@ const TX = {
     "action.rgpd.name": "<i class=ic-shield></i> GDPR compliance drive",
     "action.training.desc": "A structural investment: +1 point on your weakest DMOS pillar.",
     "action.training.name": "<i class=ic-clipboard></i> Training & tools",
+    "adm.072a6d": "<i class=ic-check></i> Contact already known — attached to list #{v0}",
+    "adm.1a2173": "<i class=ic-check></i> Test contact “{v0}” sent to list #{v1}",
+    "adm.2207c0": "<i class=ic-cross></i> HTTP failure {v0}{v1}",
+    "adm.2b99dc": "Key cleared.",
+    "adm.31bb71": "<i class=ic-check></i> API key valid — account {v0}",
+    "adm.380ff8": "<div style=\"color:var(--muted)\">No account on this device.</div>",
+    "adm.3dce22": "<i class=ic-cross></i> List #{v0} not found (HTTP {v1}) — check the number",
+    "adm.446233": "<i class=ic-cross></i> Enter an API key first.",
+    "adm.56e2bf": "<i class=ic-cross></i> Network: ",
+    "adm.58f9cd": "Email address of the test contact:",
+    "adm.5c7594": "<i class=ic-cross></i> API key rejected (HTTP {v0})",
+    "adm.62547c": "CRM contacts (e.g. {v0})",
+    "adm.7a02c8": "<i class=ic-cross></i> List: network error",
+    "adm.8c4665": "<i class=ic-cross></i> Cannot reach Brevo (network / offline)",
+    "adm.8f657d": "Fans (e.g. {v0})",
+    "adm.934aba": "<i class=ic-hourglass></i> Sending the test contact…",
+    "adm.97b4f3": "<h2><i class=ic-lock></i> Restricted access</h2>\n      <p>The Brevo administration panel is reserved for the account\n      <b style=\"color:var(--text)\">{v0}</b>. Log in with that account to access it.</p>\n      <div class=\"choices\"><button class=\"primary\" id=\"na-close\">Close</button></div>",
+    "adm.bdcba7": "<i class=ic-hourglass></i> Running the test…",
+    "adm.c06700": "<i class=ic-check></i> List #{v0} “{v1}” — {v2} contact(s)",
+    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo connection</h2>\n    <p style=\"font-size:13px\">Brevo API key (v3) and destination list. Stored in this browser only.\n    <b style=\"color:var(--warn)\">Do not enter the key on a public machine.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">List no.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} account(s) · {v3} with opt-in · {v4} synced</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Launch a sales demo</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Test the connection & the list</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Send a test contact</button>\n      <button class=\"primary\" id=\"admin-save\">Save & sync now</button>\n      <button id=\"admin-clear\">Clear the key</button>\n      <button id=\"admin-close\">Close</button>\n    </div>",
+    "adm.e6b539": "<br><i class=ic-arrow></i> {v0} account(s) processed.",
+    "adm.f3f027": "\n    <h2><i class=ic-target></i> Sales demo mode</h2>\n    <p style=\"font-size:13px\">Starts a game in the name of the club sitting across from you, already under way in\n    week 12 — DMOS score in the dark, fanbase value unknown, a board full of doubts.\n    <b style=\"color:var(--text)\">No data is sent to Brevo</b> and your own personal game\n    is left untouched.</p>\n    <input type=\"text\" id=\"demo-name\" maxlength=\"46\" placeholder=\"Prospect club name\" autocomplete=\"off\">\n    <input type=\"text\" id=\"demo-city\" maxlength=\"34\" placeholder=\"City (optional)\" autocomplete=\"off\">\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <select id=\"demo-sport\" style=\"flex:1 1 150px\">{v0}</select>\n      <select id=\"demo-div\" style=\"flex:1 1 150px\">\n        <option value=\"1\">Top flight / 1st division</option>\n        <option value=\"2\">2nd division</option>\n      </select>\n    </div>\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <input type=\"text\" id=\"demo-fans\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"Fans (estimate)\">\n      <input type=\"text\" id=\"demo-contacts\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"CRM contacts\">\n    </div>\n    <p style=\"font-size:12px;color:var(--muted);margin-top:2px\">\n      Fans and contacts are optional — without them, the usual orders of magnitude for the chosen sport apply.</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"demo-go\"><i class=ic-play></i> Launch the demo</button>\n      <button id=\"demo-cancel\">Cancel</button>\n    </div>",
+    "adm.st.failed": "failed (HTTP {v0}{v1})",
+    "adm.st.known": "already known — attached to list {v0}",
+    "adm.st.noconsent": "no opt-in — not transmitted",
+    "adm.st.nokey": "pending (API key not configured)",
+    "adm.st.none": "no (no opt-in)",
+    "adm.st.nooptin": "no opt-in — excluded from sends",
+    "adm.st.offline": "pending (offline)",
+    "adm.st.optin": "with opt-in",
+    "adm.st.pending": "pending",
+    "adm.st.profile": "pending (profile update)",
+    "adm.st.synced": "synced (list {v0}, {v1}) on {v2}",
     "club.bb.desc": "Small budget, big energy, second division. A young, engaged community — but no CRM at all and GDPR compliance that would not survive a closer look.",
     "club.bb.name": "Lions Basket 89",
     "club.bb.sport": "Basketball",
