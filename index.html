@@ -2894,6 +2894,56 @@ async function brevoSendTest(key, listId, email) {
 }
 
 /* Diagnostic complet : clé valide ? liste accessible ? combien de contacts ? */
+/* ================= Contrôle avant segmentation ========================
+   Un segment Brevo ne peut être bâti que sur un attribut qui existe déjà
+   dans le compte. Les attributs sont créés à la première synchronisation ;
+   si aucun contact n'a encore été transmis depuis l'ajout de CC_LANG, la
+   liste déroulante du constructeur de segments sera incomplète et rien ne
+   l'expliquera. Ce contrôle répond à la question avant qu'elle ne se pose. */
+const CRM_ATTRIBUTS = [
+  "CMON_SOLUTION_CLUBCATALIST", "OPT_IN", "PSEUDO", "COMPANY", "JOB_TITLE", "SPORT",
+  "CC_SEASONS", "CC_SERVICES", "CC_CERT", "CC_LAST_PLAYED", "CC_LANG",
+];
+
+async function brevoAudit(key) {
+  const out = [];
+  try {
+    const r = await fetch("https://api.brevo.com/v3/contacts/attributes", { headers: brevoHeaders(key) });
+    if (!r.ok) {
+      out.push(tr("adm.audit.ko", {v0: r.status},
+        `<i class=ic-cross></i> Attributs illisibles (HTTP {v0})`));
+      return out;
+    }
+    const j = await r.json();
+    const connus = new Set((j.attributes || []).map(a => a.name));
+    const manquants = CRM_ATTRIBUTS.filter(n => !connus.has(n));
+    if (!manquants.length) {
+      out.push(tr("adm.audit.ok", {v0: CRM_ATTRIBUTS.length},
+        `<i class=ic-check></i> Les {v0} attributs existent — le constructeur de segments les proposera.`));
+    } else {
+      out.push(tr("adm.audit.manque", {v0: manquants.length, v1: esc(manquants.join(", "))},
+        `<i class=ic-alert></i> {v0} attribut(s) absent(s) du compte : {v1}`));
+      out.push(tr("adm.audit.remede", null,
+        `<i class=ic-arrow></i> Lancez « Enregistrer & synchroniser maintenant » : la synchronisation les crée.`));
+    }
+  } catch (e) {
+    out.push(tr("adm.audit.reseau", null, `<i class=ic-cross></i> Attributs : erreur réseau`));
+  }
+  try {
+    const r = await fetch("https://api.brevo.com/v3/contacts/segments?limit=50", { headers: brevoHeaders(key) });
+    if (r.ok) {
+      const j = await r.json();
+      const noms = (j.segments || []).map(s => s.segmentName || s.name).filter(Boolean);
+      out.push(noms.length
+        ? tr("adm.audit.segments", {v0: noms.length, v1: esc(noms.join(" · "))},
+            `<i class=ic-layers></i> {v0} segment(s) déjà défini(s) : {v1}`)
+        : tr("adm.audit.aucunsegment", null,
+            `<i class=ic-layers></i> Aucun segment défini pour l'instant.`));
+    }
+  } catch (e) { /* la lecture des segments n'est pas indispensable */ }
+  return out;
+}
+
 async function brevoDiagnose(key, listId) {
   const out = [];
   try {
@@ -2962,6 +3012,7 @@ function showAdmin() {
     <div class="choices">
       <button id="admin-demo"><i class=ic-play></i> Lancer une démo commerciale</button>
       <button id="admin-test"><i class=ic-target></i> Tester la connexion & la liste</button>
+      <button id="admin-audit"><i class=ic-clipboard></i> Contrôler les attributs & segments</button>
       <button id="admin-testcontact"><i class=ic-mail></i> Envoyer un contact de test</button>
       <button class="primary" id="admin-save">Enregistrer & synchroniser maintenant</button>
       <button id="admin-clear">Effacer la clé</button>
@@ -2975,6 +3026,13 @@ function showAdmin() {
     return { k, l };
   };
   $("#admin-demo").onclick = () => { closeModal(); showDemoSetup(); };
+  $("#admin-audit").onclick = async () => {
+    const { k } = readInputs();
+    if (!k) { $("#admin-diag").innerHTML = tr("adm.446233", null, "<i class=ic-cross></i> Saisissez d'abord une clé API."); return; }
+    $("#admin-diag").innerHTML = tr("adm.audit.encours", null, "<i class=ic-hourglass></i> Contrôle en cours…");
+    const res = await brevoAudit(k);
+    $("#admin-diag").innerHTML = res.join("<br>");
+  };
   $("#admin-test").onclick = async () => {
     const { k, l } = readInputs();
     if (!k) { $("#admin-diag").innerHTML = tr("adm.446233", null, "<i class=ic-cross></i> Saisissez d'abord une clé API."); return; }
@@ -3450,6 +3508,14 @@ const TX = {
     "adm.8f657d": "Fans (z. B. {v0})",
     "adm.934aba": "<i class=ic-hourglass></i> Testkontakt wird gesendet…",
     "adm.97b4f3": "<h2><i class=ic-lock></i> Zugriff beschränkt</h2>\n      <p>Das Brevo-Administrationspanel ist dem Konto\n      <b style=\"color:var(--text)\">{v0}</b> vorbehalten. Melden Sie sich mit diesem Konto an, um darauf zuzugreifen.</p>\n      <div class=\"choices\"><button class=\"primary\" id=\"na-close\">Schliessen</button></div>",
+    "adm.audit.aucunsegment": "<i class=ic-layers></i> Noch kein Segment definiert.",
+    "adm.audit.encours": "<i class=ic-hourglass></i> Prüfung läuft…",
+    "adm.audit.ko": "<i class=ic-cross></i> Attribute nicht lesbar (HTTP {v0})",
+    "adm.audit.manque": "<i class=ic-alert></i> {v0} Attribut(e) fehlen im Konto: {v1}",
+    "adm.audit.ok": "<i class=ic-check></i> Alle {v0} Attribute sind vorhanden — der Segment-Editor wird sie anbieten.",
+    "adm.audit.remede": "<i class=ic-arrow></i> Starten Sie «Speichern & jetzt synchronisieren»: die Synchronisation legt sie an.",
+    "adm.audit.reseau": "<i class=ic-cross></i> Attribute: Netzwerkfehler",
+    "adm.audit.segments": "<i class=ic-layers></i> {v0} Segment(e) bereits definiert: {v1}",
     "adm.bdcba7": "<i class=ic-hourglass></i> Test läuft…",
     "adm.c06700": "<i class=ic-check></i> Liste #{v0} «{v1}» — {v2} Kontakt(e)",
     "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo-Verbindung</h2>\n    <p style=\"font-size:13px\">Brevo-API-Schlüssel (v3) und Zielliste. Werden ausschliesslich in diesem Browser gespeichert.\n    <b style=\"color:var(--warn)\">Geben Sie den Schlüssel nicht an einem öffentlichen Gerät ein.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">Liste Nr.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} Konto/Konten · {v3} mit Opt-in · {v4} synchronisiert</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Vertriebsdemo starten</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Verbindung & Liste testen</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Testkontakt senden</button>\n      <button class=\"primary\" id=\"admin-save\">Speichern & jetzt synchronisieren</button>\n      <button id=\"admin-clear\">Schlüssel löschen</button>\n      <button id=\"admin-close\">Schliessen</button>\n    </div>",
@@ -3859,6 +3925,14 @@ const TX = {
     "adm.8f657d": "Fans (e.g. {v0})",
     "adm.934aba": "<i class=ic-hourglass></i> Sending the test contact…",
     "adm.97b4f3": "<h2><i class=ic-lock></i> Restricted access</h2>\n      <p>The Brevo administration panel is reserved for the account\n      <b style=\"color:var(--text)\">{v0}</b>. Log in with that account to access it.</p>\n      <div class=\"choices\"><button class=\"primary\" id=\"na-close\">Close</button></div>",
+    "adm.audit.aucunsegment": "<i class=ic-layers></i> No segment defined yet.",
+    "adm.audit.encours": "<i class=ic-hourglass></i> Running the check…",
+    "adm.audit.ko": "<i class=ic-cross></i> Attributes unreadable (HTTP {v0})",
+    "adm.audit.manque": "<i class=ic-alert></i> {v0} attribute(s) missing from the account: {v1}",
+    "adm.audit.ok": "<i class=ic-check></i> All {v0} attributes exist — the segment builder will offer them.",
+    "adm.audit.remede": "<i class=ic-arrow></i> Run “Save & sync now”: the sync creates them.",
+    "adm.audit.reseau": "<i class=ic-cross></i> Attributes: network error",
+    "adm.audit.segments": "<i class=ic-layers></i> {v0} segment(s) already defined: {v1}",
     "adm.bdcba7": "<i class=ic-hourglass></i> Running the test…",
     "adm.c06700": "<i class=ic-check></i> List #{v0} “{v1}” — {v2} contact(s)",
     "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo connection</h2>\n    <p style=\"font-size:13px\">Brevo API key (v3) and destination list. Stored in this browser only.\n    <b style=\"color:var(--warn)\">Do not enter the key on a public machine.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">List no.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} account(s) · {v3} with opt-in · {v4} synced</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Launch a sales demo</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Test the connection & the list</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Send a test contact</button>\n      <button class=\"primary\" id=\"admin-save\">Save & sync now</button>\n      <button id=\"admin-clear\">Clear the key</button>\n      <button id=\"admin-close\">Close</button>\n    </div>",
