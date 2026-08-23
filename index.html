@@ -2822,12 +2822,26 @@ async function brevoSyncContact(u) {
    politique de confidentialité et restitués dans l'export RGPD.
 
    Le mode démo n'en produit aucun : le club affiché n'est pas le joueur. */
+/* Valeurs canoniques transmises au CRM. Elles ne passent JAMAIS par les
+   libellés traduits : un segment Brevo « CC_SERVICES contient Audit DMOS »
+   doit retrouver le joueur quelle que soit la langue dans laquelle il a
+   joué, sans quoi chaque segment se scinderait en trois. Même principe que
+   le rôle déclaré à l'inscription, envoyé en français dans JOB_TITLE. */
+const CRM_SERVICES = {
+  audit: "Audit DMOS", fanlabInsight: "Fan Lab Insight", fanlabPro: "Fan Lab Pro",
+  datafactory: "Data Factory", bluepenguin: "Blue Penguin", griddy: "Griddy Picks",
+};
+const CRM_CERT = { gold: "Gold", silver: "Silver", none: "Audité non certifié" };
+
 function ccSignals(s) {
   if (!s) return null;
   return {
     seasons: Math.max(0, (s.season || 1) - 1),
-    services: SERVICES.filter(sv => serviceActive(s, sv.id)).map(sv => sv.name).join(", "),
-    cert: certification(s).label,
+    services: SERVICES.filter(sv => serviceActive(s, sv.id))
+                      .map(sv => CRM_SERVICES[sv.id] || sv.id).join(", "),
+    cert: s.services && s.services.audited
+      ? (CRM_CERT[certification(s).cls] || CRM_CERT.none)
+      : "Non audité",
     lastPlayed: new Date().toISOString().slice(0, 10),   // AAAA-MM-JJ attendu par Brevo
   };
 }
