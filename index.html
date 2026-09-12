@@ -566,6 +566,110 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
 .blue-rule{border-left:2px solid var(--brand-line);padding-left:15px}
 .desc{font-size:var(--t1);color:var(--ink-3);line-height:1.6}
 
+/* ── Écran de découverte (avant compte) ───────────────────────────────── */
+.intro-hero{position:relative;overflow:hidden;border-radius:var(--r-lg);
+  border:1px solid var(--edge);padding:34px 32px;margin-bottom:16px;
+  background:radial-gradient(560px 260px at 12% -30%, rgba(98,190,245,.20), transparent 68%),
+    linear-gradient(168deg,var(--raised),var(--card) 62%);
+  box-shadow:inset 0 1px 0 var(--edge-lit),var(--shadow)}
+.intro-hero h2{font-size:var(--t5);line-height:1.06;letter-spacing:-.01em;font-weight:900;
+  text-transform:uppercase;max-width:16ch}
+.intro-hero p{font-size:var(--t2);color:var(--ink-2);line-height:1.65;margin-top:14px;max-width:62ch}
+.intro-hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.intro-hero .chips span{font-size:var(--t0);font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;padding:5px 12px;border-radius:99px;
+  background:var(--brand-soft);border:1px solid var(--brand-line);color:var(--brand-2)}
+.intro-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.intro-cta button{font-size:var(--t2);padding:13px 22px}
+.intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:880px){.intro-grid{grid-template-columns:1fr}}
+.intro-card{background:linear-gradient(168deg,var(--raised),var(--card) 66%);
+  border:1px solid var(--edge);border-radius:var(--r-lg);padding:22px 20px;
+  box-shadow:inset 0 1px 0 var(--edge-lit),var(--shadow-sm)}
+.intro-card h4{font-size:var(--t1);text-transform:uppercase;letter-spacing:.09em;
+  font-weight:800;color:var(--brand);margin-bottom:10px}
+.intro-card p{font-size:var(--t1);color:var(--ink-3);line-height:1.65}
+.intro-card p b{color:var(--ink-2)}
+
+/* Étapes numérotées — briefing, aide, découverte */
+.steps{display:grid;gap:10px;margin-top:14px}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--sunken);
+  border:1px solid var(--edge);border-radius:var(--r-sm);padding:14px 16px}
+.step .n{flex:none;width:26px;height:26px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:var(--t1);font-weight:900;color:#03121E;
+  background:linear-gradient(160deg,var(--brand-2),var(--brand) 60%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.step b{display:block;font-size:var(--t2);font-weight:800;color:var(--ink)}
+.step span{display:block;margin-top:4px;font-size:var(--t1);color:var(--ink-3);line-height:1.6}
+
+/* ── Guide de prise en main ───────────────────────────────────────────── */
+.tuto{position:relative;overflow:hidden;border-radius:var(--r-lg);padding:20px 22px;margin-bottom:16px;
+  border:1px solid var(--brand-line);
+  background:radial-gradient(420px 200px at 4% -40%, rgba(98,190,245,.18), transparent 70%),
+    linear-gradient(168deg,var(--raised),var(--card) 62%);
+  box-shadow:inset 0 1px 0 var(--edge-lit),var(--shadow)}
+.tuto-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tuto-head b{font-size:var(--t1);text-transform:uppercase;letter-spacing:.10em;
+  font-weight:800;color:var(--brand)}
+.tuto-head .count{font-size:var(--t0);font-weight:800;color:var(--ink-3);
+  font-variant-numeric:tabular-nums}
+.tuto-head button{margin-left:auto;font-size:11px;padding:4px 11px}
+.tuto-prog{height:5px;border-radius:5px;background:var(--sunken);overflow:hidden;
+  border:1px solid var(--edge);margin-bottom:16px}
+.tuto-prog .fill{height:100%;border-radius:5px;transition:width .45s cubic-bezier(.2,.7,.3,1);
+  background:linear-gradient(90deg,var(--brand-deep),var(--brand-2))}
+.tuto-step h4{font-size:var(--t3);font-weight:900;line-height:1.25;margin-bottom:8px}
+.tuto-step .how{font-size:var(--t2);color:var(--ink-2);line-height:1.6}
+.tuto-why{margin-top:12px;padding-left:15px;border-left:2px solid var(--brand-line);
+  font-size:var(--t1);color:var(--ink-3);line-height:1.65}
+/* Seul le libellé d'en-tête prend la casse d'étiquette ; les <b> du texte
+   restent des mises en valeur ordinaires. */
+.tuto-why>b:first-child{color:var(--brand-2);text-transform:uppercase;letter-spacing:.07em;
+  font-size:var(--t0);font-weight:800}
+.tuto-why b{color:var(--ink-2)}
+.tuto-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.tuto-actions button{font-size:var(--t1);padding:9px 16px}
+.tuto-trail{display:flex;gap:5px;flex-wrap:wrap;margin-top:14px}
+.tuto-trail span{font-size:10.5px;font-weight:800;letter-spacing:.05em;padding:3px 9px;
+  border-radius:99px;border:1px solid var(--edge);color:var(--ink-3);background:var(--sunken)}
+.tuto-trail span.ok{color:var(--good);border-color:rgba(52,224,168,.34);
+  background:rgba(52,224,168,.10)}
+.tuto-trail span.now{color:var(--brand-2);border-color:var(--brand-line);background:var(--brand-soft)}
+.tuto-resume{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:14px;
+  padding:10px 15px;border-radius:var(--r);border:1px solid var(--edge);
+  background:var(--sunken);font-size:var(--t1);color:var(--ink-3)}
+.tuto-resume button{margin-left:auto;font-size:11px;padding:4px 11px}
+
+/* ── Centre d'aide ────────────────────────────────────────────────────── */
+.help-nav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;padding:5px;
+  background:var(--sunken);border:1px solid var(--edge);border-radius:99px}
+.help-nav button{background:transparent;border:none;box-shadow:none;color:var(--ink-3);
+  font-size:var(--t1);font-weight:800;padding:7px 14px;border-radius:99px;letter-spacing:.02em}
+.help-nav button:hover:not(.on){background:var(--brand-soft);color:var(--ink);transform:none}
+.help-nav button.on{background:linear-gradient(180deg,var(--raised),var(--card));
+  border:1px solid var(--brand-line);color:var(--brand-2);box-shadow:var(--shadow-sm)}
+.help-sec h4{font-size:var(--t1);text-transform:uppercase;letter-spacing:.09em;font-weight:800;
+  color:var(--brand);margin:20px 0 9px}
+.help-sec h4:first-child{margin-top:0}
+.help-row{background:var(--sunken);border:1px solid var(--edge);border-radius:var(--r-sm);
+  padding:13px 15px;margin-bottom:9px}
+.help-row b{display:block;font-size:var(--t2);font-weight:800;color:var(--ink);margin-bottom:5px}
+.help-row .g{display:block;font-size:var(--t1);color:var(--ink-2);line-height:1.6}
+.help-row .r{display:block;font-size:var(--t1);color:var(--ink-3);line-height:1.6;margin-top:7px;
+  padding-left:13px;border-left:2px solid var(--brand-line)}
+.help-row .r i.tagr{font-style:normal;font-weight:800;color:var(--brand-2);
+  text-transform:uppercase;letter-spacing:.07em;font-size:var(--t0);margin-right:6px}
+
+/* ── Questionnaire de positionnement ──────────────────────────────────── */
+.qz-q{font-size:var(--t2);font-weight:800;color:var(--ink);margin:18px 0 9px}
+.qz-q:first-of-type{margin-top:6px}
+.qz-opts{display:grid;gap:7px}
+.qz-opts button{text-align:left;padding:12px 15px;font-size:var(--t1);font-weight:600;
+  color:var(--ink-2);line-height:1.45;border-radius:var(--r-sm)}
+.qz-opts button.on{border-color:var(--brand-line);background:var(--brand-soft);
+  color:var(--ink);font-weight:800}
+.qz-skip{font-size:var(--t0);color:var(--ink-3);text-align:center;margin-top:14px;line-height:1.6}
+
 /* ── Pied de page ─────────────────────────────────────────────────────── */
 .footer-note{color:var(--ink-3);font-size:var(--t0);text-align:center;padding:26px 0 34px}
 .footer-note::before{content:"";display:block;width:46px;height:3px;border-radius:2px;
@@ -577,6 +681,21 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
 </head>
 <body>
 <div class="wrap">
+
+  <!-- ============ INTRO SCREEN ============ -->
+  <!-- Première rencontre : ce que le visiteur lit avant qu'on lui demande
+       quoi que ce soit. Le contenu est monté en JS pour suivre la langue. -->
+  <div id="screen-intro" class="hidden">
+    <header>
+      <div class="brand">
+        <div>
+          <h1 style="font-size:19px"><span class="sig-cap">C</span>LUB CATALIST<span class="sig-cap">.</span></h1>
+          <div class="sub" data-i18n="ui.tagline">Simulateur de gestion marketing d'un club de sport — by C'mon Sports</div>
+        </div>
+      </div>
+    </header>
+    <div id="intro-body"></div>
+  </div>
 
   <!-- ============ LOGIN SCREEN ============ -->
   <div id="screen-login" class="hidden">
@@ -621,6 +740,9 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
         </div>
       </div>
     </div>
+    <p style="max-width:540px; margin:0 auto 12px; text-align:center">
+      <a id="link-intro" style="font-size:12px;font-weight:700;cursor:pointer" data-i18n="ui.login.back"><i class=ic-bulb></i> Qu'est-ce que Club Catalist ?</a>
+    </p>
     <p style="max-width:540px; margin:0 auto; font-size:12px; color:var(--muted); text-align:center; line-height:1.6" data-i18n="ui.login.note">
       <i class=ic-lock></i> Vos sauvegardes et votre code PIN (haché) restent <b style="color:var(--text)">dans ce navigateur</b>.
       Votre adresse e-mail est enregistrée dans le CRM de C'mon Corporations (Brevo, UE) à la création du compte ;
@@ -653,6 +775,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
         satisfaites vos sponsors et atteignez les objectifs du comité directeur… sous peine de licenciement.
       </p>
     </div>
+    <div id="setup-rules"></div>
     <div class="card">
       <h3><span data-i18n="ui.setup.pick"><span class="sig-cap">C</span>HOISISSEZ VOTRE CLUB.</span></h3>
       <div class="setup-clubs" id="setup-clubs"></div>
@@ -677,6 +800,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
         <div id="hdr-cert"></div>
         <div style="margin-top:4px">
           <span class="user-chip" id="game-user"></span>
+          <button id="btn-help" style="font-size:12px;padding:4px 10px" data-i18n="ui.btn.help"><i class=ic-bulb></i> Aide &amp; règles</button>
           <button id="btn-save" style="font-size:12px;padding:4px 10px" data-i18n="ui.btn.save"><i class=ic-save></i> Sauvegarder</button>
           <button id="btn-reset" style="font-size:12px;padding:4px 10px" data-i18n="ui.btn.newgame"><i class=ic-trash></i> Nouvelle partie</button>
           <button id="btn-logout-game" style="font-size:12px;padding:4px 10px" data-i18n="ui.btn.logout">Déconnexion</button>
@@ -697,6 +821,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
 
     <!-- ------ TAB: DASHBOARD ------ -->
     <div id="tab-dashboard">
+      <div id="tuto-zone"></div>
       <div id="last-result"></div>
       <div class="grid2">
         <div>
@@ -796,6 +921,7 @@ input[type="text"]:focus,input[type="password"]:focus{border-color:var(--brand-l
   <div class="footer-note"><svg class="cmon-icon" viewBox="210 210 545 465" fill="#62bdf4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="C’mon Sports"><polygon class="cls-1" points="397.1 586.91 371.5 543.31 311.66 441.39 324.56 419.15 278.89 341.37 220.93 442.04 352.01 665.28 469.15 665.41 423.07 586.93 397.1 586.91"/><polygon class="cls-1" points="537.9 295.62 563.77 295.63 648.63 440.05 635.72 462.4 681.35 540.11 739.25 439.74 608.59 217.18 466.77 217.28 421.28 296.14 577.81 562.8 563.95 586.83 539.86 586.87 382.42 318.72 440.9 217.33 350.43 217.35 291.76 319.07 495 665.23 609.34 665.27 668.48 562.52 525 318.04 537.9 295.62"/></svg><div style="margin-top:8px" data-i18n="ui.footer.note">Club Catalist — prototype v7 · l'écosystème C'mon Sports en jeu · sauvegarde locale automatique en fin de semaine</div>
     <div id="lang-switch" class="lang-switch" role="group" aria-label="Langue / Sprache / Language"></div>
     <div class="footer-links">
+      <a id="link-help" data-i18n="ui.footer.help"><i class=ic-bulb></i> Aide &amp; règles</a> ·
       <a id="link-privacy" data-i18n="ui.footer.privacy"><i class=ic-lock></i> Confidentialité & données (RGPD / nLPD)</a> ·
       <a id="link-export" data-i18n="ui.footer.export">Exporter mes données</a> ·
       <a id="link-delete" data-i18n="ui.footer.delete">Supprimer mon profil</a><span id="admin-wrap" style="display:none"> ·
@@ -867,13 +993,25 @@ function localizeContent() {
   const put = (o, field, key) => { const v = tr(key, null, null); if (v !== key) o[field] = v; };
   CLUBS.forEach(c => ["name","sport","desc"].forEach(f => put(c, f, `club.${c.id}.${f}`)));
   PILLARS.forEach(pl => ["label","hint"].forEach(f => put(pl, f, `pillar.${pl.key}.${f}`)));
-  ACTIONS.forEach(a => ["name","desc"].forEach(f => put(a, f, `action.${a.id}.${f}`)));
-  SERVICES.forEach(s => ["name","subLabel","btnLabel","pitch","effect"].forEach(f => put(s, f, `svc.${s.id}.${f}`)));
+  ACTIONS.forEach(a => ["name","desc","real"].forEach(f => put(a, f, `action.${a.id}.${f}`)));
+  SERVICES.forEach(s => ["name","subLabel","btnLabel","pitch","effect","real"].forEach(f => put(s, f, `svc.${s.id}.${f}`)));
   DIFFICULTIES.forEach(d => ["name","desc"].forEach(f => put(d, f, `diff.${d.id}.${f}`)));
   DECISIONS.forEach(d => {
     ["title","text"].forEach(f => put(d, f, `dec.${d.id}.${f}`));
     (d.choices || []).forEach((ch, j) => ["label","sub"].forEach(f => put(ch, f, `dec.${d.id}.c${j}.${f}`)));
   });
+  // Pédagogie : briefing, guide, aide, glossaire, questionnaire
+  BRIEFING.forEach((b, i) => ["title","body"].forEach(f => put(b, f, `brief.${i}.${f}`)));
+  TUTO.forEach(t => ["short","title","how","why"].forEach(f => put(t, f, `tuto.${t.id}.${f}`)));
+  HELP_SECTIONS.forEach(s => put(s, "label", `helpnav.${s.id}`));
+  Object.keys(KPI_HELP).forEach(k => ["t","g","r"].forEach(f => put(KPI_HELP[k], f, `kpih.${k}.${f}`)));
+  GLOSSAIRE.forEach((g, i) => ["t","d"].forEach(f => put(g, f, `glo.${i}.${f}`)));
+  QUALIFY.forEach((q, i) => {
+    put(q, "q", `qz.${i}.q`);
+    // Seul le libellé est traduit : la valeur (opts[k][0]) part au CRM en français.
+    q.opts.forEach((o, k) => { const v = tr(`qz.${i}.${k}`, null, null); if (v !== `qz.${i}.${k}`) o[1] = v; });
+  });
+  Object.keys(QUALIFY_RECO).forEach((k, i) => ["s","d"].forEach(f => put(QUALIFY_RECO[k], f, `reco.${i}.${f}`)));
 }
 
 /* Remplace le balisage statique porteur de data-i18n. */
@@ -1006,19 +1144,26 @@ const PILLARS = [
 /* ---------------- Actions hebdomadaires ---------------- */
 const ACTIONS = [
   { id:"content", name:"<i class=ic-broadcast></i> Publier du contenu", ap:1, cost:500,
-    desc:"Posts réseaux sociaux, stories match, coulisses. +engagement, +fans." },
+    desc:"Posts réseaux sociaux, stories match, coulisses. +engagement, +fans.",
+    real:"Le contenu est le seul canal que presque tous les clubs alimentent — et le seul dont personne ne mesure l'effet sur la base de contacts. Il fait venir du monde ; il ne collecte rien tout seul." },
   { id:"campaign", name:"<i class=ic-mail></i> Campagne emailing", ap:1, cost:800,
-    desc:"Newsletter + offre billetterie via votre base contacts. +revenus billetterie, +engagement. Attention à la fatigue si répétée." },
+    desc:"Newsletter + offre billetterie via votre base contacts. +revenus billetterie, +engagement. Attention à la fatigue si répétée.",
+    real:"L'e-mail reste le canal le plus rentable du sport business, et le seul dont vous possédez l'audience. Sa limite est la sur-sollicitation : sans segmentation, une base s'use en une saison." },
   { id:"collect", name:"<i class=ic-db></i> Jeu concours / collecte data", ap:1, cost:1500,
-    desc:"Opération de collecte : nouveaux contacts qualifiés, +qualité données." },
+    desc:"Opération de collecte : nouveaux contacts qualifiés, +qualité données.",
+    real:"Le jeu concours est le moyen le plus rapide de transformer un spectateur anonyme en contact identifié — à condition de demander le consentement proprement, sinon la base est inexploitable." },
   { id:"activation", name:"<i class=ic-deal></i> Activation sponsor", ap:1, cost:1200,
-    desc:"Opération visibilité pour vos sponsors (LED, réseaux, hospitalité). +satisfaction sponsors, petit bonus de revenus." },
+    desc:"Opération visibilité pour vos sponsors (LED, réseaux, hospitalité). +satisfaction sponsors, petit bonus de revenus.",
+    real:"Activer un sponsor, c'est lui donner la preuve qu'il est vu. C'est aussi le travail le plus souvent repoussé d'une saison, parce qu'il n'a pas d'échéance — jusqu'au non-renouvellement." },
   { id:"prospect", name:"<i class=ic-userplus></i> Prospection sponsor", ap:2, cost:2000,
-    desc:"Démarchage d'un nouveau sponsor. Chances de succès selon score DMOS et valeur Fan Lab." },
+    desc:"Démarchage d'un nouveau sponsor. Chances de succès selon score DMOS et valeur Fan Lab.",
+    real:"Un nouveau sponsor ne se décroche pas avec un dossier de présentation, mais avec des chiffres sur l'audience qu'on lui vend. C'est précisément ce que produit une analyse Fan Lab." },
   { id:"training", name:"<i class=ic-clipboard></i> Formation & outils", ap:1, cost:3000,
-    desc:"Investissement structurel : +1 point sur le pilier DMOS le plus faible." },
+    desc:"Investissement structurel : +1 point sur le pilier DMOS le plus faible.",
+    real:"Monter en compétence coûte cher et ne se voit pas sur le trimestre. C'est pourtant ce qui fait baisser durablement le coût de toutes les actions suivantes." },
   { id:"rgpd", name:"<i class=ic-shield></i> Chantier conformité RGPD", ap:1, cost:2000,
-    desc:"Consentements, registre, nettoyage de base. +conformité, +qualité données." },
+    desc:"Consentements, registre, nettoyage de base. +conformité, +qualité données.",
+    real:"La conformité n'est pas qu'un risque d'amende : consentements en règle et base nettoyée, c'est aussi une base qui délivre mieux et qui vaut plus cher devant un sponsor." },
 ];
 
 /* ---------------- Événements aléatoires ---------------- */
@@ -1191,27 +1336,33 @@ const SERVICES = [
   { id:"audit", name:"Audit DMOS", setup:5000, duration:3,
     subLabel:"one-shot", btnLabel:"Commander · 5 000 CHF",
     pitch:"Diagnostic complet de votre maturité digitale : kick-off, analyse des 6 piliers, workshop avec le comité, rapport et roadmap.",
-    effect:"Révèle vos scores DMOS exacts (fini les fourchettes), débloque la certification Silver/Gold, formations guidées par la roadmap (−20 %). Confiance du comité +8 à la livraison." },
+    effect:"Révèle vos scores DMOS exacts (fini les fourchettes), débloque la certification Silver/Gold, formations guidées par la roadmap (−20 %). Confiance du comité +8 à la livraison.",
+    real:"L'audit que C'mon Sports conduit réellement : kick-off, analyse des six piliers, atelier avec la direction, rapport et feuille de route chiffrée. Il transforme une intuition de maturité en note comparable d'une année sur l'autre." },
   { id:"fanlabInsight", name:"Fan Lab Insight", setup:6000,
     subLabel:"analyse one-shot", btnLabel:"Commander · 6 000 CHF",
     pitch:"L'analyse fondamentale de votre base CRM : qualité des données et indice de pénétration de votre bassin de fans.",
-    effect:"Révèle la qualité des données CRM, le bassin atteignable et le taux de pénétration — vous savez enfin où creuser." },
+    effect:"Révèle la qualité des données CRM, le bassin atteignable et le taux de pénétration — vous savez enfin où creuser.",
+    real:"La première mesure sérieuse d'une base de contacts : combien de personnes le club pourrait réellement atteindre, et ce que valent les adresses qu'il possède déjà." },
   { id:"fanlabPro", name:"Fan Lab Pro", setup:18000,
     subLabel:"analyse one-shot · inclut Insight", btnLabel:"Commander · 18 000 CHF",
     pitch:"L'analyse complète de la valeur de votre audience : ROI ticketing, ROI merchandising et valorisation économique de la fanbase pour convaincre les sponsors.",
-    effect:"Tout Insight + révèle la valeur Fan Lab en francs, chances de signature sponsor nettement accrues, part marketing billetterie 5 → 6 % et merchandising +10 %." },
+    effect:"Tout Insight + révèle la valeur Fan Lab en francs, chances de signature sponsor nettement accrues, part marketing billetterie 5 → 6 % et merchandising +10 %.",
+    real:"La valorisation économique complète de l'audience. Concrètement : le document qu'on pose sur la table en rendez-vous sponsor, quand il faut justifier un montant plutôt que le négocier." },
   { id:"datafactory", name:"Data Factory", weekly:460,
     subLabel:"abonnement · 2 000 CHF/mois", btnLabel:"Activer · 2 000 CHF/mois",
     pitch:"Le service opérationnel qui structure et entretient vos données fans : nettoyage, déduplication, procédures de collecte et de maintenance.",
-    effect:"+1 de qualité de données à l'activation, stoppe leur vieillissement hebdomadaire, immunise contre les purges de contacts obsolètes et divise par deux la fatigue emailing (meilleure segmentation : on ne sollicite que les bons segments)." },
+    effect:"+1 de qualité de données à l'activation, stoppe leur vieillissement hebdomadaire, immunise contre les purges de contacts obsolètes et divise par deux la fatigue emailing (meilleure segmentation : on ne sollicite que les bons segments).",
+    real:"Le service opérationnel qui tient la base dans la durée — nettoyage, déduplication, procédures de collecte. Sans lui, une base perd environ un cinquième de sa valeur par an." },
   { id:"bluepenguin", name:"Blue Penguin", setup:12000, weekly:350,
     subLabel:"intégration 12 000 CHF + 1 500 CHF/mois", btnLabel:"Intégrer · 12 000 CHF",
     pitch:"Programme de fidélité tokenisé : les fans gagnent des récompenses à chaque interaction avec le club.",
-    effect:"+0,8 d'engagement par semaine (rendements décroissants) et +15 % de revenus merchandising." },
+    effect:"+0,8 d'engagement par semaine (rendements décroissants) et +15 % de revenus merchandising.",
+    real:"Le programme de fidélité tokenisé de C'mon Sports : chaque interaction du fan avec le club lui rapporte quelque chose, et rapporte au club une donnée de plus." },
   { id:"griddy", name:"Griddy Picks", setup:2500, weekly:500,
     subLabel:"intégration 2 500 CHF + 500 CHF/jour de match", btnLabel:"Intégrer · 2 500 CHF",
     pitch:"Jeu de pronostics aux couleurs du club : les fans jouent chaque journée de championnat et laissent leurs données.",
-    effect:"Collecte passive de contacts qualifiés chaque semaine de compétition (selon la pénétration du bassin) — le jeu concours qui tourne tout seul." },
+    effect:"Collecte passive de contacts qualifiés chaque semaine de compétition (selon la pénétration du bassin) — le jeu concours qui tourne tout seul.",
+    real:"Le jeu de pronostics aux couleurs du club : une collecte de données qui tourne toute seule à chaque journée de championnat, sans opération marketing à relancer." },
 ];
 function freshServices() {
   return { audited:false, auditIn:0, fanlabInsight:false, fanlabPro:false, datafactory:false, bluepenguin:false, griddy:false };
@@ -1397,8 +1548,9 @@ function newGame(club, difficulty = 1, challenge = null) {
   // de départ doit être identique d'un joueur à l'autre sur un même défi.
   state = { rng: challenge ? challenge.seed : freshSeed() };
   Object.assign(state, {
-    version: 6,
+    version: 7,
     challenge: challenge ? challenge.code : null,
+    tuto: freshTuto(),
     clubId: club.id,
     difficulty,
     division: club.division,
@@ -1530,7 +1682,13 @@ function load() {
       s.challenge = null;
       s.version = 6;
     }
-    if (s && s.version === 6) return s;
+    if (s && s.version === 6) {
+      // migration v6 → v7 : guide de prise en main. Une partie déjà entamée
+      // n'a pas à être interrompue par un tutoriel — il reste rejouable.
+      s.tuto = { step: 0, done: true, hidden: false, seen: {} };
+      s.version = 7;
+    }
+    if (s && s.version === 7) return s;
   } catch(e){}
   return null;
 }
@@ -1921,10 +2079,10 @@ let prevKpis = null;
 
 function kpiList(s) {
   return [
-    { lbl:tr("lbl.7aeba4", null, "Budget"), val: fmtCHF(s.budget), raw: s.budget, color: s.budget<0 ? "var(--bad)" : "" },
-    { lbl:tr("lbl.73d38d", null, "Fans"), val: fmt(s.fans), raw: s.fans },
-    { lbl:tr("lbl.4b1f1c", null, "Engagement"), val: Math.round(s.engagement)+" %", raw: s.engagement },
-    { lbl:tr("lbl.641538", null, "Contacts CRM"), val: fmt(s.contacts), raw: s.contacts },
+    { lbl:tr("lbl.7aeba4", null, "Budget"), info:"budget", val: fmtCHF(s.budget), raw: s.budget, color: s.budget<0 ? "var(--bad)" : "" },
+    { lbl:tr("lbl.73d38d", null, "Fans"), info:"fans", val: fmt(s.fans), raw: s.fans },
+    { lbl:tr("lbl.4b1f1c", null, "Engagement"), info:"engagement", val: Math.round(s.engagement)+" %", raw: s.engagement },
+    { lbl:tr("lbl.641538", null, "Contacts CRM"), info:"contacts", val: fmt(s.contacts), raw: s.contacts },
     { lbl:tr("lbl.cff84a", null, "Pénétration bassin"), info:"penetration",
       val: insightActive(s) ? (Math.round(penetration(s)*1000)/10)+" %" : "?",
       raw: insightActive(s) ? penetration(s)*100 : 0,
@@ -1933,9 +2091,9 @@ function kpiList(s) {
       val: insightActive(s) ? (Math.round(s.dataQuality*10)/10)+"/10" : "?",
       raw: insightActive(s) ? s.dataQuality : 0,
       color: insightActive(s) ? "" : "var(--muted)" },
-    { lbl:tr("lbl.44ea9b", null, "Score DMOS"), val: dmosDisplay(s), raw: s.services.audited ? dmosTotal(s) : 0,
+    { lbl:tr("lbl.44ea9b", null, "Score DMOS"), info:"dmos", val: dmosDisplay(s), raw: s.services.audited ? dmosTotal(s) : 0,
       color: s.services.audited ? "" : "var(--muted)" },
-    { lbl:tr("lbl.25198d", null, "Confiance comité"), val: Math.round(s.boardConfidence)+" %", raw: s.boardConfidence,
+    { lbl:tr("lbl.25198d", null, "Confiance comité"), info:"board", val: Math.round(s.boardConfidence)+" %", raw: s.boardConfidence,
       color: s.boardConfidence<25 ? "var(--bad)" : s.boardConfidence<45 ? "var(--warn)" : "" },
   ];
 }
@@ -1956,7 +2114,13 @@ function renderKpis() {
     return `<div class="kpi"><div class="lbl">${k.lbl}${aide}</div><div class="val" style="color:${k.color||'var(--text)'}">${k.val}</div>${delta}</div>`;
   }).join("");
   el.querySelectorAll(".info-kpi").forEach(b => {
-    b.onclick = () => (b.dataset.info === "penetration" ? showPenetrationInfo() : showQualityInfo());
+    b.onclick = () => {
+      // Deux indicateurs ont leur propre fiche chiffrée ; les autres partagent
+      // la fiche générique « ce que ça fait / ce que ça veut dire ».
+      if (b.dataset.info === "penetration") showPenetrationInfo();
+      else if (b.dataset.info === "quality") showQualityInfo();
+      else showKpiInfo(b.dataset.info);
+    };
   });
 }
 
@@ -1991,7 +2155,8 @@ function renderActions() {
     const n = selected[a.id]||0;
     const cost = actionCost(state, a);
     const canAdd = used + a.ap <= 3;
-    return tr("ui.06a572", {v0: n?'selected':'', v1: a.name, v2: a.ap, v3: a.desc, v4: fmtCHF(cost), v5: a.id, v6: n?'':'disabled', v7: n, v8: a.id, v9: canAdd?'':'disabled'}, `<div class="action {v0}">
+    const aide = ` <button class="info-btn info-act" data-act-info="${a.id}" aria-label="${esc(tr("ui.act.info", null, "Comprendre cette action"))}" title="${esc(tr("ui.act.info", null, "Comprendre cette action"))}">i</button>`;
+    return tr("ui.06a572", {v0: n?'selected':'', v1: a.name + aide, v2: a.ap, v3: a.desc, v4: fmtCHF(cost), v5: a.id, v6: n?'':'disabled', v7: n, v8: a.id, v9: canAdd?'':'disabled'}, `<div class="action {v0}">
       <div class="info">
         <div class="name">{v1} <span style="font-weight:400;color:var(--muted);font-size:11px">({v2} PA)</span></div>
         <div class="desc">{v3}</div>
@@ -2004,7 +2169,10 @@ function renderActions() {
       </div>
     </div>`);
   }).join("");
-  $("#actions-list").querySelectorAll("button").forEach(b => {
+  $("#actions-list").querySelectorAll("[data-act-info]").forEach(b => {
+    b.onclick = () => showActionInfo(b.dataset.actInfo);
+  });
+  $("#actions-list").querySelectorAll("[data-act]").forEach(b => {
     b.onclick = () => {
       const id = b.dataset.act, dir = +b.dataset.dir;
       selected[id] = Math.max(0, (selected[id]||0) + dir);
@@ -2013,6 +2181,8 @@ function renderActions() {
     };
   });
   $("#btn-advance").disabled = state.gameOver;
+  // Le guide valide sa première étape dès que les trois points sont posés.
+  renderTuto();
 }
 
 function renderLastResult() {
@@ -2050,6 +2220,7 @@ function renderLog() {
 
 /* Explication du taux de pénétration, avec les chiffres réels du club. */
 function showPenetrationInfo() {
+  tutoMark("kpi");
   const su = insightActive(state);
   const bassin = marketCap(state), pool = collectiblePool(state), pen = penetration(state);
   const rendement = Math.round(clamp(1 - pen, 0.05, 1) * 100);
@@ -2080,6 +2251,7 @@ function showPenetrationInfo() {
 
 /* Explication de la qualité des données : d'où elle vient, ce qu'elle rapporte. */
 function showQualityInfo() {
+  tutoMark("kpi");
   const su = insightActive(state);
   const q = state.dataQuality, df = state.services.datafactory;
   const parContact = Math.round((0.15 + q * 0.06) * 100) / 100;
@@ -2112,6 +2284,7 @@ function showQualityInfo() {
 
 /* Explication du DMOS, accessible depuis le « i » du panneau. */
 function showDmosInfo() {
+  tutoMark("kpi");
   const audite = state && state.services && state.services.audited;
   showModal(tr("ui.109be2", {v0: PILLARS.map(p => `<div class="pillar-row"><b>${esc(p.label)}</b><span>${esc(p.hint)}</span></div>`).join(""), v1: audite
       ? tr("lbl.88d388", null, `Votre club a été audité : les scores affichés sont exacts, et la certification est active dès le seuil atteint.`)
@@ -2223,10 +2396,30 @@ function renderServices() {
         <div class="name"><span class="sig-cap">${svc.name[0]}</span>${svc.name.slice(1)} <span style="font-weight:600;color:var(--muted);font-size:11px">· ${svc.subLabel}</span> ${status}</div>
         <div class="desc">${svc.pitch}</div>
         <div class="desc" style="color:var(--accent)">→ ${svc.effect}</div>
+        <div class="tuto-why" style="margin-top:9px"><b>${tr("ui.svc.real", null, "Hors du jeu")}</b><br>${svc.real}</div>
       </div>
       <div style="flex-shrink:0; align-self:center">${btn && !affordable ? btn.replace("<button ", "<button disabled ") : btn}</div>
     </div>`;
   }).join("");
+  // Le moment le plus naturel pour demander au joueur où il en est vraiment :
+  // il est en train de comparer des services qui existent pour de bon.
+  const q = currentUser && currentUser.q && Object.keys(currentUser.q).length;
+  // Pendant une démo commerciale, rien ne doit s'écrire sur le compte de l'opérateur.
+  if (!demoMode) $("#services-list").insertAdjacentHTML("beforeend", tr("ui.cmon.qz", {
+    v0: q ? tr("ui.cmon.qz.done", null, "Revoir mes réponses")
+          : tr("ui.cmon.qz.go", null, "Répondre aux trois questions"),
+    v1: BOOKING_URL,
+  }, `<div class="cta-out">
+    <b><i class=ic-target></i> Et dans votre organisation, où en êtes-vous ?</b>
+    Trois questions facultatives — maturité, priorité, échéance — et nous saurons lequel de ces six
+    services vous concerne réellement. Rien ne change dans votre partie.
+    <div class="intro-cta" style="margin-top:11px">
+      <button id="svc-qz">{v0}</button>
+      <a class="btn-like out-link" href="{v1}" target="_blank" rel="noopener">Prendre 30 minutes avec C'mon Sports →</a>
+    </div>
+  </div>`));
+  const qb = $("#svc-qz");
+  if (qb) qb.onclick = () => showQualify(false);
   $("#services-list").querySelectorAll("button[data-svc]").forEach(b => {
     b.onclick = () => buyService(b.dataset.svc);
   });
@@ -2254,6 +2447,7 @@ function renderHistory() {
 function renderAll() {
   renderHeader(); renderKpis(); renderLastResult(); renderActions(); renderObjectives();
   renderLog(); renderDmos(); renderSponsors(); renderServices(); renderHistory();
+  renderTuto();
   prevKpis = kpiList(state);
 }
 
@@ -2548,7 +2742,7 @@ function isAdmin() {
 }
 
 function showScreen(id) {
-  ["screen-login", "screen-setup", "screen-game"].forEach(s =>
+  ["screen-intro", "screen-login", "screen-setup", "screen-game"].forEach(s =>
     $("#" + s).classList.toggle("hidden", s !== id));
   const wrap = $("#admin-wrap");
   if (wrap) wrap.style.display = isAdmin() ? "" : "none";
@@ -2623,6 +2817,8 @@ function finishLogin(u) {
   const saved = load();
   if (saved) { state = saved; startGame(); }
   else { state = null; showSetup(); }
+  // Briefing d'embauche : une seule fois par compte, et jamais par-dessus une partie.
+  if (!u.onboarded && !saved && !demoMode) showBriefing(0);
 }
 
 async function createProfile() {
@@ -2667,7 +2863,7 @@ const BREVO_LIST_KEY = "mktclubgm_brevo_list";
 // Suffixe de version : à incrémenter dès que la liste des attributs change,
 // sinon les navigateurs ayant déjà synchronisé sauteraient la création des
 // nouveaux attributs et Brevo rejetterait le contact (HTTP 400).
-const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok_v4";
+const BREVO_ATTR_OK = "mktclubgm_brevo_attr_ok_v5";
 const BREVO_ATTR = "CMON_SOLUTION_CLUBCATALIST";
 const BREVO_ATTR_PSEUDO = "PSEUDO";
 const BREVO_LIST_DEFAULT = 63; // liste « Club Catalist » côté Brevo
@@ -2742,6 +2938,9 @@ async function brevoEnsureAttributes(key) {
     // trilingue. Attribut dédié plutôt que le LANGUE natif de Brevo, dont
     // les valeurs sont figées — un texte libre y provoquerait un HTTP 400.
     ["CC_LANG", "text"],
+    // Questionnaire de positionnement (facultatif) + avancement pédagogique
+    ["CC_MATURITY", "text"], ["CC_PRIORITY", "text"], ["CC_TIMING", "text"],
+    ["CC_TUTO", "text"],
   ];
   let allOk = true;
   for (const [name, type] of defs) {
@@ -2780,6 +2979,8 @@ async function brevoSyncContact(u) {
         u.role ? { JOB_TITLE: u.role } : {},
         u.sportBrevo ? { SPORT: u.sportBrevo } : {},  // catégorie Brevo : valeur numérique
         { CC_LANG: u.lang || lang },
+        u.tuto ? { CC_TUTO: u.tuto } : {},
+        u.q || {},
         u.cc ? {
           CC_SEASONS: u.cc.seasons,
           CC_SERVICES: u.cc.services,
@@ -2903,6 +3104,7 @@ async function brevoSendTest(key, listId, email) {
 const CRM_ATTRIBUTS = [
   "CMON_SOLUTION_CLUBCATALIST", "OPT_IN", "PSEUDO", "COMPANY", "JOB_TITLE", "SPORT",
   "CC_SEASONS", "CC_SERVICES", "CC_CERT", "CC_LAST_PLAYED", "CC_LANG",
+  "CC_MATURITY", "CC_PRIORITY", "CC_TIMING", "CC_TUTO",
 ];
 
 async function brevoAudit(key) {
@@ -3282,6 +3484,10 @@ function showPrivacy(fromConsent = false) {
       S'y ajoutent quatre <b style="color:var(--text)">indicateurs d'usage agrégés</b> : nombre de saisons terminées,
       services C'mon Sports essayés dans le jeu, niveau de certification atteint et date de la dernière partie,
       ainsi que la langue dans laquelle vous utilisez la plateforme.
+      Enfin, si — et seulement si — vous choisissez d'y répondre, les <b style="color:var(--text)">trois réponses
+      du questionnaire de positionnement</b> (maturité déclarée de votre organisation, priorité des douze prochains
+      mois, échéance d'un éventuel projet) et l'état d'avancement du guide de prise en main. Le questionnaire est
+      facultatif : ne pas y répondre, ou y répondre plus tard, ne change rien à votre partie.
       Pas d'adresse IP collectée, pas de cookie, pas de traceur, pas d'outil d'analyse d'audience :
       aucune page vue ni aucun clic n'est enregistré.
       <h4>Où et comment ?</h4>
@@ -3289,7 +3495,8 @@ function showPrivacy(fromConsent = false) {
       restent dans le stockage local (localStorage) de ce navigateur.<br>
       <b style="color:var(--text)">Chez notre sous-traitant Brevo</b> (Sendinblue SAS, France — hébergement UE) — votre adresse
       e-mail, votre pseudo, le marqueur de solution Club Catalist, les informations facultatives que vous avez
-      renseignées et les quatre indicateurs d'usage ci-dessus y sont enregistrés, afin de gérer les comptes de la
+      renseignées, vos éventuelles réponses au questionnaire de positionnement et les quatre indicateurs d'usage
+      ci-dessus y sont enregistrés, afin de gérer les comptes de la
       plateforme, d'en mesurer l'usage et d'adapter nos échanges commerciaux à votre intérêt pour nos services.
       Base légale : <b style="color:var(--text)">intérêt légitime</b> (art. 6 §1 f RGPD), avec droit d'opposition —
       il suffit d'un e-mail pour que ces indicateurs cessent d'être transmis et soient effacés.<br>
@@ -3331,6 +3538,12 @@ function exportMyData() {
       ? { saisons_terminees: currentUser.cc.seasons, services_essayes: currentUser.cc.services,
           certification: currentUser.cc.cert, derniere_partie: currentUser.cc.lastPlayed }
       : null,
+    questionnaire_de_positionnement: (currentUser.q && Object.keys(currentUser.q).length)
+      ? { maturite_declaree: currentUser.q.CC_MATURITY || null,
+          priorite_declaree: currentUser.q.CC_PRIORITY || null,
+          echeance_declaree: currentUser.q.CC_TIMING || null }
+      : tr("lbl.qz.none", null, "non renseigné"),
+    guide_de_prise_en_main: currentUser.tuto || tr("lbl.qz.encours", null, "en cours"),
     sauvegarde_de_jeu: saveData,
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -3354,12 +3567,16 @@ function initAuth() {
   let sid = null;
   try { sid = sessionStorage.getItem(SESSION_KEY); } catch(e) {}
   const u = users.find(x => x.id === sid);
-  if (u) finishLogin(u); else renderLogin();
+  if (u) { finishLogin(u); return; }
+  // Premier passage sur cet appareil : on explique avant de demander une adresse.
+  if (!users.length && !localStorage.getItem(INTRO_KEY)) showIntro();
+  else renderLogin();
 }
 
 /* ================= Setup & wiring ================= */
 function showSetup() {
   showScreen("screen-setup");
+  renderSetupRules();
   $("#setup-user").innerHTML = currentUser ? '<i class=ic-user></i> ' + esc(currentUser.pseudo) : "";
   $("#setup-clubs").innerHTML = CLUBS.map(c => `
     <div class="club-card" data-club="${c.id}" style="--cc:${c.color};--cc-soft:${c.color}1F;--cc-line:${c.color}59;--cc-glow:${c.color}33">
@@ -3449,6 +3666,7 @@ document.querySelectorAll(".tabs button").forEach(b => {
     b.classList.add("active");
     ["dashboard","dmos","sponsors","cmon","history"].forEach(t =>
       $("#tab-"+t).classList.toggle("hidden", t !== b.dataset.tab));
+    tutoMark(b.dataset.tab);
   };
 });
 
@@ -3465,11 +3683,705 @@ $("#new-pin").onkeydown = e => { if (e.key === "Enter") createProfile(); };
 $("#btn-logout-setup").onclick = logout;
 $("#btn-logout-game").onclick = logout;
 $("#dmos-info").onclick = showDmosInfo;
+$("#btn-help").onclick = () => showHelp("regles");
+$("#link-help").onclick = () => showHelp("regles");
+$("#link-intro").onclick = showIntro;
 $("#link-privacy").onclick = () => showPrivacy(false);
 $("#optin-privacy").onclick = e => { e.preventDefault(); showPrivacy(false); };
 $("#link-export").onclick = exportMyData;
 $("#link-delete").onclick = deleteMyProfile;
 $("#link-admin").onclick = showAdmin;
+
+
+/* =====================================================================
+   PÉDAGOGIE — découverte, briefing, guide de prise en main, centre
+   d'aide, questionnaire de positionnement.
+
+   Principe directeur : chaque mécanique du jeu est expliquée deux fois.
+   Une fois pour jouer (« ce que ça fait ici »), une fois pour apprendre
+   (« ce que ça veut dire dans un vrai club »). C'est cette seconde
+   lecture qui fait de Club Catalist un support pédagogique, et c'est
+   elle qui amène naturellement au questionnaire de positionnement.
+   ===================================================================== */
+
+/* ---------- Écran de découverte, avant toute demande d'adresse ---------- */
+function renderIntro() {
+  $("#intro-body").innerHTML = tr("intro.body", { v0: WEEKS_PER_SEASON }, `
+    <div class="intro-hero">
+      <h2><span class="sig-cap">V</span>ous venez d'être recruté<span class="sig-cap">.</span></h2>
+      <p>Un club de sport vous confie son marketing digital. Vous avez {v0} semaines, trois points
+      d'action par semaine et un comité directeur qui regarde. Ce que vous ferez de vos données
+      fans décidera de tout le reste : vos sponsors, vos revenus, et votre poste.</p>
+      <div class="chips">
+        <span><i class=ic-clock></i> une saison ≈ 15 minutes</span>
+        <span><i class=ic-user></i> sans installation</span>
+        <span><i class=ic-lock></i> sauvegarde dans votre navigateur</span>
+      </div>
+      <div class="intro-cta">
+        <button class="primary" id="intro-start"><i class=ic-play></i> Créer mon compte et jouer</button>
+        <button id="intro-rules"><i class=ic-bulb></i> Voir les règles d'abord</button>
+      </div>
+    </div>
+    <div class="intro-grid">
+      <div class="intro-card">
+        <h4><i class=ic-bolt></i> Ce que vous allez faire</h4>
+        <p>Publier, envoyer des campagnes, collecter des données, activer et démarcher des sponsors,
+        vous mettre en conformité. <b>Trois actions par semaine, pas quatre</b> — l'arbitrage est
+        le cœur du jeu.</p>
+      </div>
+      <div class="intro-card">
+        <h4><i class=ic-gauge></i> Ce que vous allez apprendre</h4>
+        <p>Pourquoi <b>un fan n'est pas un contact</b>, ce que vaut économiquement une fanbase,
+        pourquoi un sponsor part, et ce que mesure un score de maturité digitale.
+        Le jeu fait ce que fait un audit : il rend visible ce qui ne l'était pas.</p>
+      </div>
+      <div class="intro-card">
+        <h4><i class=ic-launch></i> Ce qui est réel là-dedans</h4>
+        <p>Le score DMOS, le Fan Lab, la Data Factory, Blue Penguin, Griddy Picks :
+        <b>ce sont les vraies méthodes et les vrais services de C'mon Sports</b>, avec les mêmes
+        effets. Le jeu est une maquette fidèle, pas une métaphore.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3><i class=ic-play></i> <span><span class="sig-cap">C</span>OMMENT ON JOUE<span class="sig-cap">.</span></span></h3>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><div>
+          <b>Vous choisissez un club et un comité directeur</b>
+          <span>Quatre clubs suisses fictifs — hockey, football, basket, volley — et trois niveaux
+          de patience du comité. Le comité fixe la difficulté pour toute la carrière.</span></div></div>
+        <div class="step"><div class="n">2</div><div>
+          <b>Chaque semaine, vous dépensez trois points d'action</b>
+          <span>Sept actions possibles, chacune avec un coût en argent et en points. Puis vous jouez
+          la semaine : le match se joue, les revenus tombent, un événement peut survenir.</span></div></div>
+        <div class="step"><div class="n">3</div><div>
+          <b>Vous pilotez à l'aveugle — au début</b>
+          <span>Deux indicateurs affichent « ? » et votre score DMOS reste une fourchette.
+          C'est volontaire : c'est la situation d'un club qui n'a jamais mesuré.
+          Les analyses de l'onglet C'mon Sports lèvent ce brouillard.</span></div></div>
+        <div class="step"><div class="n">4</div><div>
+          <b>En fin de saison, le comité fait les comptes</b>
+          <span>Objectifs atteints ou non, sponsors qui renouvellent ou qui partent, promotion ou
+          relégation. La confiance monte ou descend — et sous un certain seuil, vous êtes remercié.</span></div></div>
+      </div>
+      <div class="intro-cta">
+        <button class="primary" id="intro-start2"><i class=ic-play></i> Créer mon compte</button>
+        <button id="intro-login">J'ai déjà un compte</button>
+      </div>
+    </div>`);
+  $("#intro-start").onclick = $("#intro-start2").onclick = () => { introSeen(); renderLogin(); };
+  $("#intro-login").onclick = () => { introSeen(); renderLogin(); };
+  $("#intro-rules").onclick = () => showHelp("regles");
+}
+const INTRO_KEY = "mktclubgm_intro_vu";
+function introSeen() { try { localStorage.setItem(INTRO_KEY, "1"); } catch (e) {} }
+function showIntro() { showScreen("screen-intro"); renderIntro(); }
+
+/* ---------- Rappel des règles sur l'écran de choix du club ---------- */
+function renderSetupRules() {
+  const el = $("#setup-rules");
+  if (!el) return;
+  el.innerHTML = tr("setup.rules", null, `<div class="card">
+    <h3><i class=ic-bulb></i> <span><span class="sig-cap">A</span>VANT DE COMMENCER<span class="sig-cap">.</span></span>
+      <span class="tag">3 minutes de lecture</span></h3>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div>
+        <b>Trois points d'action par semaine</b>
+        <span>Ni plus, ni reportables. Chaque action coûte aussi de l'argent —
+        et l'argent, lui, se reporte.</span></div></div>
+      <div class="step"><div class="n">2</div><div>
+        <b>Un score de maturité sur 60, en six piliers</b>
+        <span>Le DMOS. Il conditionne le coût de vos actions, l'efficacité de vos campagnes
+        et ce que les sponsors acceptent de signer.</span></div></div>
+      <div class="step"><div class="n">3</div><div>
+        <b>Vous ne voyez pas tout</b>
+        <span>Certains chiffres sont masqués tant que votre club n'a pas été analysé.
+        C'est la règle la plus importante du jeu.</span></div></div>
+    </div>
+    <div class="intro-cta">
+      <button id="setup-help"><i class=ic-bulb></i> Aide &amp; règles complètes</button>
+      <button id="setup-briefing"><i class=ic-clipboard></i> Revoir le briefing</button>
+    </div>
+  </div>`);
+  $("#setup-help").onclick = () => showHelp("regles");
+  $("#setup-briefing").onclick = () => showBriefing(0);
+}
+
+/* ---------- Briefing d'embauche : trois volets, passables ---------- */
+const BRIEFING = [
+  {
+    icon: "clipboard",
+    title: `Votre poste`,
+    body: `<p>Vous êtes <b>Responsable Marketing Digital</b> d'un club de sport. Le comité directeur
+      vous a recruté pour une raison simple : il sent que le club perd de l'argent quelque part,
+      sans savoir où.</p>
+      <p>Votre semaine tient en <b>trois points d'action</b>. Publier du contenu, envoyer une campagne,
+      collecter des données, activer un sponsor, en démarcher un nouveau, vous former, vous mettre en
+      conformité. Chaque action consomme aussi du budget.</p>
+      <p>Une saison dure <b>26 semaines</b>. Vous sauvegardez automatiquement à chaque fin de semaine.</p>`,
+  },
+  {
+    icon: "gauge",
+    title: `Votre note`,
+    body: `<p>Le <b>score DMOS</b> — Digital Maturity &amp; Operations Score — note votre organisation
+      sur 60, en six piliers de 10 : stratégie, contenu, données fans, outils &amp; CRM, acquisition,
+      conformité.</p>
+      <p>Au départ, il s'affiche <b>en fourchette</b> : « ~18–28 ? ». Deux de vos indicateurs affichent
+      même « ? ». Ce n'est pas un défaut d'interface : c'est exactement ce que voit un club qui n'a
+      jamais fait mesurer sa base. <b>Vous pilotez à l'estime, et vous ne le savez pas.</b></p>
+      <p>L'Audit DMOS et les analyses Fan Lab, dans l'onglet C'mon Sports, remplacent ces fourchettes
+      par des chiffres. C'est le vrai tournant d'une partie.</p>`,
+  },
+  {
+    icon: "shield",
+    title: `Votre comité`,
+    body: `<p>Le comité directeur vous fixe <b>des objectifs en début de saison</b> et fait les comptes
+      à la fin. Chaque objectif manqué coûte de la confiance ; sous le seuil de patience de votre
+      comité, <b>vous êtes remercié</b> et la partie s'arrête.</p>
+      <p>Vous choisirez son tempérament juste après votre club : conciliant, exigeant ou impitoyable.
+      Ce choix vaut pour toute la carrière.</p>
+      <p>Un <b>guide de prise en main</b> vous accompagnera pendant les premières semaines, en haut du
+      tableau de bord. Il se masque en un clic, et se rappelle depuis « Aide &amp; règles ».</p>`,
+  },
+];
+
+function showBriefing(i) {
+  const b = BRIEFING[i];
+  const dots = BRIEFING.map((_, k) =>
+    `<span class="${k === i ? "now" : k < i ? "ok" : ""}">${k + 1}</span>`).join("");
+  const last = i === BRIEFING.length - 1;
+  showModal(tr("brief.frame", {
+    v0: b.icon, v1: b.title, v2: b.body,
+    v3: dots, v4: i + 1, v5: BRIEFING.length,
+    v6: last ? tr("brief.go", null, "Choisir mon club") : tr("brief.next", null, "Suivant"),
+  }, `<h2><i class=ic-{v0}></i> {v1}</h2>
+    <div class="tuto-trail" style="margin:0 0 14px">{v3}</div>
+    {v2}
+    <div class="choices">
+      <button class="primary" id="brief-next"><i class=ic-arrow></i> {v6}</button>
+      <button id="brief-skip" style="text-align:center">Passer le briefing ({v4}/{v5})</button>
+    </div>`));
+  $("#brief-next").onclick = () => { if (last) { briefingDone(); closeModal(); } else showBriefing(i + 1); };
+  $("#brief-skip").onclick = () => { briefingDone(); closeModal(); };
+}
+function briefingDone() {
+  if (!currentUser) return;
+  currentUser.onboarded = true;
+  const users = loadUsers();
+  const u = users.find(x => x.id === currentUser.id);
+  if (u) { u.onboarded = true; saveUsers(users); }
+}
+
+/* =====================================================================
+   Guide de prise en main — une étape à la fois, jamais bloquant.
+   Chaque étape porte un « à faire » (jouer) et un « pourquoi »
+   (apprendre). Les étapes se valident toutes seules quand le joueur a
+   fait le geste ; aucune ne lui demande de cliquer sur « suivant ».
+   ===================================================================== */
+const TUTO = [
+  { id: "actions", short: `Actions`,
+    title: `Répartissez vos trois points d'action`,
+    how: `Dans la carte <b>Actions de la semaine</b>, appuyez sur « + » jusqu'à remplir les trois
+      jauges. Une action coûte 1 point — la prospection sponsor en coûte 2 — et toujours de l'argent.`,
+    why: `Un service marketing de club, c'est deux ou trois personnes et un budget fini. Le jeu vous
+      impose le même arbitrage chaque semaine : <b>ce que vous ne faites pas a un coût, invisible
+      mais réel</b>.`,
+    ok: s => apUsed() >= 3 || s.week > 1 },
+  { id: "play", short: `Semaine`,
+    title: `Jouez votre première semaine`,
+    how: `Bouton <b>Jouer la semaine</b>, en bas de la carte. Vos actions se résolvent, le match se
+      joue, les revenus tombent, et le journal raconte tout dans la colonne de droite.`,
+    why: `Rien de spectaculaire ne se produira. C'est le premier enseignement : en marketing de club,
+      <b>l'effet d'une action se lit sur un cycle, pas sur une publication</b>. Le journal est votre
+      reporting hebdomadaire — apprenez à le lire, il contient tout.`,
+    ok: s => s.week >= 2 || s.season > 1 },
+  { id: "kpi", short: `Indicateurs`,
+    title: `Interrogez un indicateur masqué`,
+    how: `En haut de l'écran, deux indicateurs affichent « ? » : <b>Pénétration bassin</b> et
+      <b>Qualité données</b>. Cliquez sur le petit « i » à côté de l'un des deux.`,
+    why: `Ce « ? » n'est pas une fonctionnalité verrouillée : c'est la situation réelle d'un club qui
+      n'a jamais fait analyser sa base. <b>Il ne sait ni combien de personnes il pourrait atteindre,
+      ni ce que valent les adresses qu'il possède</b> — et il construit quand même son plan dessus.`,
+    ok: s => s.tuto.seen.kpi },
+  { id: "dmos", short: `DMOS`,
+    title: `Ouvrez l'onglet DMOS`,
+    how: `Onglet <b>DMOS</b>, dans la barre au-dessus. Six piliers notés sur 10, et un total affiché
+      en fourchette tant que le club n'a pas été audité. Le « i » du panneau détaille chaque pilier.`,
+    why: `Le DMOS est le diagnostic que C'mon Sports pose réellement chez ses clients. La fourchette
+      est le message principal : <b>vous avez une intuition de votre maturité, pas une mesure</b>.
+      Tant qu'elle n'est pas mesurée, elle n'est ni comparable, ni défendable devant un sponsor.`,
+    ok: s => s.tuto.seen.dmos },
+  { id: "sponsors", short: `Sponsors`,
+    title: `Regardez la satisfaction de vos sponsors`,
+    how: `Onglet <b>Sponsors</b>. Chaque contrat affiche un montant, une satisfaction et une échéance.
+      Sous 60 % au moment de l'échéance, le sponsor ne renouvelle pas.`,
+    why: `Un sponsor ne se perd pas le jour où il s'en va : <b>il se perd pendant les mois où personne
+      ne l'a activé</b>. La satisfaction est le seul indicateur qui prévient à l'avance — encore
+      faut-il la suivre, ce que très peu de clubs font.`,
+    ok: s => s.tuto.seen.sponsors },
+  { id: "cmon", short: `C'mon Sports`,
+    title: `Levez le brouillard`,
+    how: `Onglet <b>C'mon Sports</b>. Six services. L'<b>Audit DMOS</b> révèle vos scores exacts et
+      débloque la certification ; <b>Fan Lab Insight</b> révèle votre bassin atteignable et la qualité
+      réelle de vos données.`,
+    why: `C'est le pivot du jeu, et c'est vrai en dehors : <b>on ne pilote pas ce qu'on ne mesure
+      pas</b>. Ces six services existent, portent ces noms, et produisent ces effets-là chez les clubs
+      accompagnés par C'mon Sports. Rien n'oblige à les acheter dans le jeu — mais jouez une saison
+      sans, puis une saison avec.`,
+    ok: s => s.tuto.seen.cmon },
+  { id: "final", short: `Terminé`,
+    title: `Le guide s'arrête là`,
+    how: `Vous avez tout. Objectifs du comité en haut à droite, journal en dessous, 26 semaines devant
+      vous. « <b>Aide &amp; règles</b> », dans l'en-tête, garde toutes les explications à portée.`,
+    why: `Une dernière chose, et elle nous intéresse vraiment : <b>où en êtes-vous, vous, dans votre
+      organisation ?</b> Trois questions, trente secondes, et nous saurons quoi vous montrer
+      d'utile plutôt que de vous envoyer une brochure générique.`,
+    ok: () => false },
+];
+
+function freshTuto() { return { step: 0, done: false, hidden: false, seen: {} }; }
+
+/* Marque un geste du joueur (onglet ouvert, explication lue). */
+function tutoMark(id) {
+  if (!state || !state.tuto || state.tuto.done) return;
+  if (state.tuto.seen[id]) return;
+  state.tuto.seen[id] = true;
+  save();
+  renderTuto();
+}
+
+/* Avance tant que l'étape courante est satisfaite. */
+function tutoAdvance() {
+  const t = state.tuto;
+  if (!t || t.done) return;
+  let guard = 0;
+  while (t.step < TUTO.length && TUTO[t.step].ok(state) && guard++ < TUTO.length) t.step++;
+  if (t.step >= TUTO.length) { t.step = TUTO.length - 1; }
+}
+
+function tutoFinish(kind) {
+  state.tuto.done = true;
+  save();
+  if (currentUser) {
+    currentUser.tuto = kind;
+    const users = loadUsers();
+    const u = users.find(x => x.id === currentUser.id);
+    if (u) { u.tuto = kind; saveUsers(users); }
+    if (!demoMode && localStorage.getItem(BREVO_KEY)) brevoSyncContact(currentUser);
+  }
+  renderTuto();
+}
+
+function renderTuto() {
+  const el = $("#tuto-zone");
+  if (!el) return;
+  // Le mode démo commerciale montre un club déjà avancé : un guide « posez vos
+  // trois points d'action » n'y a pas sa place, et le compte affiché n'est pas
+  // celui d'un joueur.
+  if (demoMode) { el.innerHTML = ""; return; }
+  if (!state.tuto) state.tuto = freshTuto();
+  const t = state.tuto;
+  if (t.done || state.gameOver) { el.innerHTML = ""; return; }
+  if (t.hidden) {
+    el.innerHTML = tr("tuto.hidden", { v0: t.step + 1, v1: TUTO.length }, `<div class="tuto-resume">
+      <i class=ic-bulb></i> <span>Guide de prise en main masqué — étape {v0}/{v1}.</span>
+      <button id="tuto-show">Le réafficher</button></div>`);
+    $("#tuto-show").onclick = () => { t.hidden = false; save(); renderTuto(); };
+    return;
+  }
+  tutoAdvance();
+  const st = TUTO[t.step];
+  const pct = Math.round(t.step / (TUTO.length - 1) * 100);
+  const trail = TUTO.map((x, k) =>
+    `<span class="${k < t.step ? "ok" : k === t.step ? "now" : ""}">${k < t.step ? "<i class=ic-check></i> " : ""}${x.short}</span>`).join("");
+  const last = st.id === "final";
+  el.innerHTML = tr("tuto.frame", {
+    v0: t.step + 1, v1: TUTO.length, v2: pct,
+    v3: st.title, v4: st.how, v5: st.why,
+    v6: trail,
+    v7: last ? tr("tuto.final.actions", null, `<button class="primary" id="tuto-q"><i class=ic-target></i> Répondre aux trois questions</button>
+        <button id="tuto-end">Terminer sans répondre</button>`)
+             : tr("tuto.actions", null, `<button id="tuto-help"><i class=ic-bulb></i> Aide &amp; règles</button>
+        <button id="tuto-skip">Je connais déjà, passer le guide</button>`),
+  }, `<div class="tuto">
+    <div class="tuto-head">
+      <b><i class=ic-bulb></i> Prise en main</b>
+      <span class="count">étape {v0}/{v1}</span>
+      <button id="tuto-hide">Masquer</button>
+    </div>
+    <div class="tuto-prog"><div class="fill" style="width:{v2}%"></div></div>
+    <div class="tuto-step">
+      <h4>{v3}</h4>
+      <div class="how">{v4}</div>
+      <div class="tuto-why"><b>Pourquoi ça compte</b><br>{v5}</div>
+    </div>
+    <div class="tuto-trail">{v6}</div>
+    <div class="tuto-actions">{v7}</div>
+  </div>`);
+  $("#tuto-hide").onclick = () => { t.hidden = true; save(); renderTuto(); };
+  if (last) {
+    $("#tuto-q").onclick = () => showQualify(true);
+    $("#tuto-end").onclick = () => tutoFinish("Terminé");
+  } else {
+    $("#tuto-help").onclick = () => showHelp("regles");
+    $("#tuto-skip").onclick = () => tutoFinish("Passé");
+  }
+}
+
+/* =====================================================================
+   Centre d'aide — la documentation du jeu, et la seconde lecture.
+   Chaque entrée dit ce que la mécanique fait dans le jeu, puis ce
+   qu'elle signifie dans un club réel.
+   ===================================================================== */
+const HELP_SECTIONS = [
+  { id: "regles",   label: `Règles`,      icon: "play" },
+  { id: "kpi",      label: `Indicateurs`, icon: "chart" },
+  { id: "actions",  label: `Actions`,     icon: "bolt" },
+  { id: "services", label: `Services`,    icon: "launch" },
+  { id: "glossaire",label: `Glossaire`,   icon: "clipboard" },
+];
+
+function helpRow(title, game, real) {
+  return `<div class="help-row"><b>${title}</b><span class="g">${game}</span>` +
+    (real ? `<span class="r"><i class="tagr">${tr("help.real", null, "Dans un vrai club")}</i>${real}</span>` : "") + `</div>`;
+}
+
+function helpRegles() {
+  return tr("help.regles", { v0: WEEKS_PER_SEASON }, `
+    <h4>Le tour de jeu</h4>
+    <div class="help-row"><b>Une semaine, dans l'ordre</b><span class="g">
+      Vous choisissez vos actions → vous cliquez « Jouer la semaine » → les actions se résolvent →
+      les frais fixes et les abonnements sont prélevés → les revenus sponsors et merchandising tombent →
+      le match se joue → un événement ou une décision peut survenir → la semaine est sauvegardée.</span></div>
+    <div class="help-row"><b>Trois points d'action, non reportables</b><span class="g">
+      Chaque semaine : 3 points. Six actions en coûtent 1, la prospection sponsor en coûte 2.
+      Les points non dépensés sont perdus ; l'argent, lui, se reporte.</span>
+      <span class="r"><i class="tagr">${tr("help.real", null, "Dans un vrai club")}</i>C'est la contrainte de temps d'une petite
+      équipe. Le budget se reporte d'un mois sur l'autre, jamais les semaines de travail.</span></div>
+    <div class="help-row"><b>L'argent</b><span class="g">
+      Chaque action a un coût, qui baisse quand le pilier « Outils &amp; CRM » monte. S'y ajoutent des
+      frais fixes hebdomadaires, qui grandissent avec la taille du club et explosent en première
+      division, et les abonnements aux services actifs.</span></div>
+    <h4>La saison</h4>
+    <div class="help-row"><b>{v0} semaines, 12 équipes</b><span class="g">
+      Un match par semaine, à domicile ou à l'extérieur. Seule une part de la billetterie (5 %, 6 % avec
+      Fan Lab Pro) revient au marketing. En fin de saison : classement, promotion ou relégation,
+      qualification européenne.</span></div>
+    <div class="help-row"><b>Le comité directeur</b><span class="g">
+      Il fixe des objectifs en début de saison et fait les comptes à la fin : chaque objectif au-dessus
+      du quota vaut +8 de confiance, chaque objectif manquant −8. Sa confiance se dégrade aussi en cours
+      de saison si les résultats sportifs déçoivent. Sous son seuil de patience, vous êtes remercié.</span>
+      <span class="r"><i class="tagr">${tr("help.real", null, "Dans un vrai club")}</i>Le comité juge sur ce qu'il voit. Un
+      responsable marketing sans chiffres à montrer est jugé sur les résultats sportifs — qu'il ne
+      contrôle pas.</span></div>
+    <div class="help-row"><b>Trois comités possibles</b><span class="g">
+      Conciliant, exigeant, impitoyable. Le choix se fait avec le club et vaut pour toute la carrière :
+      il change la confiance de départ, le seuil de licenciement, le nombre d'objectifs exigés et la
+      fréquence des décisions d'ego.</span></div>
+    <h4>Le brouillard de données</h4>
+    <div class="help-row"><b>Pourquoi des « ? » et des fourchettes</b><span class="g">
+      Tant que le club n'a pas été analysé, la pénétration du bassin et la qualité des données affichent
+      « ? », et le score DMOS s'affiche en fourchette. L'Audit DMOS révèle les scores exacts ;
+      Fan Lab Insight révèle le bassin et la qualité ; Fan Lab Pro ajoute la valeur en francs.</span>
+      <span class="r"><i class="tagr">${tr("help.real", null, "Dans un vrai club")}</i>C'est la situation de départ de la plupart
+      des clubs : des chiffres de fréquentation, aucune mesure de la base. Le brouillard n'est pas une
+      punition de jeu, c'est le point de départ réel.</span></div>
+    <h4>Sauvegarde, langues, défis</h4>
+    <div class="help-row"><b>Tout reste dans votre navigateur</b><span class="g">
+      La partie est sauvegardée automatiquement à chaque fin de semaine, dans le stockage local de cet
+      appareil. « Exporter mes données » en bas de page vous rend tout ce qui vous concerne.</span></div>
+    <div class="help-row"><b>Français, allemand, anglais</b><span class="g">
+      Le sélecteur est en bas de page. Changer de langue recharge la partie en cours sans la perdre.</span></div>
+    <div class="help-row"><b>Mode défi</b><span class="g">
+      Un code du type HC-1-A7K9F2 fige le club, le comité et toute la suite d'événements de la saison.
+      Deux joueurs partageant un code affrontent exactement les mêmes aléas — le seul écart, ce sont
+      leurs décisions.</span></div>`);
+}
+
+function helpKpi() {
+  return KPI_ORDER.map(k => {
+    const d = KPI_HELP[k];
+    return helpRow(d.t, d.g, d.r);
+  }).join("");
+}
+
+function helpActions() {
+  return ACTIONS.map(a => helpRow(
+    a.name + ` <span style="font-weight:600;color:var(--ink-3);font-size:var(--t1)">${tr("help.ap", {v0: a.ap}, "— {v0} PA")}</span>`,
+    a.desc, a.real)).join("");
+}
+
+function helpServices() {
+  return SERVICES.map(sv => helpRow(
+    esc(sv.name) + ` <span style="font-weight:600;color:var(--ink-3);font-size:var(--t1)">— ${esc(sv.subLabel)}</span>`,
+    sv.effect, sv.real)).join("");
+}
+
+const GLOSSAIRE = [
+  { t: `DMOS`, d: `Digital Maturity &amp; Operations Score. Le diagnostic de maturité digitale utilisé par
+    C'mon Sports : six piliers notés sur 10, total sur 60, comparable d'un club à l'autre et d'une année
+    sur l'autre.` },
+  { t: `Fan Lab`, d: `La méthode d'analyse de la base de contacts d'un club : qualité des données,
+    pénétration du bassin, puis valorisation économique de l'audience. Insight mesure, Pro chiffre.` },
+  { t: `Bassin atteignable`, d: `Le nombre de personnes qu'un club pourrait raisonnablement toucher —
+    bien au-delà de ses abonnés. Dans le jeu : les fans de départ × 3 en deuxième division, × 8 dans
+    l'élite, l'exposition nationale élargissant le marché.` },
+  { t: `Pénétration`, d: `La part du bassin réellement collectable qui figure déjà dans votre base de
+    contacts. Elle dit s'il reste des contacts faciles à aller chercher, ou si le gisement est épuisé.` },
+  { t: `Qualité des données`, d: `Une note sur 10 : adresses valides, doublons éliminés, consentements en
+    règle, segmentation exploitable. Deux clubs peuvent avoir le même nombre de contacts et des bases de
+    valeur très différente.` },
+  { t: `Certification Gold / Silver`, d: `Le seuil atteint au DMOS une fois le club audité : Silver à
+    30/60, Gold à 45/60. Elle rassure les sponsors et facilite la prospection.` },
+  { t: `Engagement`, d: `Le taux d'interaction moyen de la communauté. Il monte avec le contenu et les
+    programmes de fidélité, et redescend tout seul si on ne l'alimente pas.` },
+  { t: `Fatigue e-mail`, d: `L'usure d'une base sur-sollicitée : chaque campagne rapporte moins que la
+    précédente si elles s'enchaînent. Une bonne segmentation la divise par deux.` },
+  { t: `RGPD / nLPD`, d: `Le règlement européen et la loi suisse sur la protection des données. Dans le
+    jeu comme ailleurs : consentements traçables, registre à jour, base nettoyée. Un contrôle sur une
+    base non conforme coûte cher.` },
+  { t: `Point d'action (PA)`, d: `L'unité de temps de votre semaine. Trois par semaine, jamais
+    reportables.` },
+];
+
+function helpGlossaire() {
+  return GLOSSAIRE.map(g =>
+    `<div class="help-row"><b>${g.t}</b><span class="g">${g.d}</span></div>`).join("");
+}
+
+function showHelp(section) {
+  const sec = section || "regles";
+  const nav = HELP_SECTIONS.map(s =>
+    `<button data-help="${s.id}" class="${s.id === sec ? "on" : ""}"><i class=ic-${s.icon}></i> ${s.label}</button>`).join("");
+  const body = sec === "regles" ? helpRegles()
+    : sec === "kpi" ? helpKpi()
+    : sec === "actions" ? helpActions()
+    : sec === "services" ? helpServices()
+    : helpGlossaire();
+  showModal(tr("help.frame", { v0: nav, v1: body, v2: BOOKING_URL }, `
+    <h2><i class=ic-bulb></i> <span class="sig-cap">A</span>ide &amp; règles<span class="sig-cap">.</span></h2>
+    <div class="help-nav">{v0}</div>
+    <div class="help-sec">{v1}</div>
+    <p class="cta-line">Ces mécaniques sont celles d'un vrai diagnostic —
+      <a href="{v2}" target="_blank" rel="noopener">parlez-en 30 minutes avec C'mon Sports</a>.</p>
+    <div class="choices">
+      <button id="help-tuto"><i class=ic-play></i> Rejouer le guide de prise en main</button>
+      <button id="help-qz"><i class=ic-target></i> Le questionnaire de positionnement</button>
+      <button class="primary" id="help-close">Fermer</button>
+    </div>`));
+  $("#help-tuto").onclick = () => {
+    if (!state) return;
+    state.tuto = freshTuto();
+    save(); renderTuto(); closeModal();
+  };
+  $("#help-qz").onclick = () => showQualify(false);
+  $("#modal-root").querySelectorAll("[data-help]").forEach(b => {
+    b.onclick = () => showHelp(b.dataset.help);
+  });
+  $("#help-close").onclick = closeModal;
+}
+
+/* ---------- Explication générique d'un indicateur ---------- */
+const KPI_ORDER = ["budget", "fans", "engagement", "contacts", "penetration", "quality", "dmos", "board"];
+const KPI_HELP = {
+  budget: { t: `Budget`,
+    g: `Ce qu'il reste en caisse. Il s'alimente des sponsors, du merchandising et d'une part de la
+      billetterie ; il se vide en frais fixes hebdomadaires, en coût des actions et en abonnements aux
+      services actifs. Un budget négatif n'arrête pas la partie, mais le comité le remarque.`,
+    r: `Le budget marketing d'un club se consomme en charges fixes bien avant la première campagne.
+      C'est pourquoi l'arbitrage porte rarement sur « quoi faire », et presque toujours sur « quoi ne
+      pas faire ».` },
+  fans: { t: `Fans`,
+    g: `L'audience totale du club, tous canaux confondus. Elle grandit avec le contenu, l'acquisition,
+      les victoires et les montées ; elle s'érode en cas de relégation ou de saison ratée.`,
+    r: `Un fan n'est pas un contact. C'est le malentendu le plus coûteux du sport business :
+      une communauté de 40 000 personnes dont on ne peut joindre directement que 900 vaut, pour un
+      sponsor, ce que vaut la seconde moitié de cette phrase.` },
+  engagement: { t: `Engagement`,
+    g: `Le taux d'interaction moyen de votre communauté, de 0 à 100 %. Il monte avec le contenu et les
+      programmes de fidélité, il redescend seul si rien ne l'alimente. Il pèse sur la billetterie, le
+      merchandising et la valeur Fan Lab.`,
+    r: `C'est le seul indicateur d'audience qu'un sponsor regarde vraiment : il préfère 8 000 personnes
+      qui réagissent à 60 000 qui font défiler.` },
+  contacts: { t: `Contacts CRM`,
+    g: `Le nombre de personnes que vous pouvez joindre directement. Il grandit avec les jeux concours,
+      la collecte de données et Griddy Picks ; il peut baisser lors d'une purge de contacts obsolètes
+      si la qualité est basse.`,
+    r: `Le seul actif marketing qui vous appartienne réellement. Ni un réseau social ni une plateforme
+      de billetterie ne vous prêtera deux fois son audience aux mêmes conditions.` },
+  penetration: { t: `Pénétration du bassin`,
+    g: `La part du bassin réellement collectable déjà présente dans votre base. Masquée tant qu'aucune
+      analyse Fan Lab n'a été commandée. Plus elle est haute, moins les jeux concours rapportent de
+      nouveaux contacts.`,
+    r: `Elle répond à la question qu'aucun club ne sait trancher : « nous reste-t-il des contacts
+      faciles à aller chercher, ou faut-il changer de méthode ? »` },
+  quality: { t: `Qualité des données`,
+    g: `Une note sur 10 sur la santé de votre base. Elle monte avec la collecte, les chantiers de
+      conformité et la Data Factory ; elle se dégrade toute seule de 0,05 par semaine sans entretien.
+      Masquée tant qu'aucune analyse Fan Lab n'a été commandée.`,
+    r: `Une base se périme au rythme de la vie des gens : déménagements, changements d'adresse,
+      désabonnements. Sans entretien, une base perd environ un cinquième de sa valeur par an.` },
+  dmos: { t: `Score DMOS`,
+    g: `Le total des six piliers, sur 60. Affiché en fourchette tant que le club n'a pas été audité.
+      Il fait baisser le coût de vos actions, monter l'efficacité de vos campagnes et les montants que
+      les sponsors acceptent de signer.`,
+    r: `Le même diagnostic est posé chez les clients de C'mon Sports, avec les mêmes six piliers.
+      Sa vertu première n'est pas la note : c'est de rendre une organisation comparable à elle-même
+      d'une année sur l'autre.` },
+  board: { t: `Confiance du comité`,
+    g: `De 0 à 100 %. Elle monte avec les objectifs atteints, les bons résultats sportifs et la
+      livraison de l'audit ; elle descend avec les échecs et certaines décisions. Sous le seuil de
+      patience de votre comité, la partie s'arrête.`,
+    r: `Un comité juge sur ce qu'il comprend. C'est la raison pour laquelle un responsable marketing
+      qui ne produit pas de mesure finit jugé sur les résultats sportifs, qu'il ne contrôle pas.` },
+};
+
+function showKpiInfo(key) {
+  tutoMark("kpi");
+  const d = KPI_HELP[key];
+  if (!d) return;
+  showModal(tr("kpimodal", { v0: d.t, v1: d.g, v2: d.r }, `<h2>{v0}<span class="sig-cap">.</span></h2>
+    <p>{v1}</p>
+    <div class="tuto-why"><b>Dans un vrai club</b><br>{v2}</div>
+    <div class="choices"><button class="primary" id="kpi-close">Fermer</button></div>`));
+  $("#kpi-close").onclick = closeModal;
+}
+
+/* =====================================================================
+   Questionnaire de positionnement — trois questions, toutes facultatives.
+   Les valeurs partent au CRM en français, comme le rôle et les services :
+   un segment Brevo doit retrouver le même répondant quelle que soit la
+   langue de jeu. Rien n'est transmis tant que le joueur n'a pas validé.
+   ===================================================================== */
+const QUALIFY = [
+  { attr: "CC_MATURITY", q: `Où en est votre organisation, dans la vraie vie ?`,
+    opts: [
+      ["Pas de base de données fans", `Nous n'avons pas de base de données fans`],
+      ["Base peu exploitée", `Une base existe, mais nous ne l'exploitons pas vraiment`],
+      ["CRM et segmentation actifs", `CRM en place, segmentation et campagnes actives`],
+      ["Hors club", `Je ne travaille pas dans un club ou une fédération`],
+    ] },
+  { attr: "CC_PRIORITY", q: `Votre priorité des douze prochains mois ?`,
+    opts: [
+      ["Collecte et qualification de données", `Collecter et qualifier des données fans`],
+      ["Valorisation fanbase / sponsors", `Valoriser la fanbase auprès des sponsors`],
+      ["Structuration marketing digital", `Structurer le marketing digital`],
+      ["Conformité RGPD / nLPD", `Nous mettre en conformité RGPD / nLPD`],
+      ["Aucune, découverte", `Aucune pour l'instant — je découvre`],
+    ] },
+  { attr: "CC_TIMING", q: `Un projet dans les mois qui viennent ?`,
+    opts: [
+      ["Budget prévu", `Oui, un budget est prévu`],
+      ["À l'étude", `Oui, c'est à l'étude`],
+      ["Pas maintenant", `Pas pour l'instant`],
+    ] },
+];
+
+/* Recommandation servie en fin de questionnaire — la réponse utile, pas la brochure. */
+const QUALIFY_RECO = {
+  "Collecte et qualification de données": {
+    s: `Data Factory`,
+    d: `Structurer la collecte avant de l'amplifier : procédures, nettoyage, déduplication. C'est le
+      service qui, dans le jeu, stoppe la dégradation de votre base — et c'est exactement son rôle
+      en dehors.` },
+  "Valorisation fanbase / sponsors": {
+    s: `Fan Lab Pro`,
+    d: `Mettre un chiffre en francs sur la valeur de votre audience, ROI billetterie et merchandising
+      compris. C'est le document qu'on pose sur la table en rendez-vous sponsor.` },
+  "Structuration marketing digital": {
+    s: `Audit DMOS`,
+    d: `Six piliers, une note sur 60, une roadmap. Commencer par mesurer évite de financer trois ans
+      d'actions dont personne ne saura dire si elles ont servi.` },
+  "Conformité RGPD / nLPD": {
+    s: `Audit DMOS + Data Factory`,
+    d: `L'audit pose le diagnostic de conformité, la Data Factory met la base en ordre et l'y maintient.
+      Dans le jeu, c'est le duo qui protège des purges de contacts.` },
+  "Aucune, découverte": {
+    s: `Le calculateur Fan Lab`,
+    d: `Rien à vendre ici : un outil public qui estime la valeur d'une fanbase à partir de quelques
+      chiffres. De quoi mesurer l'écart entre votre intuition et la réalité.` },
+};
+
+function showQualify(fromTuto) {
+  const answers = (currentUser && currentUser.q) ? Object.assign({}, currentUser.q) : {};
+  const blocks = QUALIFY.map((q, i) => {
+    const opts = q.opts.map(([val, label]) =>
+      `<button data-q="${i}" data-v="${esc(val)}" class="${answers[q.attr] === val ? "on" : ""}">${label}</button>`).join("");
+    return `<div class="qz-q">${q.q}</div><div class="qz-opts">${opts}</div>`;
+  }).join("");
+  showModal(tr("qz.frame", { v0: blocks }, `
+    <h2><i class=ic-target></i> <span class="sig-cap">E</span>t chez vous<span class="sig-cap">&nbsp;?</span></h2>
+    <p>Trois questions, trente secondes, entièrement facultatives. Elles ne changent rien à votre
+    partie : elles nous servent à vous montrer ce qui vous concerne plutôt qu'une brochure
+    générique. Vos réponses rejoignent votre fiche dans le CRM de C'mon Corporations et
+    figurent dans votre export de données.</p>
+    {v0}
+    <div class="choices">
+      <button class="primary" id="qz-send" disabled><i class=ic-check></i> Envoyer mes réponses</button>
+      <button id="qz-skip" style="text-align:center">Passer — je ne souhaite pas répondre</button>
+    </div>`));
+  const send = $("#qz-send");
+  // La fenêtre n'est montée qu'une fois : re-rendre à chaque clic relancerait
+  // l'animation d'ouverture et ferait remonter le défilement.
+  const refresh = () => { send.disabled = !QUALIFY.every(q => answers[q.attr]); };
+  $("#modal-root").querySelectorAll("[data-q]").forEach(b => {
+    b.onclick = () => {
+      const i = +b.dataset.q, q = QUALIFY[i];
+      const deja = answers[q.attr] === b.dataset.v;
+      $("#modal-root").querySelectorAll(`[data-q="${i}"]`).forEach(x => x.classList.remove("on"));
+      if (deja) delete answers[q.attr];
+      else { answers[q.attr] = b.dataset.v; b.classList.add("on"); }
+      refresh();
+    };
+  });
+  refresh();
+  send.onclick = () => qualifySave(answers, fromTuto);
+  $("#qz-skip").onclick = () => { if (fromTuto) tutoFinish("Terminé"); closeModal(); };
+}
+
+function qualifySave(answers, fromTuto) {
+  if (currentUser) {
+    currentUser.q = answers;
+    const users = loadUsers();
+    const u = users.find(x => x.id === currentUser.id);
+    if (u) { u.q = answers; saveUsers(users); }
+  }
+  if (fromTuto && state && state.tuto) tutoFinish("Terminé");
+  if (currentUser && !demoMode) brevoSyncContact(currentUser);
+  const reco = QUALIFY_RECO[answers.CC_PRIORITY] || QUALIFY_RECO["Aucune, découverte"];
+  const chaud = answers.CC_TIMING === "Budget prévu" || answers.CC_TIMING === "À l'étude";
+  showModal(tr("qz.merci", {
+    v0: reco.s, v1: reco.d,
+    v2: BOOKING_URL, v3: FANLAB_CALC_URL,
+    v4: chaud ? tr("qz.chaud", null, `<p class="cta-line">Puisqu'un projet est dans les tuyaux :
+      le plus simple reste une demi-heure de conversation, sans support de vente.</p>`) : "",
+  }, `<h2><i class=ic-check></i> <span class="sig-cap">M</span>erci<span class="sig-cap">.</span></h2>
+    <p>C'est noté. Vous pouvez revenir sur vos réponses à tout moment depuis
+    « Aide &amp; règles », et les effacer avec votre profil.</p>
+    <div class="cta-out">
+      <b><i class=ic-launch></i> Ce qui vous concerne le plus : {v0}</b>
+      {v1}
+      <a href="{v2}" target="_blank" rel="noopener">Prendre 30 minutes avec C'mon Sports →</a><br>
+      <a href="{v3}" target="_blank" rel="noopener">Estimer la valeur de votre fanbase →</a>
+    </div>
+    {v4}
+    <div class="choices"><button class="primary" id="qz-close">Revenir au jeu</button></div>`));
+  $("#qz-close").onclick = closeModal;
+}
+
+/* ---------- Fiche d'une action hebdomadaire ---------- */
+function showActionInfo(id) {
+  const a = ACTIONS.find(x => x.id === id);
+  if (!a) return;
+  tutoMark("kpi");
+  showModal(tr("actmodal", {
+    v0: a.name, v1: a.ap, v2: fmtCHF(actionCost(state, a)), v3: a.desc, v4: a.real,
+  }, `<h2>{v0}</h2>
+    <p><b>{v1} point(s) d'action</b> · coût actuel <b>{v2}</b></p>
+    <p>{v3}</p>
+    <div class="tuto-why"><b>Dans un vrai club</b><br>{v4}</div>
+    <div class="choices"><button class="primary" id="act-close">Fermer</button></div>`));
+  $("#act-close").onclick = closeModal;
+}
 
 /* ================= Dictionnaire de traduction =========================
    Généré depuis le français du fichier lui-même. Le français n'y figure
@@ -3479,18 +4391,26 @@ const TX = {
   de: {
     "action.activation.desc": "Sichtbarkeitsaktion für Ihre Sponsoren (LED, Social Media, Hospitality). +Sponsorenzufriedenheit, kleiner Umsatzbonus.",
     "action.activation.name": "<i class=ic-deal></i> Sponsoren-Aktivierung",
+    "action.activation.real": "Einen Sponsor zu aktivieren heisst, ihm den Beweis zu liefern, dass er gesehen wird. Es ist auch die Arbeit, die am häufigsten aufgeschoben wird, weil sie keine Frist hat — bis zur Nichtverlängerung.",
     "action.campaign.desc": "Newsletter plus Ticketing-Angebot an Ihre Kontaktbasis. +Ticketing-Einnahmen, +Engagement. Vorsicht vor Ermüdung, wenn Sie es zu oft tun.",
     "action.campaign.name": "<i class=ic-mail></i> E-Mail-Kampagne",
+    "action.campaign.real": "E-Mail bleibt der rentabelste Kanal im Sportbusiness und der einzige, dessen Publikum Ihnen gehört. Ihre Grenze ist die Übersättigung: ohne Segmentierung nutzt sich eine Basis in einer Saison ab.",
     "action.collect.desc": "Sammelaktion: neue qualifizierte Kontakte, +Datenqualität.",
     "action.collect.name": "<i class=ic-db></i> Wettbewerb / Datensammlung",
+    "action.collect.real": "Das Gewinnspiel ist der schnellste Weg, aus einem anonymen Zuschauer einen identifizierten Kontakt zu machen — vorausgesetzt, die Einwilligung wird sauber eingeholt, sonst ist die Basis unbrauchbar.",
     "action.content.desc": "Social-Media-Posts, Matchstories, Blick hinter die Kulissen. +Engagement, +Fans.",
     "action.content.name": "<i class=ic-broadcast></i> Content publizieren",
+    "action.content.real": "Inhalte sind der einzige Kanal, den fast jeder Club bespielt — und der einzige, dessen Wirkung auf die Kontaktbasis niemand misst. Er bringt Publikum; er sammelt von allein gar nichts.",
     "action.prospect.desc": "Ansprache eines neuen Sponsors. Die Erfolgschancen richten sich nach dem DMOS-Score und dem Fan-Lab-Wert.",
     "action.prospect.name": "<i class=ic-userplus></i> Sponsorenakquise",
+    "action.prospect.real": "Einen neuen Sponsor gewinnt man nicht mit einer Präsentationsmappe, sondern mit Zahlen zum Publikum, das man ihm verkauft. Genau das liefert eine Fan-Lab-Analyse.",
     "action.rgpd.desc": "Einwilligungen, Verarbeitungsverzeichnis, Bereinigung der Datenbank. +Compliance, +Datenqualität.",
     "action.rgpd.name": "<i class=ic-shield></i> DSGVO-Compliance-Projekt",
+    "action.rgpd.real": "Compliance ist nicht nur ein Bussgeldrisiko: saubere Einwilligungen und eine bereinigte Basis bedeuten auch bessere Zustellraten und einen höheren Wert vor einem Sponsor.",
     "action.training.desc": "Strukturelle Investition: +1 Punkt auf der schwächsten DMOS-Säule.",
     "action.training.name": "<i class=ic-clipboard></i> Schulung & Tools",
+    "action.training.real": "Kompetenzaufbau kostet und zeigt sich nicht im Quartal. Er ist aber das, was die Kosten aller folgenden Aktionen dauerhaft senkt.",
+    "actmodal": "<h2>{v0}</h2>\n    <p><b>{v1} Aktionspunkt(e)</b> · aktuelle Kosten <b>{v2}</b></p>\n    <p>{v3}</p>\n    <div class=\"tuto-why\"><b>In einem echten Club</b><br>{v4}</div>\n    <div class=\"choices\"><button class=\"primary\" id=\"act-close\">Schliessen</button></div>",
     "adm.072a6d": "<i class=ic-check></i> Kontakt bereits bekannt — der Liste #{v0} zugeordnet",
     "adm.1a2173": "<i class=ic-check></i> Testkontakt «{v0}» in die Liste #{v1} gesendet",
     "adm.2207c0": "<i class=ic-cross></i> HTTP-Fehler {v0}{v1}",
@@ -3518,7 +4438,7 @@ const TX = {
     "adm.audit.segments": "<i class=ic-layers></i> {v0} Segment(e) bereits definiert: {v1}",
     "adm.bdcba7": "<i class=ic-hourglass></i> Test läuft…",
     "adm.c06700": "<i class=ic-check></i> Liste #{v0} «{v1}» — {v2} Kontakt(e)",
-    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo-Verbindung</h2>\n    <p style=\"font-size:13px\">Brevo-API-Schlüssel (v3) und Zielliste. Werden ausschliesslich in diesem Browser gespeichert.\n    <b style=\"color:var(--warn)\">Geben Sie den Schlüssel nicht an einem öffentlichen Gerät ein.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">Liste Nr.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} Konto/Konten · {v3} mit Opt-in · {v4} synchronisiert</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Vertriebsdemo starten</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Verbindung & Liste testen</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Testkontakt senden</button>\n      <button class=\"primary\" id=\"admin-save\">Speichern & jetzt synchronisieren</button>\n      <button id=\"admin-clear\">Schlüssel löschen</button>\n      <button id=\"admin-close\">Schliessen</button>\n    </div>",
+    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo-Verbindung</h2>\n    <p style=\"font-size:13px\">Brevo-API-Schlüssel (v3) und Zielliste. Werden ausschliesslich in diesem Browser gespeichert.\n    <b style=\"color:var(--warn)\">Geben Sie den Schlüssel nicht an einem öffentlichen Gerät ein.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">Liste Nr.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} Konto/Konten · {v3} mit Opt-in · {v4} synchronisiert</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Vertriebsdemo starten</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Verbindung & Liste testen</button>\n      <button id=\"admin-audit\"><i class=ic-clipboard></i> Attribute &amp; Segmente prüfen</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Testkontakt senden</button>\n      <button class=\"primary\" id=\"admin-save\">Speichern & jetzt synchronisieren</button>\n      <button id=\"admin-clear\">Schlüssel löschen</button>\n      <button id=\"admin-close\">Schliessen</button>\n    </div>",
     "adm.e6b539": "<br><i class=ic-arrow></i> {v0} Konto/Konten verarbeitet.",
     "adm.f3f027": "\n    <h2><i class=ic-target></i> Vertriebsdemo-Modus</h2>\n    <p style=\"font-size:13px\">Startet eine Partie im Namen des Clubs, der Ihnen gegenübersitzt, bereits laufend in\n    Woche 12 — DMOS-Score im Ungefähren, Wert der Fanbase unbekannt, ein zweifelnder Vorstand.\n    <b style=\"color:var(--text)\">Es werden keine Daten an Brevo gesendet</b>, und Ihre persönliche Partie\n    bleibt unberührt.</p>\n    <input type=\"text\" id=\"demo-name\" maxlength=\"46\" placeholder=\"Name des Interessenten-Clubs\" autocomplete=\"off\">\n    <input type=\"text\" id=\"demo-city\" maxlength=\"34\" placeholder=\"Stadt (optional)\" autocomplete=\"off\">\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <select id=\"demo-sport\" style=\"flex:1 1 150px\">{v0}</select>\n      <select id=\"demo-div\" style=\"flex:1 1 150px\">\n        <option value=\"1\">Höchste Liga / 1. Liga</option>\n        <option value=\"2\">2. Liga</option>\n      </select>\n    </div>\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <input type=\"text\" id=\"demo-fans\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"Fans (Schätzung)\">\n      <input type=\"text\" id=\"demo-contacts\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"CRM-Kontakte\">\n    </div>\n    <p style=\"font-size:12px;color:var(--muted);margin-top:2px\">\n      Fans und Kontakte sind freiwillig — ohne Angabe gelten die Grössenordnungen der gewählten Sportart.</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"demo-go\"><i class=ic-play></i> Demo starten</button>\n      <button id=\"demo-cancel\">Abbrechen</button>\n    </div>",
     "adm.st.failed": "fehlgeschlagen (HTTP {v0}{v1})",
@@ -3532,6 +4452,15 @@ const TX = {
     "adm.st.pending": "ausstehend",
     "adm.st.profile": "ausstehend (Profilaktualisierung)",
     "adm.st.synced": "synchronisiert (Liste {v0}, {v1}) am {v2}",
+    "brief.0.body": "<p>Sie sind <b>Leiterin oder Leiter Digital Marketing</b> eines Sportclubs. Der Vorstand hat Sie aus einem einfachen Grund geholt: Er spürt, dass der Club irgendwo Geld verliert, ohne zu wissen, wo.</p><p>Ihre Woche besteht aus <b>drei Aktionspunkten</b>. Inhalte veröffentlichen, eine Kampagne versenden, Daten sammeln, einen Sponsor aktivieren, einen neuen ansprechen, sich weiterbilden, Compliance herstellen. Jede Aktion kostet auch Budget.</p><p>Eine Saison dauert <b>26 Wochen</b>. Am Ende jeder Woche wird automatisch gespeichert.</p>",
+    "brief.0.title": "Ihre Stelle",
+    "brief.1.body": "<p>Der <b>DMOS-Score</b> — Digital Maturity &amp; Operations Score — bewertet Ihre Organisation auf 60 Punkte, in sechs Säulen zu je 10: Strategie, Content, Fandaten, Tools &amp; CRM, Akquisition, Compliance.</p><p>Zu Beginn erscheint er <b>als Spanne</b>: « ~18–28 ? ». Zwei Ihrer Kennzahlen zeigen sogar nur « ? ». Das ist kein Anzeigefehler: Es ist genau das, was ein Club sieht, der seine Basis nie hat messen lassen. <b>Sie steuern nach Gefühl, ohne es zu merken.</b></p><p>Das DMOS-Audit und die Fan-Lab-Analysen im Reiter C'mon Sports ersetzen diese Spannen durch Zahlen. Das ist der eigentliche Wendepunkt einer Partie.</p>",
+    "brief.1.title": "Ihre Note",
+    "brief.2.body": "<p>Der Vorstand setzt Ihnen <b>zu Saisonbeginn Ziele</b> und rechnet am Ende ab. Jedes verfehlte Ziel kostet Vertrauen; unter der Geduldsschwelle Ihres Vorstands <b>werden Sie freigestellt</b> und die Partie endet.</p><p>Sein Temperament wählen Sie direkt nach Ihrem Club: nachsichtig, anspruchsvoll oder unerbittlich. Diese Wahl gilt für die gesamte Laufbahn.</p><p>Ein <b>Einführungsleitfaden</b> begleitet Sie in den ersten Wochen, oben im Dashboard. Er lässt sich mit einem Klick ausblenden und über « Hilfe &amp; Regeln » wieder aufrufen.</p>",
+    "brief.2.title": "Ihr Vorstand",
+    "brief.frame": "<h2><i class=ic-{v0}></i> {v1}</h2>\n    <div class=\"tuto-trail\" style=\"margin:0 0 14px\">{v3}</div>\n    {v2}\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"brief-next\"><i class=ic-arrow></i> {v6}</button>\n      <button id=\"brief-skip\" style=\"text-align:center\">Briefing überspringen ({v4}/{v5})</button>\n    </div>",
+    "brief.go": "Meinen Club wählen",
+    "brief.next": "Weiter",
     "club.bb.desc": "Kleines Budget, grosse Energie, zweite Liga. Junge, engagierte Community – aber kein CRM und eine DSGVO-Compliance, die diesen Namen kaum verdient.",
     "club.bb.name": "Lions Basket 89",
     "club.bb.sport": "Basketball",
@@ -3596,6 +4525,60 @@ const TX = {
     "diff.1.name": "Anspruchsvoller Vorstand",
     "diff.2.desc": "Allgegenwärtiger Präsident, überdimensionierte Egos, unerbittliche Presse. Sie brauchen 3 von 5 Zielen, um Ihren Posten zu behalten.",
     "diff.2.name": "Gnadenloser Vorstand",
+    "glo.0.d": "Digital Maturity &amp; Operations Score. Die Reifediagnose, die C'mon Sports verwendet: sechs Säulen zu je 10 Punkten, Gesamtnote von 60, vergleichbar von Club zu Club und von Jahr zu Jahr.",
+    "glo.0.t": "DMOS",
+    "glo.1.d": "Die Analysemethode für die Kontaktbasis eines Clubs: Datenqualität, Durchdringung des Potenzials, dann wirtschaftliche Bewertung des Publikums. Insight misst, Pro beziffert.",
+    "glo.1.t": "Fan Lab",
+    "glo.2.d": "Die Zahl der Menschen, die ein Club realistisch erreichen könnte — weit über seine Abonnenten hinaus. Im Spiel: Ausgangsfans × 3 in der zweiten Liga, × 8 in der obersten, weil nationale Sichtbarkeit den Markt vergrössert.",
+    "glo.2.t": "Erreichbares Potenzial",
+    "glo.3.d": "Der Anteil des tatsächlich erfassbaren Potenzials, der bereits in Ihrer Kontaktbasis steht. Er sagt, ob es noch leicht erreichbare Kontakte gibt oder ob die Quelle erschöpft ist.",
+    "glo.3.t": "Durchdringung",
+    "glo.4.d": "Eine Note von 10: gültige Adressen, bereinigte Dubletten, saubere Einwilligungen, nutzbare Segmentierung. Zwei Clubs können gleich viele Kontakte haben und Basen von sehr unterschiedlichem Wert.",
+    "glo.4.t": "Datenqualität",
+    "glo.5.d": "Die im DMOS erreichte Schwelle nach dem Audit: Silver ab 30/60, Gold ab 45/60. Sie beruhigt Sponsoren und erleichtert die Akquise.",
+    "glo.5.t": "Zertifizierung Gold / Silver",
+    "glo.6.d": "Die durchschnittliche Interaktionsrate der Gemeinschaft. Sie steigt mit Inhalten und Treueprogrammen und sinkt von allein, wenn nichts nachkommt.",
+    "glo.6.t": "Engagement",
+    "glo.7.d": "Die Abnutzung einer überstrapazierten Basis: Jede Kampagne bringt weniger als die vorherige, wenn sie zu dicht aufeinanderfolgen. Eine gute Segmentierung halbiert diesen Effekt.",
+    "glo.7.t": "E-Mail-Müdigkeit",
+    "glo.8.d": "Die europäische Verordnung und das Schweizer Datenschutzgesetz. Im Spiel wie ausserhalb: nachvollziehbare Einwilligungen, aktuelles Verzeichnis, bereinigte Basis. Eine Kontrolle bei einer nicht konformen Basis wird teuer.",
+    "glo.8.t": "DSGVO / revDSG",
+    "glo.9.d": "Die Zeiteinheit Ihrer Woche. Drei pro Woche, niemals übertragbar.",
+    "glo.9.t": "Aktionspunkt (AP)",
+    "help.ap": "— {v0} AP",
+    "help.frame": "\n    <h2><i class=ic-bulb></i> <span class=\"sig-cap\">H</span>ilfe &amp; Regeln<span class=\"sig-cap\">.</span></h2>\n    <div class=\"help-nav\">{v0}</div>\n    <div class=\"help-sec\">{v1}</div>\n    <p class=\"cta-line\">Diese Mechanik ist die einer echten Diagnose —\n      <a href=\"{v2}\" target=\"_blank\" rel=\"noopener\">sprechen Sie 30 Minuten mit C'mon Sports</a>.</p>\n    <div class=\"choices\">\n      <button id=\"help-tuto\"><i class=ic-play></i> Einführungsleitfaden erneut durchgehen</button>\n      <button id=\"help-qz\"><i class=ic-target></i> Der Standortfragebogen</button>\n      <button class=\"primary\" id=\"help-close\">Schliessen</button>\n    </div>",
+    "help.regles": "\n    <h4>Der Spielzug</h4>\n    <div class=\"help-row\"><b>Eine Woche, der Reihe nach</b><span class=\"g\">\n      Sie wählen Ihre Aktionen → Sie klicken « Woche spielen » → die Aktionen werden ausgewertet →\n      Fixkosten und Abonnements werden abgebucht → Sponsoren- und Merchandising-Einnahmen fliessen →\n      das Spiel wird ausgetragen → ein Ereignis oder eine Entscheidung kann eintreten → die Woche wird gespeichert.</span></div>\n    <div class=\"help-row\"><b>Drei Aktionspunkte, nicht übertragbar</b><span class=\"g\">\n      Jede Woche: 3 Punkte. Sechs Aktionen kosten 1 Punkt, die Sponsorenakquise kostet 2.\n      Nicht genutzte Punkte verfallen; Geld dagegen wird übertragen.</span>\n      <span class=\"r\"><i class=\"tagr\">In einem echten Club</i>Das ist die Zeitgrenze eines kleinen\n      Teams. Budget wird von Monat zu Monat übertragen, Arbeitswochen niemals.</span></div>\n    <div class=\"help-row\"><b>Das Geld</b><span class=\"g\">\n      Jede Aktion hat Kosten, die sinken, wenn die Säule « Tools &amp; CRM » steigt. Dazu kommen\n      wöchentliche Fixkosten, die mit der Grösse des Clubs wachsen und in der ersten Liga\n      explodieren, sowie die Abonnements der aktiven Leistungen.</span></div>\n    <h4>Die Saison</h4>\n    <div class=\"help-row\"><b>{v0} Wochen, 12 Mannschaften</b><span class=\"g\">\n      Ein Spiel pro Woche, zu Hause oder auswärts. Nur ein Teil des Ticketings (5 %, 6 % mit\n      Fan Lab Pro) fliesst ins Marketing. Am Saisonende: Tabelle, Auf- oder Abstieg,\n      europäische Qualifikation.</span></div>\n    <div class=\"help-row\"><b>Der Vorstand</b><span class=\"g\">\n      Er setzt zu Saisonbeginn Ziele und rechnet am Ende ab: Jedes Ziel über der Quote bringt +8\n      Vertrauen, jedes fehlende −8. Sein Vertrauen sinkt auch während der Saison, wenn die sportlichen\n      Ergebnisse enttäuschen. Unter seiner Geduldsschwelle werden Sie freigestellt.</span>\n      <span class=\"r\"><i class=\"tagr\">In einem echten Club</i>Der Vorstand urteilt über das, was er\n      sieht. Eine Marketingverantwortung ohne vorzeigbare Zahlen wird an den sportlichen Ergebnissen\n      gemessen — die sie nicht steuert.</span></div>\n    <div class=\"help-row\"><b>Drei mögliche Vorstände</b><span class=\"g\">\n      Nachsichtig, anspruchsvoll, unerbittlich. Die Wahl erfolgt mit dem Club und gilt für die ganze\n      Laufbahn: Sie verändert das Startvertrauen, die Entlassungsschwelle, die Zahl der geforderten\n      Ziele und die Häufigkeit der Ego-Entscheidungen.</span></div>\n    <h4>Der Datennebel</h4>\n    <div class=\"help-row\"><b>Warum « ? » und Spannen</b><span class=\"g\">\n      Solange der Club nicht analysiert wurde, zeigen Durchdringung und Datenqualität « ? », und der\n      DMOS-Score erscheint als Spanne. Das DMOS-Audit zeigt die exakten Werte;\n      Fan Lab Insight zeigt Potenzial und Qualität; Fan Lab Pro ergänzt den Wert in Franken.</span>\n      <span class=\"r\"><i class=\"tagr\">In einem echten Club</i>Das ist die Ausgangslage der meisten\n      Clubs: Zuschauerzahlen ja, Messung der Basis nein. Der Nebel ist keine Spielstrafe, er ist der\n      reale Startpunkt.</span></div>\n    <h4>Speicherung, Sprachen, Duelle</h4>\n    <div class=\"help-row\"><b>Alles bleibt in Ihrem Browser</b><span class=\"g\">\n      Die Partie wird am Ende jeder Woche automatisch im lokalen Speicher dieses Geräts gesichert.\n      « Meine Daten exportieren » am Seitenende gibt Ihnen alles heraus, was Sie betrifft.</span></div>\n    <div class=\"help-row\"><b>Französisch, Deutsch, Englisch</b><span class=\"g\">\n      Die Auswahl steht am Seitenende. Ein Sprachwechsel lädt die laufende Partie neu, ohne sie zu verlieren.</span></div>\n    <div class=\"help-row\"><b>Duell-Modus</b><span class=\"g\">\n      Ein Code wie HC-1-A7K9F2 legt Club, Vorstand und die gesamte Ereignisfolge der Saison fest.\n      Zwei Spielende mit demselben Code treffen auf exakt dieselben Zufälle — der einzige Unterschied\n      sind ihre Entscheidungen.</span></div>",
+    "helpnav.actions": "Aktionen",
+    "helpnav.glossaire": "Glossar",
+    "helpnav.kpi": "Kennzahlen",
+    "helpnav.regles": "Regeln",
+    "helpnav.services": "Leistungen",
+    "intro.body": "\n    <div class=\"intro-hero\">\n      <h2><span class=\"sig-cap\">S</span>ie sind soeben eingestellt worden<span class=\"sig-cap\">.</span></h2>\n      <p>Ein Sportclub vertraut Ihnen sein digitales Marketing an. Sie haben {v0} Wochen, drei\n      Aktionspunkte pro Woche und einen Vorstand, der zusieht. Was Sie aus Ihren Fandaten machen,\n      entscheidet über alles Übrige: Ihre Sponsoren, Ihre Einnahmen und Ihre Stelle.</p>\n      <div class=\"chips\">\n        <span><i class=ic-clock></i> eine Saison ≈ 15 Minuten</span>\n        <span><i class=ic-user></i> ohne Installation</span>\n        <span><i class=ic-lock></i> Speicherung in Ihrem Browser</span>\n      </div>\n      <div class=\"intro-cta\">\n        <button class=\"primary\" id=\"intro-start\"><i class=ic-play></i> Konto erstellen und spielen</button>\n        <button id=\"intro-rules\"><i class=ic-bulb></i> Zuerst die Regeln ansehen</button>\n      </div>\n    </div>\n    <div class=\"intro-grid\">\n      <div class=\"intro-card\">\n        <h4><i class=ic-bolt></i> Was Sie tun werden</h4>\n        <p>Veröffentlichen, Kampagnen versenden, Daten sammeln, Sponsoren aktivieren und akquirieren,\n        Compliance herstellen. <b>Drei Aktionen pro Woche, nicht vier</b> — die Abwägung ist der Kern\n        des Spiels.</p>\n      </div>\n      <div class=\"intro-card\">\n        <h4><i class=ic-gauge></i> Was Sie lernen werden</h4>\n        <p>Warum <b>ein Fan kein Kontakt ist</b>, was eine Fanbase wirtschaftlich wert ist,\n        warum ein Sponsor geht und was ein Reifegrad-Score eigentlich misst.\n        Das Spiel tut, was ein Audit tut: Es macht sichtbar, was es nicht war.</p>\n      </div>\n      <div class=\"intro-card\">\n        <h4><i class=ic-launch></i> Was daran echt ist</h4>\n        <p>DMOS-Score, Fan Lab, Data Factory, Blue Penguin, Griddy Picks:\n        <b>das sind die echten Methoden und die echten Leistungen von C'mon Sports</b>, mit derselben\n        Wirkung. Das Spiel ist ein getreues Modell, keine Metapher.</p>\n      </div>\n    </div>\n    <div class=\"card\">\n      <h3><i class=ic-play></i> <span><span class=\"sig-cap\">S</span>O WIRD GESPIELT<span class=\"sig-cap\">.</span></span></h3>\n      <div class=\"steps\">\n        <div class=\"step\"><div class=\"n\">1</div><div>\n          <b>Sie wählen einen Club und einen Vorstand</b>\n          <span>Vier fiktive Schweizer Clubs — Eishockey, Fussball, Basketball, Volleyball — und drei\n          Stufen der Vorstandsgeduld. Der Vorstand legt den Schwierigkeitsgrad für die ganze Laufbahn fest.</span></div></div>\n        <div class=\"step\"><div class=\"n\">2</div><div>\n          <b>Jede Woche geben Sie drei Aktionspunkte aus</b>\n          <span>Sieben mögliche Aktionen, jede mit Kosten in Geld und Punkten. Dann spielen Sie die Woche:\n          das Spiel wird ausgetragen, die Einnahmen fliessen, ein Ereignis kann eintreten.</span></div></div>\n        <div class=\"step\"><div class=\"n\">3</div><div>\n          <b>Sie steuern blind — zumindest anfangs</b>\n          <span>Zwei Kennzahlen zeigen « ? » und Ihr DMOS-Score bleibt eine Spanne.\n          Das ist Absicht: Es ist die Lage eines Clubs, der nie gemessen hat.\n          Die Analysen im Reiter C'mon Sports lichten diesen Nebel.</span></div></div>\n        <div class=\"step\"><div class=\"n\">4</div><div>\n          <b>Am Saisonende rechnet der Vorstand ab</b>\n          <span>Ziele erreicht oder nicht, Sponsoren, die verlängern oder gehen, Auf- oder Abstieg.\n          Das Vertrauen steigt oder fällt — und unter einer bestimmten Schwelle werden Sie freigestellt.</span></div></div>\n      </div>\n      <div class=\"intro-cta\">\n        <button class=\"primary\" id=\"intro-start2\"><i class=ic-play></i> Konto erstellen</button>\n        <button id=\"intro-login\">Ich habe bereits ein Konto</button>\n      </div>\n    </div>",
+    "kpih.board.g": "Von 0 bis 100 %. Es steigt mit erreichten Zielen, guten sportlichen Ergebnissen und der Lieferung des Audits; es sinkt mit Misserfolgen und bestimmten Entscheidungen. Unter der Geduldsschwelle Ihres Vorstands endet die Partie.",
+    "kpih.board.r": "Ein Vorstand urteilt über das, was er versteht. Deshalb wird eine Marketingverantwortung, die keine Messung liefert, am Ende an den sportlichen Ergebnissen gemessen, die sie nicht steuert.",
+    "kpih.board.t": "Vertrauen des Vorstands",
+    "kpih.budget.g": "Was in der Kasse bleibt. Es speist sich aus Sponsoren, Merchandising und einem Anteil am Ticketing; es leert sich durch wöchentliche Fixkosten, die Kosten der Aktionen und die Abonnements aktiver Leistungen. Ein negatives Budget beendet die Partie nicht, aber der Vorstand bemerkt es.",
+    "kpih.budget.r": "Das Marketingbudget eines Clubs geht lange vor der ersten Kampagne für Fixkosten drauf. Deshalb dreht sich die Abwägung selten um « was tun » und fast immer um « was lassen ».",
+    "kpih.budget.t": "Budget",
+    "kpih.contacts.g": "Die Zahl der Menschen, die Sie direkt erreichen können. Sie wächst mit Gewinnspielen, Datenerfassung und Griddy Picks; sie kann bei einer Bereinigung veralteter Kontakte sinken, wenn die Qualität niedrig ist.",
+    "kpih.contacts.r": "Der einzige Marketing-Vermögenswert, der Ihnen wirklich gehört. Weder ein soziales Netzwerk noch eine Ticketing-Plattform wird Ihnen sein Publikum zweimal zu denselben Bedingungen leihen.",
+    "kpih.contacts.t": "CRM-Kontakte",
+    "kpih.dmos.g": "Die Summe der sechs Säulen, von 60. Als Spanne angezeigt, solange der Club nicht auditiert ist. Er senkt die Kosten Ihrer Aktionen, steigert die Wirksamkeit Ihrer Kampagnen und die Beträge, die Sponsoren zu unterschreiben bereit sind.",
+    "kpih.dmos.r": "Dieselbe Diagnose wird bei den Kunden von C'mon Sports gestellt, mit denselben sechs Säulen. Ihr grösster Nutzen ist nicht die Note: Sie macht eine Organisation von Jahr zu Jahr mit sich selbst vergleichbar.",
+    "kpih.dmos.t": "DMOS-Score",
+    "kpih.engagement.g": "Die durchschnittliche Interaktionsrate Ihrer Gemeinschaft, von 0 bis 100 %. Sie steigt mit Inhalten und Treueprogrammen und sinkt von allein, wenn nichts nachkommt. Sie wirkt auf Ticketing, Merchandising und den Fan-Lab-Wert.",
+    "kpih.engagement.r": "Es ist die einzige Publikumskennzahl, auf die ein Sponsor wirklich schaut: Ihm sind 8 000 Menschen, die reagieren, lieber als 60 000, die weiterscrollen.",
+    "kpih.engagement.t": "Engagement",
+    "kpih.fans.g": "Das gesamte Publikum des Clubs über alle Kanäle. Es wächst mit Inhalten, Akquisition, Siegen und Aufstiegen; es schrumpft bei Abstieg oder verkorkster Saison.",
+    "kpih.fans.r": "Ein Fan ist kein Kontakt. Das ist das teuerste Missverständnis im Sportbusiness: Eine Gemeinschaft von 40 000 Menschen, von denen sich nur 900 direkt erreichen lassen, ist für einen Sponsor so viel wert wie die zweite Hälfte dieses Satzes.",
+    "kpih.fans.t": "Fans",
+    "kpih.penetration.g": "Der Anteil des tatsächlich erfassbaren Potenzials, der bereits in Ihrer Basis steht. Verdeckt, solange keine Fan-Lab-Analyse beauftragt wurde. Je höher er ist, desto weniger neue Kontakte bringen Gewinnspiele.",
+    "kpih.penetration.r": "Sie beantwortet die Frage, die kein Club für sich klären kann: « Gibt es noch leicht erreichbare Kontakte, oder müssen wir die Methode wechseln? »",
+    "kpih.penetration.t": "Durchdringung des Potenzials",
+    "kpih.quality.g": "Eine Note von 10 für den Zustand Ihrer Basis. Sie steigt mit Datenerfassung, Compliance-Projekten und der Data Factory; ohne Pflege sinkt sie von allein um 0,05 pro Woche. Verdeckt, solange keine Fan-Lab-Analyse beauftragt wurde.",
+    "kpih.quality.r": "Eine Basis veraltet im Rhythmus des Lebens der Menschen: Umzüge, neue Adressen, Abmeldungen. Ohne Pflege verliert eine Basis rund ein Fünftel ihres Werts pro Jahr.",
+    "kpih.quality.t": "Datenqualität",
+    "kpimodal": "<h2>{v0}<span class=\"sig-cap\">.</span></h2>\n    <p>{v1}</p>\n    <div class=\"tuto-why\"><b>In einem echten Club</b><br>{v2}</div>\n    <div class=\"choices\"><button class=\"primary\" id=\"kpi-close\">Schliessen</button></div>",
     "lbl.0045ff": "DMOS Silver zertifiziert",
     "lbl.07a186": "SIEG",
     "lbl.099144": " — die Gewinnung neuer Kontakte stösst an ihre Grenzen",
@@ -3666,6 +4649,8 @@ const TX = {
     "lbl.fb7315": "Data Factory pflegt die Datenbasis laufend: Sie altert nicht mehr.",
     "lbl.fd6f54": "<i class=ic-pulse></i> Engagement: {v0} %<br>",
     "lbl.fea822": "Saison {v0} · Woche {v1} — {v2} · {v3}. von {v4}",
+    "lbl.qz.encours": "läuft",
+    "lbl.qz.none": "nicht angegeben",
     "msg.00151d": "Schulung: Alle Säulen sind am Maximum!",
     "msg.07c089": "<i class=ic-broadcast></i> An der Pressekonferenz erklärt der Coach, «das Marketing habe vom Sport keine Ahnung». Stimmung im Club: gereizt.",
     "msg.0c1904": "<i class=ic-userplus></i> Monatlicher Jour fixe mit Ihrem Partner Manager von C'mon Sports: ein paar Quick Wins identifiziert und ein Vorstand, den die professionelle Steuerung beruhigt.",
@@ -3733,36 +4718,103 @@ const TX = {
     "pillar.outils.label": "Tools & CRM",
     "pillar.strategie.hint": "Vision, KPIs, Governance — stabilisiert das Vertrauen des Vorstands",
     "pillar.strategie.label": "Digitalstrategie",
+    "qz.0.0": "Wir haben keine Fandatenbank",
+    "qz.0.1": "Eine Basis existiert, aber wir nutzen sie kaum",
+    "qz.0.2": "CRM vorhanden, Segmentierung und Kampagnen laufen",
+    "qz.0.3": "Ich arbeite nicht in einem Club oder Verband",
+    "qz.0.q": "Wo steht Ihre Organisation in der Realität?",
+    "qz.1.0": "Fandaten erfassen und qualifizieren",
+    "qz.1.1": "Die Fanbase gegenüber Sponsoren aufwerten",
+    "qz.1.2": "Das digitale Marketing strukturieren",
+    "qz.1.3": "DSGVO- / revDSG-Konformität herstellen",
+    "qz.1.4": "Derzeit keine — ich schaue mich um",
+    "qz.1.q": "Ihre Priorität für die nächsten zwölf Monate?",
+    "qz.2.0": "Ja, ein Budget ist vorgesehen",
+    "qz.2.1": "Ja, es wird geprüft",
+    "qz.2.2": "Derzeit nicht",
+    "qz.2.q": "Ein Projekt in den kommenden Monaten?",
+    "qz.chaud": "<p class=\"cta-line\">Da ein Projekt ansteht:\n      am einfachsten ist eine halbe Stunde Gespräch, ohne Verkaufsunterlagen.</p>",
+    "qz.frame": "\n    <h2><i class=ic-target></i> <span class=\"sig-cap\">U</span>nd bei Ihnen<span class=\"sig-cap\">&nbsp;?</span></h2>\n    <p>Drei Fragen, dreissig Sekunden, vollständig freiwillig. Sie ändern nichts an Ihrer Partie:\n    Sie helfen uns, Ihnen zu zeigen, was Sie wirklich betrifft, statt einer Standardbroschüre.\n    Ihre Antworten gehen in Ihren Datensatz im CRM von C'mon Corporations und erscheinen in\n    Ihrem Datenexport.</p>\n    {v0}\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"qz-send\" disabled><i class=ic-check></i> Antworten senden</button>\n      <button id=\"qz-skip\" style=\"text-align:center\">Überspringen — ich möchte nicht antworten</button>\n    </div>",
+    "qz.merci": "<h2><i class=ic-check></i> <span class=\"sig-cap\">D</span>anke<span class=\"sig-cap\">.</span></h2>\n    <p>Notiert. Sie können Ihre Antworten jederzeit über « Hilfe &amp; Regeln » ändern\n    und sie mit Ihrem Profil löschen.</p>\n    <div class=\"cta-out\">\n      <b><i class=ic-launch></i> Was Sie am meisten betrifft: {v0}</b>\n      {v1}\n      <a href=\"{v2}\" target=\"_blank\" rel=\"noopener\">30 Minuten mit C'mon Sports vereinbaren →</a><br>\n      <a href=\"{v3}\" target=\"_blank\" rel=\"noopener\">Den Wert Ihrer Fanbase schätzen →</a>\n    </div>\n    {v4}\n    <div class=\"choices\"><button class=\"primary\" id=\"qz-close\">Zurück zum Spiel</button></div>",
+    "reco.0.d": "Die Erfassung strukturieren, bevor man sie verstärkt: Prozesse, Bereinigung, Dublettenabgleich. Es ist die Leistung, die im Spiel den Verfall Ihrer Basis stoppt — und genau das ist auch ausserhalb ihre Aufgabe.",
+    "reco.0.s": "Data Factory",
+    "reco.1.d": "Den Wert Ihres Publikums in Franken beziffern, inklusive Ticketing- und Merchandising-ROI. Das ist das Dokument, das man im Sponsorengespräch auf den Tisch legt.",
+    "reco.1.s": "Fan Lab Pro",
+    "reco.2.d": "Sechs Säulen, eine Note von 60, eine Roadmap. Mit der Messung zu beginnen erspart es, drei Jahre Aktionen zu finanzieren, von denen niemand sagen kann, ob sie etwas gebracht haben.",
+    "reco.2.s": "DMOS-Audit",
+    "reco.3.d": "Das Audit stellt die Compliance-Diagnose, die Data Factory bringt die Basis in Ordnung und hält sie dort. Im Spiel ist es das Duo, das vor Kontaktbereinigungen schützt.",
+    "reco.3.s": "DMOS-Audit + Data Factory",
+    "reco.4.d": "Hier gibt es nichts zu verkaufen: ein öffentliches Werkzeug, das den Wert einer Fanbase aus wenigen Zahlen schätzt. Genug, um den Abstand zwischen Ihrer Ahnung und der Realität zu messen.",
+    "reco.4.s": "Der Fan-Lab-Rechner",
+    "setup.rules": "<div class=\"card\">\n    <h3><i class=ic-bulb></i> <span><span class=\"sig-cap\">V</span>OR DEM START<span class=\"sig-cap\">.</span></span>\n      <span class=\"tag\">3 Minuten Lesezeit</span></h3>\n    <div class=\"steps\">\n      <div class=\"step\"><div class=\"n\">1</div><div>\n        <b>Drei Aktionspunkte pro Woche</b>\n        <span>Nicht mehr, nicht übertragbar. Jede Aktion kostet zusätzlich Geld —\n        und Geld wird sehr wohl übertragen.</span></div></div>\n      <div class=\"step\"><div class=\"n\">2</div><div>\n        <b>Ein Reifegrad von 60 Punkten, in sechs Säulen</b>\n        <span>Der DMOS. Er bestimmt die Kosten Ihrer Aktionen, die Wirksamkeit Ihrer Kampagnen\n        und das, was Sponsoren zu unterschreiben bereit sind.</span></div></div>\n      <div class=\"step\"><div class=\"n\">3</div><div>\n        <b>Sie sehen nicht alles</b>\n        <span>Bestimmte Zahlen bleiben verdeckt, solange Ihr Club nicht analysiert wurde.\n        Das ist die wichtigste Regel des Spiels.</span></div></div>\n    </div>\n    <div class=\"intro-cta\">\n      <button id=\"setup-help\"><i class=ic-bulb></i> Hilfe &amp; vollständige Regeln</button>\n      <button id=\"setup-briefing\"><i class=ic-clipboard></i> Briefing erneut ansehen</button>\n    </div>\n  </div>",
     "svc.audit.btnLabel": "Bestellen · 5 000 CHF",
     "svc.audit.effect": "Deckt Ihre exakten DMOS-Scores auf (Schluss mit Schätzbereichen), schaltet die Silver-/Gold-Zertifizierung frei, Schulungen entlang der Roadmap (−20 %). Vertrauen des Vorstands +8 bei Lieferung.",
     "svc.audit.name": "DMOS-Audit",
     "svc.audit.pitch": "Die vollständige Diagnose Ihrer digitalen Reife: Kick-off, Analyse der 6 Säulen, Workshop mit dem Vorstand, Bericht und Roadmap.",
+    "svc.audit.real": "Das Audit, das C'mon Sports tatsächlich durchführt: Kick-off, Analyse der sechs Säulen, Workshop mit der Geschäftsleitung, Bericht und bezifferte Roadmap. Es macht aus einer Ahnung von Reife eine Note, die sich von Jahr zu Jahr vergleichen lässt.",
     "svc.audit.subLabel": "einmalig",
     "svc.bluepenguin.btnLabel": "Integrieren · 12 000 CHF",
     "svc.bluepenguin.effect": "+0,8 Engagement pro Woche (mit abnehmendem Ertrag) und +15 % Merchandising-Umsatz.",
     "svc.bluepenguin.name": "Blue Penguin",
     "svc.bluepenguin.pitch": "Tokenisiertes Treueprogramm: Die Fans sammeln bei jeder Interaktion mit dem Club Belohnungen.",
+    "svc.bluepenguin.real": "Das tokenisierte Treueprogramm von C'mon Sports: jede Interaktion des Fans mit dem Club bringt ihm etwas ein — und dem Club ein Datum mehr.",
     "svc.bluepenguin.subLabel": "Integration 12 000 CHF + 1 500 CHF/Monat",
     "svc.datafactory.btnLabel": "Aktivieren · 2 000 CHF/Monat",
     "svc.datafactory.effect": "+1 Datenqualität bei der Aktivierung, stoppt deren wöchentliche Alterung, immunisiert gegen das Aussortieren veralteter Kontakte und halbiert die E-Mail-Ermüdung (bessere Segmentierung: angeschrieben wird nur, wer wirklich passt).",
     "svc.datafactory.name": "Data Factory",
     "svc.datafactory.pitch": "Der operative Service, der Ihre Fandaten strukturiert und pflegt: Bereinigung, Deduplizierung, Prozesse für Erfassung und Unterhalt.",
+    "svc.datafactory.real": "Der operative Dienst, der die Basis dauerhaft in Form hält — Bereinigung, Dublettenabgleich, Erfassungsprozesse. Ohne ihn verliert eine Basis rund ein Fünftel ihres Werts pro Jahr.",
     "svc.datafactory.subLabel": "Abo · 2 000 CHF/Monat",
     "svc.fanlabInsight.btnLabel": "Bestellen · 6 000 CHF",
     "svc.fanlabInsight.effect": "Deckt die Qualität Ihrer CRM-Daten, das erreichbare Einzugsgebiet und die Durchdringungsrate auf — endlich wissen Sie, wo Sie ansetzen müssen.",
     "svc.fanlabInsight.name": "Fan Lab Insight",
     "svc.fanlabInsight.pitch": "Die Grundlagenanalyse Ihrer CRM-Datenbank: Datenqualität und Durchdringungsrate Ihres Einzugsgebiets.",
+    "svc.fanlabInsight.real": "Die erste ernsthafte Vermessung einer Kontaktbasis: wie viele Menschen der Club wirklich erreichen könnte und was die Adressen wert sind, die er bereits besitzt.",
     "svc.fanlabInsight.subLabel": "Einmalanalyse",
     "svc.fanlabPro.btnLabel": "Bestellen · 18 000 CHF",
     "svc.fanlabPro.effect": "Alles aus Insight, plus den Fan-Lab-Wert in Franken, deutlich höhere Abschlusschancen bei Sponsoren, Marketinganteil am Ticketing 5 → 6 % und Merchandising +10 %.",
     "svc.fanlabPro.name": "Fan Lab Pro",
     "svc.fanlabPro.pitch": "Die komplette Wertanalyse Ihres Publikums: Ticketing-ROI, Merchandising-ROI und wirtschaftliche Bewertung der Fanbase, um Sponsoren zu überzeugen.",
+    "svc.fanlabPro.real": "Die vollständige wirtschaftliche Bewertung des Publikums. Konkret: das Dokument, das man im Sponsorengespräch auf den Tisch legt, wenn ein Betrag begründet statt verhandelt werden soll.",
     "svc.fanlabPro.subLabel": "Einmalanalyse · inkl. Insight",
     "svc.griddy.btnLabel": "Integrieren · 2 500 CHF",
     "svc.griddy.effect": "Passive Gewinnung qualifizierter Kontakte in jeder Spielwoche (je nach Durchdringungsrate des Einzugsgebiets) — der Wettbewerb, der ganz von allein läuft.",
     "svc.griddy.name": "Griddy Picks",
     "svc.griddy.pitch": "Tippspiel in den Clubfarben: Die Fans tippen an jedem Meisterschaftsspieltag und hinterlassen dabei ihre Daten.",
+    "svc.griddy.real": "Das Tippspiel in den Farben des Clubs: eine Datenerfassung, die an jedem Spieltag von allein läuft, ohne Marketingaktion, die nachgeschoben werden muss.",
     "svc.griddy.subLabel": "Integration 2 500 CHF + 500 CHF/Spieltag",
+    "tuto.actions": "<button id=\"tuto-help\"><i class=ic-bulb></i> Hilfe &amp; Regeln</button>\n        <button id=\"tuto-skip\">Kenne ich schon, Leitfaden überspringen</button>",
+    "tuto.actions.how": "Drücken Sie in der Karte <b>Aktionen der Woche</b> auf « + », bis alle drei Balken gefüllt sind. Eine Aktion kostet 1 Punkt — die Sponsorenakquise 2 — und immer auch Geld.",
+    "tuto.actions.short": "Aktionen",
+    "tuto.actions.title": "Verteilen Sie Ihre drei Aktionspunkte",
+    "tuto.actions.why": "Eine Marketingabteilung im Club, das sind zwei oder drei Personen und ein begrenztes Budget. Das Spiel zwingt Sie jede Woche zur selben Abwägung: <b>was Sie nicht tun, hat einen Preis — unsichtbar, aber real</b>.",
+    "tuto.cmon.how": "Reiter <b>C'mon Sports</b>. Sechs Leistungen. Das <b>DMOS-Audit</b> zeigt Ihre exakten Werte und schaltet die Zertifizierung frei; <b>Fan Lab Insight</b> zeigt Ihr erreichbares Potenzial und die tatsächliche Qualität Ihrer Daten.",
+    "tuto.cmon.short": "C'mon Sports",
+    "tuto.cmon.title": "Lichten Sie den Nebel",
+    "tuto.cmon.why": "Das ist der Angelpunkt des Spiels, und ausserhalb gilt dasselbe: <b>man steuert nicht, was man nicht misst</b>. Diese sechs Leistungen existieren, tragen diese Namen und erzielen genau diese Wirkung bei den Clubs, die C'mon Sports begleitet. Nichts zwingt Sie im Spiel zum Kauf — aber spielen Sie eine Saison ohne und danach eine mit.",
+    "tuto.dmos.how": "Reiter <b>DMOS</b> in der Leiste darüber. Sechs Säulen zu je 10 Punkten und eine Gesamtnote, die als Spanne erscheint, solange der Club nicht auditiert ist. Das « i » im Panel erläutert jede Säule.",
+    "tuto.dmos.short": "DMOS",
+    "tuto.dmos.title": "Öffnen Sie den Reiter DMOS",
+    "tuto.dmos.why": "Der DMOS ist die Diagnose, die C'mon Sports bei seinen Kunden tatsächlich stellt. Die Spanne ist die eigentliche Botschaft: <b>Sie haben eine Ahnung von Ihrer Reife, keine Messung</b>. Solange sie nicht gemessen ist, ist sie weder vergleichbar noch vor einem Sponsor belegbar.",
+    "tuto.final.actions": "<button class=\"primary\" id=\"tuto-q\"><i class=ic-target></i> Die drei Fragen beantworten</button>\n        <button id=\"tuto-end\">Ohne Antwort beenden</button>",
+    "tuto.final.how": "Sie haben alles. Die Ziele des Vorstands oben rechts, das Journal darunter, 26 Wochen vor sich. « <b>Hilfe &amp; Regeln</b> » in der Kopfzeile hält alle Erklärungen bereit.",
+    "tuto.final.short": "Fertig",
+    "tuto.final.title": "Hier endet der Leitfaden",
+    "tuto.final.why": "Eine letzte Sache, und sie interessiert uns wirklich: <b>wo stehen Sie selbst in Ihrer Organisation?</b> Drei Fragen, dreissig Sekunden — dann wissen wir, was wir Ihnen Nützliches zeigen können, statt Ihnen eine Standardbroschüre zu schicken.",
+    "tuto.frame": "<div class=\"tuto\">\n    <div class=\"tuto-head\">\n      <b><i class=ic-bulb></i> Einführung</b>\n      <span class=\"count\">Schritt {v0}/{v1}</span>\n      <button id=\"tuto-hide\">Ausblenden</button>\n    </div>\n    <div class=\"tuto-prog\"><div class=\"fill\" style=\"width:{v2}%\"></div></div>\n    <div class=\"tuto-step\">\n      <h4>{v3}</h4>\n      <div class=\"how\">{v4}</div>\n      <div class=\"tuto-why\"><b>Warum das zählt</b><br>{v5}</div>\n    </div>\n    <div class=\"tuto-trail\">{v6}</div>\n    <div class=\"tuto-actions\">{v7}</div>\n  </div>",
+    "tuto.hidden": "<div class=\"tuto-resume\">\n      <i class=ic-bulb></i> <span>Einführungsleitfaden ausgeblendet — Schritt {v0}/{v1}.</span>\n      <button id=\"tuto-show\">Wieder einblenden</button></div>",
+    "tuto.kpi.how": "Oben im Bild zeigen zwei Kennzahlen « ? »: <b>Durchdringung</b> und <b>Datenqualität</b>. Klicken Sie auf das kleine « i » neben einer der beiden.",
+    "tuto.kpi.short": "Kennzahlen",
+    "tuto.kpi.title": "Fragen Sie eine verdeckte Kennzahl ab",
+    "tuto.kpi.why": "Dieses « ? » ist keine gesperrte Funktion: Es ist die reale Lage eines Clubs, der seine Basis nie hat analysieren lassen. <b>Er weiss weder, wie viele Menschen er erreichen könnte, noch was die Adressen wert sind, die er besitzt</b> — und baut seinen Plan trotzdem darauf.",
+    "tuto.play.how": "Schaltfläche <b>Woche spielen</b>, unten in der Karte. Ihre Aktionen werden ausgewertet, das Spiel wird ausgetragen, die Einnahmen fliessen, und das Journal in der rechten Spalte erzählt alles.",
+    "tuto.play.short": "Woche",
+    "tuto.play.title": "Spielen Sie Ihre erste Woche",
+    "tuto.play.why": "Es wird nichts Spektakuläres passieren. Das ist die erste Lektion: Im Clubmarketing <b>zeigt sich die Wirkung einer Aktion über einen Zyklus, nicht über einen Post</b>. Das Journal ist Ihr Wochenreporting — lernen Sie, es zu lesen, es enthält alles.",
+    "tuto.sponsors.how": "Reiter <b>Sponsoren</b>. Jeder Vertrag zeigt Betrag, Zufriedenheit und Laufzeitende. Unter 60 % zum Laufzeitende verlängert der Sponsor nicht.",
+    "tuto.sponsors.short": "Sponsoren",
+    "tuto.sponsors.title": "Sehen Sie sich die Zufriedenheit Ihrer Sponsoren an",
+    "tuto.sponsors.why": "Ein Sponsor geht nicht an dem Tag verloren, an dem er kündigt: <b>er geht in den Monaten verloren, in denen ihn niemand aktiviert hat</b>. Die Zufriedenheit ist die einzige Kennzahl, die vorher warnt — man muss sie nur verfolgen, was die wenigsten Clubs tun.",
     "ui.00151d": "Schulung: Alle Säulen sind am Maximum!",
     "ui.06a572": "<div class=\"action {v0}\">\n      <div class=\"info\">\n        <div class=\"name\">{v1} <span style=\"font-weight:400;color:var(--muted);font-size:11px\">({v2} AP)</span></div>\n        <div class=\"desc\">{v3}</div>\n        <div class=\"cost\">Kosten: {v4}</div>\n      </div>\n      <div class=\"ctrl\">\n        <button data-act=\"{v5}\" data-dir=\"-1\" {v6}>−</button>\n        <div class=\"count\">{v7}</div>\n        <button data-act=\"{v8}\" data-dir=\"1\" {v9}>+</button>\n      </div>\n    </div>",
     "ui.0c3870": "<span><i class=ic-target></i> <b>Demo-Modus</b> — {v0} ·\n      keine Daten an das CRM übermittelt</span>\n      <button id=\"demo-exit\">Demo verlassen</button>",
@@ -3811,6 +4863,7 @@ const TX = {
     "ui.a1e286": "<i class=ic-arrow></i> Der Vorstand ({v0}) dankt Ihnen. Ihr Abenteuer beim Club endet hier.",
     "ui.a3d5df": "<span class=\"badge gold\"><i class=ic-check></i> Audit geliefert</span>",
     "ui.aa95ff": "Meine Karrierebilanz bei {v0} auf Club Catalist.",
+    "ui.act.info": "Diese Aktion verstehen",
     "ui.b02d9d": "<div class=\"result-banner\" style=\"border-color:var(--good); color:var(--good)\"><i class=ic-launch></i> AUFSTIEG in {v0}! Sponsoren aufgewertet… aber Kosten und Erwartungen werden explodieren.</div>",
     "ui.b0a94f": "Datensammlung: +{v0} qualifizierte Kontakte{v1}",
     "ui.b5410e": "<i class=ic-launch></i> Griddy Picks integriert ({v0} + 500 CHF/Spieltag): Das Tippspiel sammelt seine ersten Kontakte.",
@@ -3820,6 +4873,7 @@ const TX = {
     "ui.b918b2": "\n    <h2><span class=\"sig-cap\">D</span>ie Durchdringung des Einzugsgebiets<span class=\"sig-cap\">.</span></h2>\n    <p>Sie beantwortet eine einfache Frage: <b>Welcher Anteil der Menschen, die Sie erreichen könnten,\n    steht bereits in Ihrer Kontaktbasis?</b> Ein Club kann viele Fans haben und fast keine Daten über\n    sie — genau diese Lücke misst diese Kennzahl.</p>\n    <div class=\"calc\">\n      <div class=\"calc-row\"><span>Erreichbares Einzugsgebiet</span><b>{v0}</b></div>\n      <div class=\"calc-note\">Ihre Ausgangsfans × 3 in der 2. Liga, × 8 in der höchsten Liga:\n      Die nationale Bühne vergrössert den Markt.</div>\n      <div class=\"calc-row\"><span>Davon tatsächlich erfassbar</span><b>{v1}</b></div>\n      <div class=\"calc-note\">Rund 35 % des Einzugsgebiets sind bereit, ihre Kontaktdaten zu hinterlassen.\n      Der Rest bleibt anonymes Publikum.</div>\n      <div class=\"calc-row calc-total\"><span>Durchdringung = Kontakte ÷ erfassbar</span>\n        <b>{v2}</b></div>\n    </div>\n    <p><b>Warum das zählt:</b> Je stärker das Einzugsgebiet bereits abgedeckt ist, desto schwerer sind\n    neue Kontakte zu finden. Ihre Wettbewerbe bringen heute noch\n    <b style=\"color:var(--brand)\">{v3}</b> ihres ursprünglichen Ertrags.\n    Ein Aufstieg vergrössert das Einzugsgebiet und bringt die Sammelaktionen wieder in Fahrt.</p>\n    {v4}\n    <div class=\"choices\"><button class=\"primary\" id=\"pen-close\">Schliessen</button></div>",
     "ui.ba91f4": "<div class=\"card\" style=\"text-align:center\">\n      <p style=\"font-size:14px;color:var(--muted);margin-bottom:10px\">Es existiert ein gespeicherter Spielstand (Saison {v0}, Woche {v1}).</p>\n      <button class=\"primary\" id=\"btn-resume\"><i class=ic-play></i> Partie fortsetzen</button></div>",
     "ui.bd327b": "{v0} · {v1} · Sie sind Leiter Digital Marketing",
+    "ui.btn.help": "<i class=ic-bulb></i> Hilfe &amp; Regeln",
     "ui.btn.logout": "Abmelden",
     "ui.btn.newgame": "<i class=ic-trash></i> Neue Partie",
     "ui.btn.save": "<i class=ic-save></i> Speichern",
@@ -3832,6 +4886,9 @@ const TX = {
     "ui.cc6e4f": "<i class=ic-globe></i> Niederlage im Europacup. TV-Rechte +{v0}, Auswärtsreise −3 000 CHF. Die Fans hatten mehr erwartet.",
     "ui.ce6636": "\n    <h2><i class=ic-lock></i> Wie Ihre Daten verarbeitet werden</h2>\n    <p><b style=\"color:var(--text)\">Ihr Spielstand bleibt auf diesem Gerät.</b> Club Catalist funktioniert ohne Server,\n    ohne Cookies, ohne Tracker (Schriften sind eingebettet): Spielstände und PIN-Code (gehasht) verlassen diesen Browser nie.</p>\n    <p><b style=\"color:var(--text)\">Wenn Sie ein Konto erstellen</b>, wird Ihre E-Mail-Adresse im CRM von\n    C'mon Corporations (Brevo, Hosting in der EU) gespeichert, um die Club-Catalist-Konten zu verwalten und deren Nutzung\n    nachzuvollziehen — Rechtsgrundlage: berechtigtes Interesse, dem Sie jederzeit widersprechen können.</p>\n    <p><b style=\"color:var(--text)\">News-E-Mails</b> erhalten Sie dagegen nur, wenn Sie das dafür vorgesehene Kästchen\n    ankreuzen (Einwilligung). Ohne dieses wird Ihre Adresse als von jedem Marketingversand ausgeschlossen markiert.</p>\n    <p>Sie können Ihre sämtlichen Daten jederzeit über die Fusszeile exportieren oder löschen\n    («Datenschutz & Daten»).</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"consent-ok\">Verstanden — weiter</button>\n      <button id=\"consent-privacy\">Datenschutzerklärung lesen</button>\n    </div>",
     "ui.cmon.intro": "\n          Ein Club kann alles selbst machen — nur eben im Blindflug. C'mon Sports deckt auf, was Sie nicht\n          sehen (exakte DMOS-Scores, wirtschaftlicher Wert der Fanbase, Zustand Ihrer Daten), und\n          strukturiert Ihr Wachstum. Jeder aktivierte Service verändert Ihr Dashboard nachhaltig.\n        ",
+    "ui.cmon.qz": "<div class=\"cta-out\">\n    <b><i class=ic-target></i> Und in Ihrer Organisation, wo stehen Sie?</b>\n    Drei freiwillige Fragen — Reife, Priorität, Zeithorizont — und wir wissen, welche dieser sechs\n    Leistungen Sie wirklich betrifft. An Ihrer Partie ändert sich nichts.\n    <div class=\"intro-cta\" style=\"margin-top:11px\">\n      <button id=\"svc-qz\">{v0}</button>\n      <a class=\"btn-like out-link\" href=\"{v1}\" target=\"_blank\" rel=\"noopener\">30 Minuten mit C'mon Sports vereinbaren →</a>\n    </div>\n  </div>",
+    "ui.cmon.qz.done": "Meine Antworten ansehen",
+    "ui.cmon.qz.go": "Die drei Fragen beantworten",
     "ui.cmon.title": "<span class=\"sig-cap\">C</span>'MON SPORTS — IHR PARTNER FÜR DATA & MARKETING.",
     "ui.d026bc": "<div class=\"result-banner\" style=\"border-color:var(--gold); color:var(--gold)\"><i class=ic-globe></i> EUROPÄISCHE QUALIFIKATION für die nächste Saison!</div>",
     "ui.d0f4ca": "Was mir das Spiel in Erinnerung gerufen hat: Solange man nicht misst, steuert man blind. Bis zum Audit blieb der Score ein blosser Schätzbereich.",
@@ -3858,9 +4915,11 @@ const TX = {
     "ui.fe0f6b": "<i class=ic-globe></i> Europäischer Sieg! Prämie und TV-Rechte: +{v0} (Auswärtsreise −3 000 CHF). Die Stadt bebt.",
     "ui.footer.delete": "Mein Profil löschen",
     "ui.footer.export": "Meine Daten exportieren",
+    "ui.footer.help": "<i class=ic-bulb></i> Hilfe &amp; Regeln",
     "ui.footer.note": "Club Catalist — Prototyp v7 · das Ökosystem von C'mon Sports als Spiel · automatische lokale Speicherung am Ende jeder Woche",
     "ui.footer.privacy": "<i class=ic-lock></i> Datenschutz & Daten (DSGVO / revDSG)",
     "ui.hist.title": "<span class=\"sig-cap\">S</span>AISONBILANZEN.",
+    "ui.login.back": "<i class=ic-bulb></i> Was ist Club Catalist?",
     "ui.login.create": "Neues Konto",
     "ui.login.note": "\n      <i class=ic-lock></i> Ihre Spielstände und Ihr PIN-Code (gehasht) bleiben <b style=\"color:var(--text)\">in diesem Browser</b>.\n      Ihre E-Mail-Adresse wird bei der Kontoerstellung im CRM von C'mon Corporations (Brevo, EU) gespeichert;\n      News-E-Mails gehen nur raus, wenn Sie das Kästchen ankreuzen.\n    ",
     "ui.login.optin": "Ich bin einverstanden, die News von C'mon Sports per E-Mail zu erhalten. <b style=\"color:var(--text)\">Optional</b> —\n            ohne dieses Kästchen wird mir keine Kampagne zugestellt.<br>\n            <span style=\"font-size:11px\">In jedem Fall wird bei der Kontoerstellung meine Adresse im CRM\n            von C'mon Corporations (Brevo, Hosting in der EU) für die Verwaltung der Club-Catalist-Konten gespeichert.\n            <a id=\"optin-privacy\" style=\"color:var(--accent);cursor:pointer;text-decoration:underline\">Mehr erfahren</a></span>",
@@ -3888,26 +4947,36 @@ const TX = {
     "ui.spons.th.sat": "Zufriedenheit",
     "ui.spons.th.sector": "Branche",
     "ui.spons.title": "<span class=\"sig-cap\">S</span>PONSORENPORTFOLIO.",
+    "ui.svc.real": "Ausserhalb des Spiels",
     "ui.tab.dashboard": "<i class=ic-chart></i> Dashboard",
     "ui.tab.history": "<i class=ic-clock></i> Verlauf",
     "ui.tab.sponsors": "<i class=ic-deal></i> Sponsoren",
     "ui.tagline": "Manager-Simulation für das Marketing eines Sportclubs — by C'mon Sports",
+    "help.real": "In einem echten Club",
   },  /* TX-DE */
   en: {
     "action.activation.desc": "A visibility operation for your sponsors (LED boards, social, hospitality). +sponsor satisfaction, plus a small revenue bonus.",
     "action.activation.name": "<i class=ic-deal></i> Sponsor activation",
+    "action.activation.real": "Activating a sponsor means proving to them that they are being seen. It is also the work most often postponed across a season, because it has no deadline — until the contract is not renewed.",
     "action.campaign.desc": "Newsletter plus a ticketing offer to your contact base. +ticketing revenue, +engagement. Mind the fatigue if you keep repeating it.",
     "action.campaign.name": "<i class=ic-mail></i> Email campaign",
+    "action.campaign.real": "Email remains the most profitable channel in sports business, and the only audience you actually own. Its limit is over-solicitation: without segmentation, a database wears out in a single season.",
     "action.collect.desc": "A data capture operation: new qualified contacts, +data quality.",
     "action.collect.name": "<i class=ic-db></i> Prize draw / data capture",
+    "action.collect.real": "A prize draw is the fastest way to turn an anonymous spectator into an identified contact — provided consent is collected properly, otherwise the database is unusable.",
     "action.content.desc": "Social posts, matchday stories, behind the scenes. +engagement, +fans.",
     "action.content.name": "<i class=ic-broadcast></i> Publish content",
+    "action.content.real": "Content is the one channel almost every club feeds — and the only one whose effect on the contact base nobody measures. It brings people in; on its own it collects nothing.",
     "action.prospect.desc": "Go hunting for a new sponsor. Your odds depend on your DMOS score and your Fan Lab value.",
     "action.prospect.name": "<i class=ic-userplus></i> Sponsor prospecting",
+    "action.prospect.real": "A new sponsor is not won with a presentation deck, but with figures about the audience you are selling. That is precisely what a Fan Lab analysis produces.",
     "action.rgpd.desc": "Consents, processing register, database clean-up. +compliance, +data quality.",
     "action.rgpd.name": "<i class=ic-shield></i> GDPR compliance drive",
+    "action.rgpd.real": "Compliance is not only a fine to avoid: clean consents and a tidy database also mean better deliverability and a higher value in front of a sponsor.",
     "action.training.desc": "A structural investment: +1 point on your weakest DMOS pillar.",
     "action.training.name": "<i class=ic-clipboard></i> Training & tools",
+    "action.training.real": "Building skills is expensive and invisible within the quarter. It is nonetheless what permanently lowers the cost of every action that follows.",
+    "actmodal": "<h2>{v0}</h2>\n    <p><b>{v1} action point(s)</b> · current cost <b>{v2}</b></p>\n    <p>{v3}</p>\n    <div class=\"tuto-why\"><b>In a real club</b><br>{v4}</div>\n    <div class=\"choices\"><button class=\"primary\" id=\"act-close\">Close</button></div>",
     "adm.072a6d": "<i class=ic-check></i> Contact already known — attached to list #{v0}",
     "adm.1a2173": "<i class=ic-check></i> Test contact “{v0}” sent to list #{v1}",
     "adm.2207c0": "<i class=ic-cross></i> HTTP failure {v0}{v1}",
@@ -3935,7 +5004,7 @@ const TX = {
     "adm.audit.segments": "<i class=ic-layers></i> {v0} segment(s) already defined: {v1}",
     "adm.bdcba7": "<i class=ic-hourglass></i> Running the test…",
     "adm.c06700": "<i class=ic-check></i> List #{v0} “{v1}” — {v2} contact(s)",
-    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo connection</h2>\n    <p style=\"font-size:13px\">Brevo API key (v3) and destination list. Stored in this browser only.\n    <b style=\"color:var(--warn)\">Do not enter the key on a public machine.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">List no.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} account(s) · {v3} with opt-in · {v4} synced</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Launch a sales demo</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Test the connection & the list</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Send a test contact</button>\n      <button class=\"primary\" id=\"admin-save\">Save & sync now</button>\n      <button id=\"admin-clear\">Clear the key</button>\n      <button id=\"admin-close\">Close</button>\n    </div>",
+    "adm.c95505": "\n    <h2><i class=ic-sliders></i> Administration — Brevo connection</h2>\n    <p style=\"font-size:13px\">Brevo API key (v3) and destination list. Stored in this browser only.\n    <b style=\"color:var(--warn)\">Do not enter the key on a public machine.</b></p>\n    <input type=\"password\" id=\"admin-key\" placeholder=\"xkeysib-…\" value=\"{v0}\" autocomplete=\"off\">\n    <div style=\"display:flex; align-items:center; gap:10px; margin-top:8px\">\n      <span style=\"font-size:13px; color:var(--muted); white-space:nowrap\">List no.</span>\n      <input type=\"text\" id=\"admin-list\" inputmode=\"numeric\" value=\"{v1}\" style=\"max-width:110px\">\n    </div>\n    <div id=\"admin-diag\" style=\"font-size:12px; line-height:1.7; margin-top:12px; color:var(--muted)\"></div>\n    <p style=\"font-size:12px; margin:12px 0 4px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700\">\n      {v2} account(s) · {v3} with opt-in · {v4} synced</p>\n    <div style=\"font-size:12px; max-height:150px; overflow-y:auto\">{v5}</div>\n    {v6}\n    <div class=\"choices\">\n      <button id=\"admin-demo\"><i class=ic-play></i> Launch a sales demo</button>\n      <button id=\"admin-test\"><i class=ic-target></i> Test the connection & the list</button>\n      <button id=\"admin-audit\"><i class=ic-clipboard></i> Check attributes &amp; segments</button>\n      <button id=\"admin-testcontact\"><i class=ic-mail></i> Send a test contact</button>\n      <button class=\"primary\" id=\"admin-save\">Save & sync now</button>\n      <button id=\"admin-clear\">Clear the key</button>\n      <button id=\"admin-close\">Close</button>\n    </div>",
     "adm.e6b539": "<br><i class=ic-arrow></i> {v0} account(s) processed.",
     "adm.f3f027": "\n    <h2><i class=ic-target></i> Sales demo mode</h2>\n    <p style=\"font-size:13px\">Starts a game in the name of the club sitting across from you, already under way in\n    week 12 — DMOS score in the dark, fanbase value unknown, a board full of doubts.\n    <b style=\"color:var(--text)\">No data is sent to Brevo</b> and your own personal game\n    is left untouched.</p>\n    <input type=\"text\" id=\"demo-name\" maxlength=\"46\" placeholder=\"Prospect club name\" autocomplete=\"off\">\n    <input type=\"text\" id=\"demo-city\" maxlength=\"34\" placeholder=\"City (optional)\" autocomplete=\"off\">\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <select id=\"demo-sport\" style=\"flex:1 1 150px\">{v0}</select>\n      <select id=\"demo-div\" style=\"flex:1 1 150px\">\n        <option value=\"1\">Top flight / 1st division</option>\n        <option value=\"2\">2nd division</option>\n      </select>\n    </div>\n    <div style=\"display:flex;gap:9px;flex-wrap:wrap\">\n      <input type=\"text\" id=\"demo-fans\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"Fans (estimate)\">\n      <input type=\"text\" id=\"demo-contacts\" inputmode=\"numeric\" style=\"flex:1 1 150px\" placeholder=\"CRM contacts\">\n    </div>\n    <p style=\"font-size:12px;color:var(--muted);margin-top:2px\">\n      Fans and contacts are optional — without them, the usual orders of magnitude for the chosen sport apply.</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"demo-go\"><i class=ic-play></i> Launch the demo</button>\n      <button id=\"demo-cancel\">Cancel</button>\n    </div>",
     "adm.st.failed": "failed (HTTP {v0}{v1})",
@@ -3949,6 +5018,15 @@ const TX = {
     "adm.st.pending": "pending",
     "adm.st.profile": "pending (profile update)",
     "adm.st.synced": "synced (list {v0}, {v1}) on {v2}",
+    "brief.0.body": "<p>You are <b>Digital Marketing Manager</b> of a sports club. The board hired you for a simple reason: it senses the club is losing money somewhere, without knowing where.</p><p>Your week comes down to <b>three action points</b>. Publish content, send a campaign, collect data, activate a sponsor, prospect a new one, train, get compliant. Every action also costs budget.</p><p>A season runs <b>26 weeks</b>. The game saves automatically at the end of each week.</p>",
+    "brief.0.title": "Your job",
+    "brief.1.body": "<p>The <b>DMOS score</b> — Digital Maturity &amp; Operations Score — rates your organisation out of 60, across six pillars of 10: strategy, content, fan data, tools &amp; CRM, acquisition, compliance.</p><p>At the start it shows <b>as a range</b>: « ~18–28 ? ». Two of your indicators show nothing but « ? ». That is not an interface flaw: it is exactly what a club sees when it has never had its database measured. <b>You are steering by feel, and you don't know it.</b></p><p>The DMOS Audit and the Fan Lab analyses, in the C'mon Sports tab, replace those ranges with figures. That is the real turning point of a game.</p>",
+    "brief.1.title": "Your score",
+    "brief.2.body": "<p>The board sets you <b>objectives at the start of the season</b> and settles up at the end. Every missed objective costs confidence; below your board's patience threshold, <b>you are let go</b> and the game ends.</p><p>You will choose its temperament right after your club: lenient, demanding or ruthless. That choice holds for your entire career.</p><p>An <b>onboarding guide</b> will walk with you through the first weeks, at the top of the dashboard. One click hides it, and « Help &amp; rules » brings it back.</p>",
+    "brief.2.title": "Your board",
+    "brief.frame": "<h2><i class=ic-{v0}></i> {v1}</h2>\n    <div class=\"tuto-trail\" style=\"margin:0 0 14px\">{v3}</div>\n    {v2}\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"brief-next\"><i class=ic-arrow></i> {v6}</button>\n      <button id=\"brief-skip\" style=\"text-align:center\">Skip the briefing ({v4}/{v5})</button>\n    </div>",
+    "brief.go": "Choose my club",
+    "brief.next": "Next",
     "club.bb.desc": "Small budget, big energy, second division. A young, engaged community — but no CRM at all and GDPR compliance that would not survive a closer look.",
     "club.bb.name": "Lions Basket 89",
     "club.bb.sport": "Basketball",
@@ -4013,6 +5091,60 @@ const TX = {
     "diff.1.name": "Demanding board",
     "diff.2.desc": "An omnipresent president, oversized egos, a merciless press. You need 3 objectives out of 5 to keep your job.",
     "diff.2.name": "Ruthless board",
+    "glo.0.d": "Digital Maturity &amp; Operations Score. The digital maturity diagnosis used by C'mon Sports: six pillars rated out of 10, a total out of 60, comparable from one club to another and from one year to the next.",
+    "glo.0.t": "DMOS",
+    "glo.1.d": "The method for analysing a club's contact base: data quality, catchment penetration, then economic valuation of the audience. Insight measures, Pro puts a figure on it.",
+    "glo.1.t": "Fan Lab",
+    "glo.2.d": "The number of people a club could reasonably reach — well beyond its subscribers. In the game: starting fans × 3 in the second division, × 8 in the top flight, since national exposure widens the market.",
+    "glo.2.t": "Reachable catchment",
+    "glo.3.d": "The share of the genuinely collectable catchment already present in your contact base. It tells you whether easy contacts remain, or whether the seam is exhausted.",
+    "glo.3.t": "Penetration",
+    "glo.4.d": "A score out of 10: valid addresses, duplicates removed, consents in order, segmentation usable. Two clubs can hold the same number of contacts and databases of very different value.",
+    "glo.4.t": "Data quality",
+    "glo.5.d": "The DMOS threshold reached once the club has been audited: Silver at 30/60, Gold at 45/60. It reassures sponsors and makes prospecting easier.",
+    "glo.5.t": "Gold / Silver certification",
+    "glo.6.d": "The community's average interaction rate. It rises with content and loyalty programmes, and falls on its own if nothing feeds it.",
+    "glo.6.t": "Engagement",
+    "glo.7.d": "The wear on an over-solicited database: each campaign returns less than the last if they follow too closely. Good segmentation halves it.",
+    "glo.7.t": "Email fatigue",
+    "glo.8.d": "The European regulation and the Swiss data protection act. In the game as outside it: traceable consents, an up-to-date register, a clean database. An inspection of a non-compliant database is expensive.",
+    "glo.8.t": "GDPR / revFADP",
+    "glo.9.d": "The unit of time in your week. Three per week, never carried over.",
+    "glo.9.t": "Action point (AP)",
+    "help.ap": "— {v0} AP",
+    "help.frame": "\n    <h2><i class=ic-bulb></i> <span class=\"sig-cap\">H</span>elp &amp; rules<span class=\"sig-cap\">.</span></h2>\n    <div class=\"help-nav\">{v0}</div>\n    <div class=\"help-sec\">{v1}</div>\n    <p class=\"cta-line\">These mechanics are those of a real diagnosis —\n      <a href=\"{v2}\" target=\"_blank\" rel=\"noopener\">spend 30 minutes with C'mon Sports</a>.</p>\n    <div class=\"choices\">\n      <button id=\"help-tuto\"><i class=ic-play></i> Replay the onboarding guide</button>\n      <button id=\"help-qz\"><i class=ic-target></i> The positioning questionnaire</button>\n      <button class=\"primary\" id=\"help-close\">Close</button>\n    </div>",
+    "help.regles": "\n    <h4>The turn</h4>\n    <div class=\"help-row\"><b>One week, in order</b><span class=\"g\">\n      You choose your actions → you click « Play the week » → the actions resolve →\n      fixed costs and subscriptions are deducted → sponsor and merchandising revenue comes in →\n      the match is played → an event or a decision may occur → the week is saved.</span></div>\n    <div class=\"help-row\"><b>Three action points, never carried over</b><span class=\"g\">\n      Every week: 3 points. Six actions cost 1, sponsor prospecting costs 2.\n      Unspent points are lost; money, on the other hand, carries over.</span>\n      <span class=\"r\"><i class=\"tagr\">In a real club</i>This is the time constraint of a small\n      team. Budget carries from one month to the next; weeks of work never do.</span></div>\n    <div class=\"help-row\"><b>The money</b><span class=\"g\">\n      Every action has a cost, which falls as the « Tools &amp; CRM » pillar rises. On top come\n      weekly fixed costs, which grow with the size of the club and explode in the first division,\n      plus the subscriptions to any active services.</span></div>\n    <h4>The season</h4>\n    <div class=\"help-row\"><b>{v0} weeks, 12 teams</b><span class=\"g\">\n      One match a week, home or away. Only a share of ticketing (5 %, 6 % with Fan Lab Pro) comes back\n      to marketing. At the end of the season: standings, promotion or relegation,\n      European qualification.</span></div>\n    <div class=\"help-row\"><b>The board</b><span class=\"g\">\n      It sets objectives at the start of the season and settles up at the end: each objective above\n      quota is worth +8 confidence, each one missing −8. Its confidence also erodes mid-season if\n      results on the pitch disappoint. Below its patience threshold, you are let go.</span>\n      <span class=\"r\"><i class=\"tagr\">In a real club</i>A board judges on what it sees. A marketing\n      lead with no figures to show ends up judged on sporting results — which they do not\n      control.</span></div>\n    <div class=\"help-row\"><b>Three possible boards</b><span class=\"g\">\n      Lenient, demanding, ruthless. The choice is made with the club and holds for the whole career:\n      it changes starting confidence, the dismissal threshold, the number of objectives required and\n      how often ego decisions come up.</span></div>\n    <h4>The data fog</h4>\n    <div class=\"help-row\"><b>Why « ? » and ranges</b><span class=\"g\">\n      Until the club has been analysed, catchment penetration and data quality show « ? », and the\n      DMOS score appears as a range. The DMOS Audit reveals the exact scores;\n      Fan Lab Insight reveals catchment and quality; Fan Lab Pro adds the value in francs.</span>\n      <span class=\"r\"><i class=\"tagr\">In a real club</i>This is where most clubs start: attendance\n      figures, no measurement of the database. The fog is not a game penalty, it is the real starting\n      point.</span></div>\n    <h4>Saving, languages, challenges</h4>\n    <div class=\"help-row\"><b>Everything stays in your browser</b><span class=\"g\">\n      The game is saved automatically at the end of each week, in this device's local storage.\n      « Export my data » at the foot of the page hands you back everything that concerns you.</span></div>\n    <div class=\"help-row\"><b>French, German, English</b><span class=\"g\">\n      The switch is at the foot of the page. Changing language reloads the current game without losing it.</span></div>\n    <div class=\"help-row\"><b>Challenge mode</b><span class=\"g\">\n      A code such as HC-1-A7K9F2 fixes the club, the board and the entire sequence of events for the\n      season. Two players sharing a code face exactly the same chance — the only difference is\n      their decisions.</span></div>",
+    "helpnav.actions": "Actions",
+    "helpnav.glossaire": "Glossary",
+    "helpnav.kpi": "Indicators",
+    "helpnav.regles": "Rules",
+    "helpnav.services": "Services",
+    "intro.body": "\n    <div class=\"intro-hero\">\n      <h2><span class=\"sig-cap\">Y</span>ou have just been hired<span class=\"sig-cap\">.</span></h2>\n      <p>A sports club is handing you its digital marketing. You have {v0} weeks, three action points\n      a week and a board that is watching. What you do with your fan data will decide everything else:\n      your sponsors, your revenue, and your job.</p>\n      <div class=\"chips\">\n        <span><i class=ic-clock></i> a season ≈ 15 minutes</span>\n        <span><i class=ic-user></i> nothing to install</span>\n        <span><i class=ic-lock></i> saved in your browser</span>\n      </div>\n      <div class=\"intro-cta\">\n        <button class=\"primary\" id=\"intro-start\"><i class=ic-play></i> Create my account and play</button>\n        <button id=\"intro-rules\"><i class=ic-bulb></i> Read the rules first</button>\n      </div>\n    </div>\n    <div class=\"intro-grid\">\n      <div class=\"intro-card\">\n        <h4><i class=ic-bolt></i> What you will do</h4>\n        <p>Publish, send campaigns, collect data, activate and prospect sponsors, get compliant.\n        <b>Three actions a week, not four</b> — the trade-off is the heart of the game.</p>\n      </div>\n      <div class=\"intro-card\">\n        <h4><i class=ic-gauge></i> What you will learn</h4>\n        <p>Why <b>a fan is not a contact</b>, what a fanbase is worth economically,\n        why a sponsor walks away, and what a digital maturity score actually measures.\n        The game does what an audit does: it makes visible what was not.</p>\n      </div>\n      <div class=\"intro-card\">\n        <h4><i class=ic-launch></i> What is real in here</h4>\n        <p>The DMOS score, Fan Lab, Data Factory, Blue Penguin, Griddy Picks:\n        <b>these are C'mon Sports' real methods and real services</b>, with the same effects.\n        The game is a faithful model, not a metaphor.</p>\n      </div>\n    </div>\n    <div class=\"card\">\n      <h3><i class=ic-play></i> <span><span class=\"sig-cap\">H</span>OW IT IS PLAYED<span class=\"sig-cap\">.</span></span></h3>\n      <div class=\"steps\">\n        <div class=\"step\"><div class=\"n\">1</div><div>\n          <b>You pick a club and a board</b>\n          <span>Four fictional Swiss clubs — ice hockey, football, basketball, volleyball — and three\n          levels of board patience. The board sets the difficulty for your whole career.</span></div></div>\n        <div class=\"step\"><div class=\"n\">2</div><div>\n          <b>Every week, you spend three action points</b>\n          <span>Seven possible actions, each with a cost in money and in points. Then you play the week:\n          the match is played, revenue comes in, an event may occur.</span></div></div>\n        <div class=\"step\"><div class=\"n\">3</div><div>\n          <b>You steer blind — at first</b>\n          <span>Two indicators show « ? » and your DMOS score stays a range.\n          That is deliberate: it is the situation of a club that has never measured.\n          The analyses in the C'mon Sports tab lift that fog.</span></div></div>\n        <div class=\"step\"><div class=\"n\">4</div><div>\n          <b>At the end of the season, the board settles up</b>\n          <span>Objectives met or missed, sponsors renewing or leaving, promotion or relegation.\n          Confidence rises or falls — and below a certain threshold, you are let go.</span></div></div>\n      </div>\n      <div class=\"intro-cta\">\n        <button class=\"primary\" id=\"intro-start2\"><i class=ic-play></i> Create my account</button>\n        <button id=\"intro-login\">I already have an account</button>\n      </div>\n    </div>",
+    "kpih.board.g": "From 0 to 100 %. It rises with objectives met, good sporting results and the delivery of the audit; it falls with failures and certain decisions. Below your board's patience threshold, the game ends.",
+    "kpih.board.r": "A board judges on what it understands. That is why a marketing lead who produces no measurement ends up judged on sporting results, which they do not control.",
+    "kpih.board.t": "Board confidence",
+    "kpih.budget.g": "What is left in the bank. It is fed by sponsors, merchandising and a share of ticketing; it is drained by weekly fixed costs, the cost of your actions and the subscriptions to active services. A negative budget does not end the game, but the board notices.",
+    "kpih.budget.r": "A club's marketing budget is consumed by fixed costs long before the first campaign. That is why the trade-off is rarely about « what to do », and almost always about « what not to do ».",
+    "kpih.budget.t": "Budget",
+    "kpih.contacts.g": "The number of people you can reach directly. It grows with prize draws, data collection and Griddy Picks; it can fall during a purge of obsolete contacts if quality is low.",
+    "kpih.contacts.r": "The only marketing asset you genuinely own. Neither a social network nor a ticketing platform will lend you its audience twice on the same terms.",
+    "kpih.contacts.t": "CRM contacts",
+    "kpih.dmos.g": "The total of the six pillars, out of 60. Shown as a range for as long as the club has not been audited. It lowers the cost of your actions, raises the effectiveness of your campaigns and the amounts sponsors agree to sign.",
+    "kpih.dmos.r": "The same diagnosis is performed for C'mon Sports' clients, with the same six pillars. Its main virtue is not the score: it makes an organisation comparable to itself from one year to the next.",
+    "kpih.dmos.t": "DMOS score",
+    "kpih.engagement.g": "Your community's average interaction rate, from 0 to 100 %. It rises with content and loyalty programmes, and falls on its own if nothing feeds it. It weighs on ticketing, merchandising and Fan Lab value.",
+    "kpih.engagement.r": "It is the only audience indicator a sponsor really looks at: they would rather have 8,000 people who react than 60,000 who scroll past.",
+    "kpih.engagement.t": "Engagement",
+    "kpih.fans.g": "The club's total audience, across all channels. It grows with content, acquisition, wins and promotions; it erodes after relegation or a wasted season.",
+    "kpih.fans.r": "A fan is not a contact. It is the costliest misunderstanding in sports business: a community of 40,000 people of whom only 900 can be reached directly is worth, to a sponsor, exactly what the second half of this sentence says.",
+    "kpih.fans.t": "Fans",
+    "kpih.penetration.g": "The share of the genuinely collectable catchment already present in your database. Hidden until a Fan Lab analysis has been ordered. The higher it is, the fewer new contacts prize draws bring in.",
+    "kpih.penetration.r": "It answers the question no club can settle on its own: « are there still easy contacts to go and get, or do we need to change method? »",
+    "kpih.penetration.t": "Catchment penetration",
+    "kpih.quality.g": "A score out of 10 on the health of your database. It rises with collection, compliance work and the Data Factory; without upkeep it decays on its own by 0.05 a week. Hidden until a Fan Lab analysis has been ordered.",
+    "kpih.quality.r": "A database ages at the pace of people's lives: moves, new addresses, unsubscribes. Without upkeep, a database loses roughly a fifth of its value each year.",
+    "kpih.quality.t": "Data quality",
+    "kpimodal": "<h2>{v0}<span class=\"sig-cap\">.</span></h2>\n    <p>{v1}</p>\n    <div class=\"tuto-why\"><b>In a real club</b><br>{v2}</div>\n    <div class=\"choices\"><button class=\"primary\" id=\"kpi-close\">Close</button></div>",
     "lbl.0045ff": "DMOS Silver certified",
     "lbl.07a186": "VICTORY",
     "lbl.099144": " — collecting new contacts is nearing saturation",
@@ -4083,6 +5215,8 @@ const TX = {
     "lbl.fb7315": "Data Factory maintains the base continuously: it no longer decays.",
     "lbl.fd6f54": "<i class=ic-pulse></i> Engagement: {v0}%<br>",
     "lbl.fea822": "Season {v0} · Week {v1} — {v2} · position {v3} in {v4}",
+    "lbl.qz.encours": "in progress",
+    "lbl.qz.none": "not provided",
     "msg.00151d": "Training: every pillar is already maxed out!",
     "msg.07c089": "<i class=ic-broadcast></i> In a press conference, the coach declares that “marketing understands nothing about sport”. Lovely atmosphere at the club.",
     "msg.0c1904": "<i class=ic-userplus></i> Monthly check-in with your C'mon Sports partner manager: a few quick wins identified, and a board reassured by the professional grip on things.",
@@ -4150,36 +5284,103 @@ const TX = {
     "pillar.outils.label": "Tools & CRM",
     "pillar.strategie.hint": "Vision, KPIs, governance — steadies the board's confidence",
     "pillar.strategie.label": "Digital strategy",
+    "qz.0.0": "We have no fan database",
+    "qz.0.1": "A database exists, but we barely use it",
+    "qz.0.2": "CRM in place, segmentation and campaigns running",
+    "qz.0.3": "I don't work for a club or a federation",
+    "qz.0.q": "Where does your organisation actually stand?",
+    "qz.1.0": "Collect and qualify fan data",
+    "qz.1.1": "Make the fanbase count with sponsors",
+    "qz.1.2": "Structure digital marketing",
+    "qz.1.3": "Become GDPR / revFADP compliant",
+    "qz.1.4": "None for now — I'm exploring",
+    "qz.1.q": "Your priority for the next twelve months?",
+    "qz.2.0": "Yes, budget is allocated",
+    "qz.2.1": "Yes, it's under consideration",
+    "qz.2.2": "Not for now",
+    "qz.2.q": "A project in the coming months?",
+    "qz.chaud": "<p class=\"cta-line\">Since a project is in the pipeline:\n      the simplest next step is half an hour of conversation, with no sales deck.</p>",
+    "qz.frame": "\n    <h2><i class=ic-target></i> <span class=\"sig-cap\">A</span>nd at your place<span class=\"sig-cap\">?</span></h2>\n    <p>Three questions, thirty seconds, entirely optional. They change nothing in your game:\n    they help us show you what actually concerns you rather than a generic brochure.\n    Your answers join your record in C'mon Corporations' CRM and appear in your data export.</p>\n    {v0}\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"qz-send\" disabled><i class=ic-check></i> Send my answers</button>\n      <button id=\"qz-skip\" style=\"text-align:center\">Skip — I would rather not answer</button>\n    </div>",
+    "qz.merci": "<h2><i class=ic-check></i> <span class=\"sig-cap\">T</span>hank you<span class=\"sig-cap\">.</span></h2>\n    <p>Noted. You can revisit your answers at any time from « Help &amp; rules »,\n    and erase them along with your profile.</p>\n    <div class=\"cta-out\">\n      <b><i class=ic-launch></i> What concerns you most: {v0}</b>\n      {v1}\n      <a href=\"{v2}\" target=\"_blank\" rel=\"noopener\">Book 30 minutes with C'mon Sports →</a><br>\n      <a href=\"{v3}\" target=\"_blank\" rel=\"noopener\">Estimate the value of your fanbase →</a>\n    </div>\n    {v4}\n    <div class=\"choices\"><button class=\"primary\" id=\"qz-close\">Back to the game</button></div>",
+    "reco.0.d": "Structure collection before amplifying it: procedures, cleaning, deduplication. It is the service that, in the game, stops your database decaying — and that is exactly its role outside it.",
+    "reco.0.s": "Data Factory",
+    "reco.1.d": "Put a figure in francs on the value of your audience, ticketing and merchandising ROI included. It is the document you put on the table in a sponsor meeting.",
+    "reco.1.s": "Fan Lab Pro",
+    "reco.2.d": "Six pillars, a score out of 60, a roadmap. Starting with measurement spares you three years of spending on actions nobody can say were worth it.",
+    "reco.2.s": "DMOS Audit",
+    "reco.3.d": "The audit delivers the compliance diagnosis, the Data Factory puts the database in order and keeps it there. In the game, it is the pair that protects you from contact purges.",
+    "reco.3.s": "DMOS Audit + Data Factory",
+    "reco.4.d": "Nothing to sell here: a public tool that estimates the value of a fanbase from a handful of figures. Enough to measure the gap between your hunch and reality.",
+    "reco.4.s": "The Fan Lab calculator",
+    "setup.rules": "<div class=\"card\">\n    <h3><i class=ic-bulb></i> <span><span class=\"sig-cap\">B</span>EFORE YOU START<span class=\"sig-cap\">.</span></span>\n      <span class=\"tag\">3 minutes' reading</span></h3>\n    <div class=\"steps\">\n      <div class=\"step\"><div class=\"n\">1</div><div>\n        <b>Three action points a week</b>\n        <span>No more, and never carried over. Every action also costs money —\n        and money, unlike time, does carry over.</span></div></div>\n      <div class=\"step\"><div class=\"n\">2</div><div>\n        <b>A maturity score out of 60, across six pillars</b>\n        <span>The DMOS. It governs the cost of your actions, the effectiveness of your campaigns\n        and what sponsors agree to sign.</span></div></div>\n      <div class=\"step\"><div class=\"n\">3</div><div>\n        <b>You do not see everything</b>\n        <span>Some figures stay hidden until your club has been analysed.\n        It is the most important rule in the game.</span></div></div>\n    </div>\n    <div class=\"intro-cta\">\n      <button id=\"setup-help\"><i class=ic-bulb></i> Help &amp; full rules</button>\n      <button id=\"setup-briefing\"><i class=ic-clipboard></i> Replay the briefing</button>\n    </div>\n  </div>",
     "svc.audit.btnLabel": "Order · 5 000 CHF",
     "svc.audit.effect": "Reveals your exact DMOS scores (no more vague ranges), unlocks Silver/Gold certification, and makes training roadmap-guided (−20%). Board confidence +8 on delivery.",
     "svc.audit.name": "DMOS Audit",
     "svc.audit.pitch": "A full diagnosis of your digital maturity: kick-off, analysis of the 6 pillars, workshop with the board, report and roadmap.",
+    "svc.audit.real": "The audit C'mon Sports actually runs: kick-off, analysis of the six pillars, workshop with management, report and costed roadmap. It turns a hunch about maturity into a score comparable from one year to the next.",
     "svc.audit.subLabel": "one-off",
     "svc.bluepenguin.btnLabel": "Integrate · 12 000 CHF",
     "svc.bluepenguin.effect": "+0.8 engagement per week (diminishing returns) and +15% merchandising revenue.",
     "svc.bluepenguin.name": "Blue Penguin",
     "svc.bluepenguin.pitch": "A tokenised loyalty programme: fans earn rewards every time they interact with the club.",
+    "svc.bluepenguin.real": "C'mon Sports' tokenised loyalty programme: every interaction between fan and club earns the fan something — and earns the club one more piece of data.",
     "svc.bluepenguin.subLabel": "setup 12 000 CHF + 1 500 CHF/month",
     "svc.datafactory.btnLabel": "Activate · 2 000 CHF/month",
     "svc.datafactory.effect": "+1 data quality on activation, stops the weekly decay, makes you immune to obsolete-contact purges and halves email fatigue (better segmentation: only the right segments get contacted).",
     "svc.datafactory.name": "Data Factory",
     "svc.datafactory.pitch": "The operational service that structures and maintains your fan data: cleaning, deduplication, collection and maintenance procedures.",
+    "svc.datafactory.real": "The operational service that keeps a database in shape over time — cleaning, deduplication, collection procedures. Without it, a database loses roughly a fifth of its value each year.",
     "svc.datafactory.subLabel": "subscription · 2 000 CHF/month",
     "svc.fanlabInsight.btnLabel": "Order · 6 000 CHF",
     "svc.fanlabInsight.effect": "Reveals your CRM data quality, your reachable catchment and your penetration rate — you finally know where to dig.",
     "svc.fanlabInsight.name": "Fan Lab Insight",
     "svc.fanlabInsight.pitch": "The foundation analysis of your CRM base: data quality and the penetration index of your fan catchment.",
+    "svc.fanlabInsight.real": "The first serious measurement of a contact database: how many people the club could genuinely reach, and what the addresses it already holds are worth.",
     "svc.fanlabInsight.subLabel": "one-off analysis",
     "svc.fanlabPro.btnLabel": "Order · 18 000 CHF",
     "svc.fanlabPro.effect": "Everything in Insight, plus your Fan Lab value in francs, far better odds of signing sponsors, ticketing marketing share 5 → 6% and merchandising +10%.",
     "svc.fanlabPro.name": "Fan Lab Pro",
     "svc.fanlabPro.pitch": "The complete analysis of what your audience is worth: ticketing ROI, merchandising ROI and a hard economic value for your fanbase to put in front of sponsors.",
+    "svc.fanlabPro.real": "The full economic valuation of the audience. In practice: the document you put on the table in a sponsor meeting, when an amount has to be justified rather than negotiated.",
     "svc.fanlabPro.subLabel": "one-off analysis · includes Insight",
     "svc.griddy.btnLabel": "Integrate · 2 500 CHF",
     "svc.griddy.effect": "Passive collection of qualified contacts every competition week (depending on catchment penetration) — the prize draw that runs itself.",
     "svc.griddy.name": "Griddy Picks",
     "svc.griddy.pitch": "A prediction game in club colours: fans play every league matchday and hand over their data.",
+    "svc.griddy.real": "The club-branded prediction game: data collection that runs by itself on every match day, with no marketing operation to relaunch.",
     "svc.griddy.subLabel": "setup 2 500 CHF + 500 CHF/matchday",
+    "tuto.actions": "<button id=\"tuto-help\"><i class=ic-bulb></i> Help &amp; rules</button>\n        <button id=\"tuto-skip\">I know this already, skip the guide</button>",
+    "tuto.actions.how": "In the <b>Actions this week</b> card, press « + » until the three gauges are full. An action costs 1 point — sponsor prospecting costs 2 — and always costs money too.",
+    "tuto.actions.short": "Actions",
+    "tuto.actions.title": "Spend your three action points",
+    "tuto.actions.why": "A club's marketing department is two or three people and a finite budget. The game imposes the same trade-off every week: <b>what you don't do has a cost, invisible but real</b>.",
+    "tuto.cmon.how": "The <b>C'mon Sports</b> tab. Six services. The <b>DMOS Audit</b> reveals your exact scores and unlocks certification; <b>Fan Lab Insight</b> reveals your reachable catchment and the real quality of your data.",
+    "tuto.cmon.short": "C'mon Sports",
+    "tuto.cmon.title": "Lift the fog",
+    "tuto.cmon.why": "This is the pivot of the game, and it holds outside it: <b>you cannot steer what you do not measure</b>. These six services exist, carry these names, and produce these effects for the clubs C'mon Sports works with. Nothing forces you to buy them in the game — but play one season without, then one with.",
+    "tuto.dmos.how": "The <b>DMOS</b> tab, in the bar above. Six pillars out of 10, and a total shown as a range for as long as the club has not been audited. The panel's « i » details every pillar.",
+    "tuto.dmos.short": "DMOS",
+    "tuto.dmos.title": "Open the DMOS tab",
+    "tuto.dmos.why": "DMOS is the diagnosis C'mon Sports actually performs for its clients. The range is the main message: <b>you have a hunch about your maturity, not a measurement</b>. Until it is measured, it is neither comparable nor defensible in front of a sponsor.",
+    "tuto.final.actions": "<button class=\"primary\" id=\"tuto-q\"><i class=ic-target></i> Answer the three questions</button>\n        <button id=\"tuto-end\">Finish without answering</button>",
+    "tuto.final.how": "You have everything. Board objectives top right, journal below, 26 weeks ahead of you. « <b>Help &amp; rules</b> », in the header, keeps every explanation within reach.",
+    "tuto.final.short": "Done",
+    "tuto.final.title": "The guide stops here",
+    "tuto.final.why": "One last thing, and this one genuinely interests us: <b>where do you stand, in your own organisation?</b> Three questions, thirty seconds, and we will know what is worth showing you instead of sending you a generic brochure.",
+    "tuto.frame": "<div class=\"tuto\">\n    <div class=\"tuto-head\">\n      <b><i class=ic-bulb></i> Getting started</b>\n      <span class=\"count\">step {v0}/{v1}</span>\n      <button id=\"tuto-hide\">Hide</button>\n    </div>\n    <div class=\"tuto-prog\"><div class=\"fill\" style=\"width:{v2}%\"></div></div>\n    <div class=\"tuto-step\">\n      <h4>{v3}</h4>\n      <div class=\"how\">{v4}</div>\n      <div class=\"tuto-why\"><b>Why it matters</b><br>{v5}</div>\n    </div>\n    <div class=\"tuto-trail\">{v6}</div>\n    <div class=\"tuto-actions\">{v7}</div>\n  </div>",
+    "tuto.hidden": "<div class=\"tuto-resume\">\n      <i class=ic-bulb></i> <span>Onboarding guide hidden — step {v0}/{v1}.</span>\n      <button id=\"tuto-show\">Show it again</button></div>",
+    "tuto.kpi.how": "At the top of the screen, two indicators show « ? »: <b>Catchment penetration</b> and <b>Data quality</b>. Click the small « i » next to either one.",
+    "tuto.kpi.short": "Indicators",
+    "tuto.kpi.title": "Question a hidden indicator",
+    "tuto.kpi.why": "That « ? » is not a locked feature: it is the real situation of a club that has never had its database analysed. <b>It knows neither how many people it could reach, nor what the addresses it owns are worth</b> — and it builds its plan on that anyway.",
+    "tuto.play.how": "The <b>Play the week</b> button, at the bottom of the card. Your actions resolve, the match is played, revenue comes in, and the journal on the right tells the whole story.",
+    "tuto.play.short": "Week",
+    "tuto.play.title": "Play your first week",
+    "tuto.play.why": "Nothing spectacular will happen. That is the first lesson: in club marketing, <b>an action's effect shows over a cycle, not over a post</b>. The journal is your weekly reporting — learn to read it, everything is in there.",
+    "tuto.sponsors.how": "The <b>Sponsors</b> tab. Each contract shows an amount, a satisfaction level and an expiry. Below 60 % at expiry, the sponsor does not renew.",
+    "tuto.sponsors.short": "Sponsors",
+    "tuto.sponsors.title": "Look at your sponsors' satisfaction",
+    "tuto.sponsors.why": "A sponsor is not lost on the day they leave: <b>they are lost during the months when nobody activated them</b>. Satisfaction is the only indicator that warns you in advance — provided you track it, which very few clubs do.",
     "ui.00151d": "Training: every pillar is maxed out!",
     "ui.06a572": "<div class=\"action {v0}\">\n      <div class=\"info\">\n        <div class=\"name\">{v1} <span style=\"font-weight:400;color:var(--muted);font-size:11px\">({v2} AP)</span></div>\n        <div class=\"desc\">{v3}</div>\n        <div class=\"cost\">Cost: {v4}</div>\n      </div>\n      <div class=\"ctrl\">\n        <button data-act=\"{v5}\" data-dir=\"-1\" {v6}>−</button>\n        <div class=\"count\">{v7}</div>\n        <button data-act=\"{v8}\" data-dir=\"1\" {v9}>+</button>\n      </div>\n    </div>",
     "ui.0c3870": "<span><i class=ic-target></i> <b>Demo mode</b> — {v0} ·\n      no data sent to the CRM</span>\n      <button id=\"demo-exit\">Exit the demo</button>",
@@ -4228,6 +5429,7 @@ const TX = {
     "ui.a1e286": "<i class=ic-arrow></i> The board ({v0}) thanks you for your service. Your run at the club ends here.",
     "ui.a3d5df": "<span class=\"badge gold\"><i class=ic-check></i> Audit delivered</span>",
     "ui.aa95ff": "My career at {v0} on Club Catalist — the final tally.",
+    "ui.act.info": "Understand this action",
     "ui.b02d9d": "<div class=\"result-banner\" style=\"border-color:var(--good); color:var(--good)\"><i class=ic-launch></i> PROMOTION to {v0}! Sponsors revalued… but costs and expectations are about to explode.</div>",
     "ui.b0a94f": "Data capture: +{v0} qualified contacts{v1}",
     "ui.b5410e": "<i class=ic-launch></i> Griddy Picks integrated ({v0} + 500 CHF/matchday): the prediction game is bringing in its first contacts.",
@@ -4237,6 +5439,7 @@ const TX = {
     "ui.b918b2": "\n    <h2><span class=\"sig-cap\">C</span>atchment penetration<span class=\"sig-cap\">.</span></h2>\n    <p>It answers a simple question: <b>what share of the people you could reach is already\n    in your contact base?</b> A club can have plenty of fans and almost no data on them —\n    that gap is exactly what this indicator measures.</p>\n    <div class=\"calc\">\n      <div class=\"calc-row\"><span>Reachable catchment</span><b>{v0}</b></div>\n      <div class=\"calc-note\">Your starting fans × 3 in the 2<sup>nd</sup> division, × 8 in the top flight:\n      national exposure widens the market.</div>\n      <div class=\"calc-row\"><span>Of which actually collectable</span><b>{v1}</b></div>\n      <div class=\"calc-note\">Around 35% of the catchment will agree to hand over their details. The rest\n      stay anonymous spectators.</div>\n      <div class=\"calc-row calc-total\"><span>Penetration = contacts ÷ collectable</span>\n        <b>{v2}</b></div>\n    </div>\n    <p><b>Why it matters:</b> the more of the catchment you already cover, the harder new contacts\n    are to find. Your prize draws currently return\n    <b style=\"color:var(--brand)\">{v3}</b> of their original yield.\n    Going up a division widens the catchment and restarts collection.</p>\n    {v4}\n    <div class=\"choices\"><button class=\"primary\" id=\"pen-close\">Close</button></div>",
     "ui.ba91f4": "<div class=\"card\" style=\"text-align:center\">\n      <p style=\"font-size:14px;color:var(--muted);margin-bottom:10px\">A saved game exists (season {v0}, week {v1}).</p>\n      <button class=\"primary\" id=\"btn-resume\"><i class=ic-play></i> Resume the game</button></div>",
     "ui.bd327b": "{v0} · {v1} · you are the Head of Digital Marketing",
+    "ui.btn.help": "<i class=ic-bulb></i> Help &amp; rules",
     "ui.btn.logout": "Log out",
     "ui.btn.newgame": "<i class=ic-trash></i> New game",
     "ui.btn.save": "<i class=ic-save></i> Save",
@@ -4249,6 +5452,9 @@ const TX = {
     "ui.cc6e4f": "<i class=ic-globe></i> Beaten in Europe. TV rights +{v0}, away trip −3 000 CHF. The fans expected better.",
     "ui.ce6636": "\n    <h2><i class=ic-lock></i> How your data is handled</h2>\n    <p><b style=\"color:var(--text)\">Your progress stays on this device.</b> Club Catalist runs with no server,\n    no cookies and no trackers (fonts are embedded): saves and PIN code (hashed) never leave this browser.</p>\n    <p><b style=\"color:var(--text)\">If you create an account</b>, your email address is recorded in the CRM of\n    C'mon Corporations (Brevo, EU hosting) in order to manage Club Catalist accounts and monitor their use —\n    legal basis: legitimate interest, which you may object to at any time.</p>\n    <p><b style=\"color:var(--text)\">News emails</b>, for their part, will only be sent to you if you tick the box\n    provided for that purpose (consent). Without it, your address is flagged as excluded from all marketing sends.</p>\n    <p>You can export or erase all of your data at any time from the footer\n    (“Privacy & data”).</p>\n    <div class=\"choices\">\n      <button class=\"primary\" id=\"consent-ok\">Understood — continue</button>\n      <button id=\"consent-privacy\">Read the privacy policy</button>\n    </div>",
     "ui.cmon.intro": "\n          A club can do everything on its own — but it moves blind. C'mon Sports reveals what you do\n          not see (exact DMOS scores, the economic value of the fanbase, the health of your data) and\n          gives your growth a structure. Every service you activate changes your dashboard for good.\n        ",
+    "ui.cmon.qz": "<div class=\"cta-out\">\n    <b><i class=ic-target></i> And in your organisation, where do you stand?</b>\n    Three optional questions — maturity, priority, timing — and we will know which of these six\n    services actually concerns you. Nothing changes in your game.\n    <div class=\"intro-cta\" style=\"margin-top:11px\">\n      <button id=\"svc-qz\">{v0}</button>\n      <a class=\"btn-like out-link\" href=\"{v1}\" target=\"_blank\" rel=\"noopener\">Book 30 minutes with C'mon Sports →</a>\n    </div>\n  </div>",
+    "ui.cmon.qz.done": "Review my answers",
+    "ui.cmon.qz.go": "Answer the three questions",
     "ui.cmon.title": "<span class=\"sig-cap\">C</span>'MON SPORTS — YOUR DATA & MARKETING PARTNER.",
     "ui.d026bc": "<div class=\"result-banner\" style=\"border-color:var(--gold); color:var(--gold)\"><i class=ic-globe></i> EUROPEAN QUALIFICATION for next season!</div>",
     "ui.d0f4ca": "What the game reminded me: until you measure, you are flying blind. My score stayed a rough range right up to the audit.",
@@ -4275,9 +5481,11 @@ const TX = {
     "ui.fe0f6b": "<i class=ic-globe></i> European win! Prize money and TV rights: +{v0} (away trip −3 000 CHF). The whole town is buzzing.",
     "ui.footer.delete": "Delete my profile",
     "ui.footer.export": "Export my data",
+    "ui.footer.help": "<i class=ic-bulb></i> Help &amp; rules",
     "ui.footer.note": "Club Catalist — prototype v7 · the C'mon Sports ecosystem, playable · automatic local save at the end of each week",
     "ui.footer.privacy": "<i class=ic-lock></i> Privacy & data (GDPR / revFADP)",
     "ui.hist.title": "<span class=\"sig-cap\">S</span>EASON REVIEWS.",
+    "ui.login.back": "<i class=ic-bulb></i> What is Club Catalist?",
     "ui.login.create": "Create an account",
     "ui.login.note": "\n      <i class=ic-lock></i> Your saves and your PIN code (hashed) stay <b style=\"color:var(--text)\">in this browser</b>.\n      Your email address is recorded in the CRM of C'mon Corporations (Brevo, EU) when the account is created;\n      news emails only go out if you tick the box.\n    ",
     "ui.login.optin": "I agree to receive C'mon Sports news by email. <b style=\"color:var(--text)\">Optional</b> —\n            without this box ticked, no campaign will be sent to me.<br>\n            <span style=\"font-size:11px\">Either way, creating the account records my address in the CRM\n            of C'mon Corporations (Brevo, EU hosting) for the management of Club Catalist accounts.\n            <a id=\"optin-privacy\" style=\"color:var(--accent);cursor:pointer;text-decoration:underline\">Learn more</a></span>",
@@ -4305,10 +5513,12 @@ const TX = {
     "ui.spons.th.sat": "Satisfaction",
     "ui.spons.th.sector": "Sector",
     "ui.spons.title": "<span class=\"sig-cap\">S</span>PONSOR PORTFOLIO.",
+    "ui.svc.real": "Outside the game",
     "ui.tab.dashboard": "<i class=ic-chart></i> Dashboard",
     "ui.tab.history": "<i class=ic-clock></i> History",
     "ui.tab.sponsors": "<i class=ic-deal></i> Sponsors",
     "ui.tagline": "A sports club marketing management sim — by C'mon Sports",
+    "help.real": "In a real club",
   },  /* TX-EN */
 };
 
